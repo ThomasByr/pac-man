@@ -24,8 +24,8 @@ used to perform checks.
 #ifndef __tests_m_H__
 #define __tests_m_H__
 
-#include <stdio.h>
 #include <fcntl.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -35,6 +35,28 @@ used to perform checks.
 #include "utils.h"
 
 extern unsigned long _no_asserts;
+
+/**
+ * @brief Check if the given operation succeeded
+ * (i.e. did not return -1)
+ *
+ * @param op operation to check
+ * @return does not return if the operation failed
+ */
+#define CHK(op)                                                           \
+  do {                                                                    \
+    if ((op) == -1) {                                                     \
+      fprintf(stderr, FG_RED "   CHK: thread %zu on %s:%d\n     -> " RST, \
+              pthread_self(), __FILE__, __LINE__);                        \
+      fprintf(stderr, #op);                                               \
+      fprintf(stderr, "\n");                                              \
+      if (errno) {                                                        \
+        perror(FG_RED "     -> " RST);                                    \
+        fprintf(stderr, "\n");                                            \
+      }                                                                   \
+      abort();                                                            \
+    }                                                                     \
+  } while (0)
 
 #define assert_info(expr, ...)                                                 \
   do {                                                                         \
@@ -125,4 +147,4 @@ extern unsigned long _no_asserts;
     }                                                                        \
   } while (0);
 
-#endif  // __tests_m_H__
+#endif // __tests_m_H__
