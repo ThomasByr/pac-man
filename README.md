@@ -1,4 +1,4 @@
-# <img src="assets/imgs/icon.png" alt="icon" width="4%"/> pac-man - A Clone in CPP
+# <img src="assets/icon.png" alt="icon" width="4%"/> pac-man - A Clone in CPP
 
 [![Linux](https://svgshare.com/i/Zhy.svg)](https://docs.microsoft.com/en-us/windows/wsl/tutorials/gui-apps)
 [![GitHub license](https://img.shields.io/github/license/ThomasByr/pac-man)](https://github.com/ThomasByr/pac-man/blob/master/LICENSE)
