@@ -43,8 +43,9 @@ Assets::Assets(const std::string &path) {
   // todo
 
   // set m_pacman_up for all frames
-  for (size_t i = 0; i < data["pacman_up"].size(); i++) {
-    m_pacman_up.push_back(from_json(data["pacman_up"][i]));
+  auto _data_pacman_up = data["pacman_up"];
+  for (size_t i = 0; i < _data_pacman_up.size(); i++) {
+    m_pacman_up.push_back(from_json(_data_pacman_up[i]));
   }
 }
 
