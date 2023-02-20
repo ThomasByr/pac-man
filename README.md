@@ -12,7 +12,7 @@
 
 [![GitHub version](https://badge.fury.io/gh/ThomasByr%2Fpac-man.svg)](https://github.com/ThomasByr/pac-man)
 [![Author](https://img.shields.io/badge/author-@ThomasByr-blue)](https://github.com/ThomasByr)
-[![Author](https://img.shields.io/badge/author-@Arnaud-blue)](https://github.com/?)
+[![Author](https://img.shields.io/badge/author-@Arnaud-blue)](https://github.com/Loussiaul)
 
 1. [✏️ Setup](#️-setup)
 2. [💁 More infos and Usage](#-more-infos-and-usage)
@@ -44,11 +44,12 @@ The produced executable binary is to be found inside of the `bin` folder.
 ## 💁 More infos and Usage
 
 > **Warning**
-> We use SDL2 as the only external dependency. Others dependencies are compiled from source (please see [lib](lib) folder).
+> We use SDL2 as the only external dependency. Others dependencies are compiled from source (please see [lib](lib) folder). Note that if not specified, all files are written by @ThomasByr.
 >
 > Notable ones are :
 >
 > - ctpl.hpp, a C++11 header-only library for thread pools
+> - ini.hpp, a single-file header-only library for INI files
 > - json.hpp, a single-file header-only library for JSON (by Niels Lohmann)
 
 ## 🧪 Testing
@@ -82,7 +83,7 @@ Happy coding ! 🙂
 
 ## ⚖️ License
 
-This project is licensed under the GPL-3.0 new or revised license. Please read the [LICENSE](LICENSE) file.
+This project is licensed under the AGPL-3.0 new or revised license. Please read the [LICENSE](LICENSE) file.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
@@ -99,7 +100,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 **v0.1.0** first release
 
--
+- brought back `ctpl.hpp` (thread pool)
+- added `ini.hpp` (INI files) and `json.hpp` (JSON files)
 
 </details>
 
