@@ -1,6 +1,6 @@
 {
   "C_Cpp.clang_format_fallbackStyle": "Microsoft",
-  "C_Cpp.clang_format_style": "{IndentWidth: 2, TabWidth: 2, ColumnLimit: 80, AlignEscapedNewlines: Left, AllowShortIfStatementsOnASingleLine: true}",
+  "C_Cpp.clang_format_style": "{IndentWidth: 2, TabWidth: 2, ColumnLimit: 80, AlignEscapedNewlines: Left, AllowShortIfStatementsOnASingleLine: true, AllowShortBlocksOnASingleLine: true, AllowShortCaseLabelsOnASingleLine: true, AllowShortEnumsOnASingleLine: true, AllowShortFunctionsOnASingleLine: true, AllowShortLambdasOnASingleLine: true, AllowShortLoopsOnASingleLine: true}",
   "C_Cpp.clang_format_sortIncludes": true,
   "C_Cpp.formatting": "clangFormat",
   "C_Cpp.default.cppStandard": "gnu++17",
@@ -9,6 +9,7 @@
     "*.s": "asm-intel-x86-generic",
     "Doxyfile": "plaintext",
     "*.lex": "lex",
+    "LICENSE": "plaintext",
     "stdexcept": "cpp",
     "cctype": "cpp",
     "clocale": "cpp",
@@ -81,6 +82,7 @@
     "ranges": "cpp",
     "cfenv": "cpp",
     "typeindex": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "cassert": "cpp"
   }
 }
