@@ -84,5 +84,6 @@
     "typeindex": "cpp",
     "valarray": "cpp",
     "cassert": "cpp"
-  }
+  },
+  "C_Cpp.codeAnalysis.clangTidy.enabled": true
 }
