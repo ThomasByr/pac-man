@@ -25,6 +25,9 @@ private:
 
   /* a bunch of rectangles for the sprites */
 
+  SDL_Rect m_dot;       // dot
+  SDL_Rect m_power_dot; // power dot
+
   std::vector<SDL_Rect> m_pacman_up;    // facing up
   std::vector<SDL_Rect> m_pacman_down;  // facing down
   std::vector<SDL_Rect> m_pacman_left;  // facing left

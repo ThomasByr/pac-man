@@ -4,6 +4,9 @@
 #include <memory>
 #include <vector>
 
+#include "helper/assets.h"
+#include "helper/renderer.h"
+
 #include "core/game.h"
 
 Game::Game(const std::string &config_path) {
@@ -18,6 +21,7 @@ Game::Game(const std::string &config_path) {
 
   m_renderer = std::make_unique<Renderer>("Pacman", config_path);
   m_running = true;
+  m_assets = m_renderer->get_assets();
 }
 
 
@@ -34,6 +38,8 @@ void Game::run(void) {
     }
 
     // update
+    m_renderer->clear();
+    m_renderer->blit(m_assets->m_bg, 0, 0);
     m_renderer->flip();
   }
 }

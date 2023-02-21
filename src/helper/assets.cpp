@@ -62,9 +62,9 @@ Assets::Assets(const std::string &path) {
   y = _data_alpha_numerical["y"];
   w = _data_alpha_numerical["w"];
   h = _data_alpha_numerical["h"];
-  // set 0-9 - / ! ,
+  // set "[0-9]-/!,"
   for (int i = 0; i < 10; i++) { /* 0-9 */
-    m_alpha_numerical.insert(make_pair('0' + i, {x + i * (w + 1), y, w, h}));
+    m_alpha_numerical.insert(make_pair{'0' + i, {x + i * (w + 1), y, w, h}});
   }
 
   // set m_pacman_up for all frames

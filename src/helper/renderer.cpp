@@ -43,6 +43,14 @@ Renderer::Renderer(const std::string &title, const std::string &config_path) {
   if (m_surface == nullptr) {
     fmt::panic("Failed to get window surface: %s", SDL_GetError());
   }
+
+  m_sprites = m_assets->get_surface();
+  SDL_Rect src_bg = m_assets->m_bg;
+
+  double scale_x = static_cast<double>(m_width) / src_bg.w;
+  double scale_y = static_cast<double>(m_height) / src_bg.h;
+  m_scale = std::min(scale_x, scale_y);
+  m_rect_mode = RectMode::CORNER;
 }
 
 Renderer::~Renderer() {
@@ -50,6 +58,8 @@ Renderer::~Renderer() {
   m_window = nullptr;
   m_surface = nullptr;
 }
+
+std::shared_ptr<Assets> Renderer::get_assets(void) const { return m_assets; }
 
 void Renderer::add_showable(std::shared_ptr<Showable> showable) {
   m_showables.push_back(showable);
@@ -61,24 +71,29 @@ void Renderer::remove_showable(std::shared_ptr<Showable> showable) {
       m_showables.end());
 }
 
-void Renderer::flip(void) {
-  // surface of the spritesheet
-  SDL_Surface *surface = m_assets->get_surface();
-  SDL_Rect src_bg = m_assets->m_bg;
+void Renderer::flip(void) { SDL_UpdateWindowSurface(m_window); }
 
-  double scale_x = static_cast<double>(m_width) / src_bg.w;
-  double scale_y = static_cast<double>(m_height) / src_bg.h;
-  double scale = std::min(scale_x, scale_y);
+void Renderer::clear(void) {
+  SDL_FillRect(m_surface, nullptr, SDL_MapRGB(m_surface->format, 0, 0, 0));
+}
 
-  SDL_Rect dest_bg = {0, 0, static_cast<int>(src_bg.w * scale),
-                      static_cast<int>(src_bg.h * scale)};
+void Renderer::blit(SDL_Rect src, int x, int y) {
 
-  SDL_SetColorKey(surface, false, 0);
-  SDL_BlitScaled(surface, &src_bg, m_surface, &dest_bg);
+  int w = static_cast<int>(src.w * m_scale);
+  int h = static_cast<int>(src.h * m_scale);
 
-  for (auto &showable : m_showables) { showable->show(m_surface); }
+  switch (m_rect_mode) {
+  case RectMode::CORNER:
+    break;
+  case RectMode::CENTER:
+    x -= w / 2;
+    y -= h / 2;
+    break;
+  }
 
-  SDL_UpdateWindowSurface(m_window);
+  SDL_Rect dest = {x, y, w, h};
+  SDL_SetColorKey(m_sprites, false, 0);
+  SDL_BlitScaled(m_sprites, &src, m_surface, &dest);
 }
 
 void Renderer::text(const std::string &text, int x, int y) {
@@ -91,11 +106,13 @@ void Renderer::text(const std::string &text, int x, int y) {
   (void)y;
 
   // todo: implement
-  
+
   // for (auto &c : text) {
   //   SDL_Rect sprite = m_assets->get_sprite_alpha_numerical(c);
   //   SDL_Rect dest = {x, y, sprite.w, sprite.h};
-    
+
   //   x += 7;
   // }
 }
+
+void Renderer::rect_mode(RectMode mode) { m_rect_mode = mode; }
