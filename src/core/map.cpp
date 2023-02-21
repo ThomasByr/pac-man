@@ -1,6 +1,7 @@
 
 #include <SDL2/SDL.h>
 
+#include <cctype>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -8,9 +9,12 @@
 #include "core/map.h"
 #include "tile.h"
 
-Map::Map(const std::string &path) {
+#include "utils.h"
+
+Map::Map(double size, const std::string &path) {
   using namespace std;
 
+  this->size = size;
   ifstream file{path};
   string line;
 
@@ -23,21 +27,25 @@ Map::Map(const std::string &path) {
   int i = 0, j = 0;
   while (getline(file, line)) {
     if (line.find("<!--") != string::npos) { continue; }
+    try {
+      if (isspace(line.at(0))) { continue; }
+    } catch (const out_of_range &e) {
+      continue;
+    }
 
     vector<Tile> row;
     for (char c : line) {
-      row.push_back(Tile{static_cast<int>(c), i, j});
+      row.push_back(Tile{static_cast<int>(c - '0'), i, j, size});
       j++;
     }
     m_map.push_back(row);
     i++;
+    j = 0;
   }
 }
 
-void Map::show(SDL_Surface *surface) {
+void Map::show(std::shared_ptr<Renderer> renderer) {
   for (auto &row : m_map) {
-    for (auto &tile : row) {
-      tile.show(surface);
-    }
+    for (auto &tile : row) { tile.show(renderer); }
   }
 }

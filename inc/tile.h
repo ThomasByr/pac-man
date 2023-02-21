@@ -20,7 +20,7 @@ enum class TileType {
   EMPTY,
   WALL,
   DOT,
-  POWER_PELLET,
+  POWER_DOT,
   GHOST_HOUSE_DOOR,
   PORTAL,
   START_POSITION = 9 // so that we can use static_cast<TileType>(9)
@@ -29,12 +29,13 @@ enum class TileType {
 class Tile : public Showable {
 private:
   TileType m_type; // type of the tile
-  int m_x, m_y;    // position of the tile in the array
+  int m_i, m_j;    // position of the tile in the array
+  double size;        // size of the tile
 
 public:
-  Tile(const int type, const int x, const int y);
+  Tile(const int type, const int x, const int y, const double size);
 
-  void show(SDL_Surface *surface) override;
+  void show(std::shared_ptr<Renderer> renderer) override;
 };
 
 #endif // __inc_tile_H__

@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "interface/showable.h"
 
@@ -14,10 +15,11 @@
 class Map : public Showable {
 private:
   std::vector<std::vector<Tile>> m_map;
+  double size;
 
 public:
-  Map(const std::string &path = "assets/map.txt");
-  void show(SDL_Surface *surface) override;
+  Map(double size, const std::string &path = "assets/map.txt");
+  void show(std::shared_ptr<Renderer> renderer) override;
 };
 
 #endif // __inc_core_map_H__

@@ -3,7 +3,7 @@
 
 Ghost::Ghost() {}
 
-void Ghost::show(SDL_Surface *surface) {
-  (void)surface;
+void Ghost::show(std::shared_ptr<Renderer> renderer) {
+  (void)renderer;
   throw "Not implemented";
 }

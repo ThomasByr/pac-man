@@ -3,7 +3,7 @@
 
 Pacman::Pacman() {}
 
-void Pacman::show(SDL_Surface *surface) {
-  (void)surface;
+void Pacman::show(std::shared_ptr<Renderer> renderer) {
+  (void)renderer;
   throw "Not implemented";
 }

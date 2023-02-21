@@ -65,6 +65,9 @@ public:
 
   SDL_Surface *get_surface(void) const;
 
+  SDL_Rect get_sprite_dot(void) const;
+  SDL_Rect get_sprite_power_dot(void) const;
+
   /**
    * @brief Get the Sprite object for pacman
    *

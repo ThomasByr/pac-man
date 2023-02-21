@@ -19,7 +19,7 @@ private:
   std::unique_ptr<Pacman> m_pacman;
   std::vector<std::unique_ptr<Ghost>> m_ghosts;
 
-  std::unique_ptr<Renderer> m_renderer;
+  std::shared_ptr<Renderer> m_renderer;
   std::shared_ptr<Assets> m_assets;
 
   bool m_running;

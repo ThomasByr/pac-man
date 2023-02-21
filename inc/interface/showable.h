@@ -4,9 +4,13 @@
 
 #include <SDL2/SDL.h>
 
+#include <memory>
+
+#include "helper/renderer.h"
+
 class Showable {
 public:
-  virtual void show(SDL_Surface *surface) = 0;
+  virtual void show(std::shared_ptr<Renderer> renderer) = 0;
 };
 
 #endif // __inc_interface_showable_H__

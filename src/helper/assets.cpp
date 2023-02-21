@@ -30,7 +30,7 @@ Assets::Assets(const std::string &path) {
 
   const std::string filename = path.substr(0, path.find_last_of('.'));
   const std::ifstream file(fmt::format("%s.json", filename.c_str()));
-  
+
   std::stringstream buffer;
   buffer << file.rdbuf();
   auto data = nlohmann::json::parse(buffer.str());
@@ -47,6 +47,12 @@ Assets::Assets(const std::string &path) {
 
   auto _data_bg = data["bg"];
   m_bg = from_json(_data_bg);
+
+  // set dots
+  auto _data_dot = data["m_dot"];
+  m_dot = from_json(_data_dot);
+  auto _data_power_dot = data["m_power_dot"];
+  m_power_dot = from_json(_data_power_dot);
 
   // set the alpha-numerical characters
   auto _data_alpha_numerical = data["alpha-numerical-default"];
@@ -87,3 +93,6 @@ SDL_Rect Assets::get_sprite_alpha_numerical(char c) const {
 }
 
 SDL_Surface *Assets::get_surface(void) const { return m_surface; }
+
+SDL_Rect Assets::get_sprite_dot(void) const { return m_dot; }
+SDL_Rect Assets::get_sprite_power_dot(void) const { return m_power_dot; }

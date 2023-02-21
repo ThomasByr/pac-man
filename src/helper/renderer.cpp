@@ -18,6 +18,7 @@ Renderer::Renderer(const std::string &title, const std::string &config_path) {
   auto &window = data["window"];
   m_width = window["width"].as<int>();
   m_height = window["height"].as<int>();
+  size = window["size"].as<double>();
   m_fullscreen = window["fullscreen"].as<bool>();
 
   auto &engine = data["engine"];
@@ -50,7 +51,10 @@ Renderer::Renderer(const std::string &title, const std::string &config_path) {
   double scale_x = static_cast<double>(m_width) / src_bg.w;
   double scale_y = static_cast<double>(m_height) / src_bg.h;
   m_scale = std::min(scale_x, scale_y);
+  size *= m_scale;
+
   m_rect_mode = RectMode::CORNER;
+  m_trans_x = 0, m_trans_y = 0;
 }
 
 Renderer::~Renderer() {
@@ -60,18 +64,13 @@ Renderer::~Renderer() {
 }
 
 std::shared_ptr<Assets> Renderer::get_assets(void) const { return m_assets; }
+double Renderer::get_scale(void) const { return m_scale; }
+double Renderer::get_size(void) const { return size; }
 
-void Renderer::add_showable(std::shared_ptr<Showable> showable) {
-  m_showables.push_back(showable);
+void Renderer::flip(void) {
+  SDL_UpdateWindowSurface(m_window);
+  SDL_Delay(1000 / m_fps);
 }
-
-void Renderer::remove_showable(std::shared_ptr<Showable> showable) {
-  m_showables.erase(
-      std::remove(m_showables.begin(), m_showables.end(), showable),
-      m_showables.end());
-}
-
-void Renderer::flip(void) { SDL_UpdateWindowSurface(m_window); }
 
 void Renderer::clear(void) {
   SDL_FillRect(m_surface, nullptr, SDL_MapRGB(m_surface->format, 0, 0, 0));
@@ -79,19 +78,20 @@ void Renderer::clear(void) {
 
 void Renderer::blit(SDL_Rect src, int x, int y) {
 
-  int w = static_cast<int>(src.w * m_scale);
-  int h = static_cast<int>(src.h * m_scale);
+  double w = static_cast<double>(src.w * m_scale);
+  double h = static_cast<double>(src.h * m_scale);
+  double real_x = static_cast<double>(x);
+  double real_y = static_cast<double>(y);
 
   switch (m_rect_mode) {
-  case RectMode::CORNER:
-    break;
-  case RectMode::CENTER:
-    x -= w / 2;
-    y -= h / 2;
-    break;
+  case RectMode::CENTER: real_x -= w / 2; real_y -= h / 2;
+  default:;
   }
+  real_x += m_trans_x;
+  real_y += m_trans_y;
 
-  SDL_Rect dest = {x, y, w, h};
+  SDL_Rect dest = {static_cast<int>(real_x), static_cast<int>(real_y),
+                   static_cast<int>(w), static_cast<int>(h)};
   SDL_SetColorKey(m_sprites, false, 0);
   SDL_BlitScaled(m_sprites, &src, m_surface, &dest);
 }
@@ -114,5 +114,30 @@ void Renderer::text(const std::string &text, int x, int y) {
   //   x += 7;
   // }
 }
+
+void Renderer::translate(int x, int y) {
+  m_trans_x += static_cast<double>(x);
+  m_trans_y += static_cast<double>(y);
+}
+
+void Renderer::push(void) {
+  Config c{m_rect_mode, m_trans_x, m_trans_y};
+  m_config_stack.push_back(c);
+}
+
+void Renderer::pop(void) {
+  Config c = m_config_stack.back();
+  m_config_stack.pop_back();
+  m_rect_mode = c.rect_mode;
+  m_trans_x = c.trans_x;
+  m_trans_y = c.trans_y;
+}
+
+Config::Config(RectMode rect_mode, double trans_x, double trans_y) {
+  this->rect_mode = rect_mode;
+  this->trans_x = trans_x;
+  this->trans_y = trans_y;
+}
+Config::~Config() {}
 
 void Renderer::rect_mode(RectMode mode) { m_rect_mode = mode; }

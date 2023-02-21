@@ -4,7 +4,11 @@
 
 #include <SDL2/SDL.h>
 
+#include <memory>
+
 #include "interface/showable.h"
+
+#include "helper/renderer.h"
 
 class Entity : public Showable {
 private:
@@ -13,7 +17,7 @@ private:
 
 public:
   Entity();
-  virtual void show(SDL_Surface *surface) = 0;
+  virtual void show(std::shared_ptr<Renderer> renderer) = 0;
 };
 
 #endif // __inc_core_entity_H__
