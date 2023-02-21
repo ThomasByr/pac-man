@@ -1,4 +1,26 @@
+
 {
+  "alpha-numerical-0": {
+    "x": 4,
+    "y": 53,
+    "w": 7,
+    "h": 7
+  },
+
+  "alpha-numerical-default": {
+    "x": 4,
+    "y": 61,
+    "w": 7,
+    "h": 7
+  },
+
+  "bg": {
+    "x": 370,
+    "y": 4,
+    "w": 166,
+    "h": 214
+  },
+
   "m_pacman_up": [
     {
       "x": 0,
