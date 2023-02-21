@@ -1,6 +1,7 @@
 
 #include <SDL2/SDL.h>
 
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -18,29 +19,53 @@ SDL_Rect from_json(const nlohmann::json &j) {
     rect.w = j["w"];
     rect.h = j["h"];
   } catch (const std::exception &e) {
-    std::stringstream ss;
-    ss << "Failed to parse json: " << e.what() << std::endl;
-    throw std::runtime_error(ss.str());
+    fmt::panic("Failed to parse json: %s", e.what());
   }
 
   return rect;
 }
 
 Assets::Assets(const std::string &path) {
+  using make_pair = std::pair<char, SDL_Rect>;
+
   const std::string filename = path.substr(0, path.find_last_of('.'));
-  auto data = nlohmann::json::parse(fmt::format("%s.json", filename.c_str()));
+  const std::ifstream file(fmt::format("%s.json", filename.c_str()));
+  
+  std::stringstream buffer;
+  buffer << file.rdbuf();
+  auto data = nlohmann::json::parse(buffer.str());
 
   // load the surface
   m_surface = SDL_LoadBMP(path.c_str());
 
   if (m_surface == nullptr) {
-    std::stringstream ss;
-    ss << "Failed to load assets: " << SDL_GetError() << std::endl;
-    throw std::runtime_error(ss.str());
+    fmt::panic("Failed to load surface: %s", SDL_GetError());
   }
 
   // set the rectangles for the sprites
   // todo
+
+  auto _data_bg = data["bg"];
+  m_bg = from_json(_data_bg);
+
+  // set the alpha-numerical characters
+  auto _data_alpha_numerical = data["alpha-numerical-default"];
+  int x, y, w, h;
+  x = _data_alpha_numerical["x"];
+  y = _data_alpha_numerical["y"];
+  w = _data_alpha_numerical["w"];
+  h = _data_alpha_numerical["h"];
+  m_alpha_numerical_default = {x, y, w, h};
+
+  _data_alpha_numerical = data["alpha-numerical-0"];
+  x = _data_alpha_numerical["x"];
+  y = _data_alpha_numerical["y"];
+  w = _data_alpha_numerical["w"];
+  h = _data_alpha_numerical["h"];
+  // set 0-9 - / ! ,
+  for (int i = 0; i < 10; i++) { /* 0-9 */
+    m_alpha_numerical.insert(make_pair('0' + i, {x + i * (w + 1), y, w, h}));
+  }
 
   // set m_pacman_up for all frames
   auto _data_pacman_up = data["pacman_up"];
@@ -50,3 +75,15 @@ Assets::Assets(const std::string &path) {
 }
 
 Assets::~Assets() { SDL_FreeSurface(m_surface); }
+
+SDL_Rect Assets::get_sprite_alpha_numerical(char c) const {
+  auto it = m_alpha_numerical.find(c);
+  if (it == m_alpha_numerical.end()) {
+    fmt::debug("Failed to find sprite for character: %c", c);
+    return m_alpha_numerical_default;
+  }
+
+  return it->second;
+}
+
+SDL_Surface *Assets::get_surface(void) const { return m_surface; }

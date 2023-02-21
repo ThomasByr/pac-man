@@ -30,12 +30,22 @@
 //! ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 //! POSSIBILITY OF SUCH DAMAGE.
 
+#include <SDL2/SDL.h>
+
 #include <iostream>
 #include <string>
 
+#include "core/game.h"
+
 #include "utils.h"
 
-int main() {
-  using namespace std;
-  cout << fmt::format("Hello, %s!", "World") << endl;
+int main(void) /* we take no cmd line arguments */ {
+
+  // welcome
+  fmt::info("Welcome to pac-man!");
+  fmt::info("Please visit us at "
+            "https://github.com/ThomasByr/pac-man");
+
+  Game game{};
+  game.run();
 }
