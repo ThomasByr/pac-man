@@ -33,6 +33,16 @@ Please make sure you have `libsdl2` installed :
 sudo apt install libsdl2-dev
 ```
 
+<details>
+  <summary>  For Windows 11 WSLg users (click here to expand) </summary>
+  Please make sure you have graphical x11 support installed:
+
+  ```bash
+  sudo apt-get install libgl1 libxkbcommon-x11-0
+  ```
+
+</details>
+
 Then compile a release version of the program with :
 
 ```bash
@@ -102,6 +112,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 - brought back `ctpl.hpp` (thread pool)
 - added `ini.hpp` (INI files) and `json.hpp` (JSON files)
+- made some header files for game logic
 
 </details>
 
