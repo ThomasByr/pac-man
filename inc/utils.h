@@ -70,6 +70,15 @@ template <typename... Args> void info(const std::string &fmt, Args &&...args);
  */
 template <typename... Args> void alert(const std::string &fmt, Args &&...args);
 
+/**
+ * @brief print error message on std::cerr and abort
+ *
+ * @tparam Args template arguments
+ * @param fmt   format string
+ * @param args  format arguments
+ */
+template <typename... Args> void [[noreturn]] panic(const std::string &fmt, Args &&...args);
+
 } // namespace fmt
 
 #include "utils.hpp"

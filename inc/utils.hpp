@@ -70,6 +70,13 @@ template <typename... Args> void alert(const std::string &fmt, Args &&...args) {
   cerr << FG_RED << "   alert " << RST << format(fmt, args...) << endl;
 }
 
+template <typename... Args> void [[noreturn]] panic(const std::string &fmt, Args &&...args) {
+  using namespace std;
+  using namespace internal;
+  cerr << FG_RED << "   panic " << RST << format(fmt, args...) << endl;
+  abort();
+}
+
 } // namespace fmt
 
 #endif // __fmt_utils_HPP__
