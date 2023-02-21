@@ -9,6 +9,7 @@
 class Ghost : public Entity {
 public:
   Ghost();
+  Ghost(const Ghost &other) = delete;
   void show(SDL_Surface *surface);
 };
 

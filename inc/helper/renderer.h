@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "helper/assets.h"
 #include "interface/showable.h"
 
 class Renderer {
@@ -26,8 +27,18 @@ private:
 
   std::vector<std::shared_ptr<Showable>> m_showables;
 
+  std::shared_ptr<Assets> m_assets;
+
 public:
   Renderer(const std::string &title, const std::string &config_path = ".ini");
+  ~Renderer();
+
+  void add_showable(std::shared_ptr<Showable> showable);
+  void remove_showable(std::shared_ptr<Showable> showable);
+
+  void flip(void);
+
+  void text(const std::string &text, int x, int y);
 };
 
 #endif // __inc_helper_renderer_H__

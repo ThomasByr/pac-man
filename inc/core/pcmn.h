@@ -9,6 +9,7 @@
 class Pacman : public Entity {
 public:
   Pacman();
+  Pacman(const Pacman &other) = delete;
   void show(SDL_Surface *surface);
 };
 

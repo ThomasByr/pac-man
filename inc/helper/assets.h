@@ -4,6 +4,7 @@
 
 #include <SDL2/SDL.h>
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -17,6 +18,10 @@ class Assets {
 private:
   // the surface of the assets
   SDL_Surface *m_surface;
+
+  /* alpha-numerical characters */
+  SDL_Rect m_alpha_numerical_default;
+  std::map<char, SDL_Rect> m_alpha_numerical;
 
   /* a bunch of rectangles for the sprites */
 
@@ -37,6 +42,8 @@ private:
   std::vector<SDL_Rect> m_ghost_dead_eye;   // dead ghost eye
 
 public:
+  SDL_Rect m_bg; // background
+
   /**
    * @brief Construct a new Assets object
    *
@@ -46,10 +53,20 @@ public:
   ~Assets();
 
   /**
+   * @brief Get the sprite alpha numerical object
+   *
+   * @param c the character
+   * @return SDL_Rect - the sprite
+   */
+  SDL_Rect get_sprite_alpha_numerical(char c) const;
+
+  SDL_Surface *get_surface(void) const;
+
+  /**
    * @brief Get the Sprite object for pacman
    *
    * @param dir the direction of the sprite
-   * @param fc the frame count (0..=2)
+   * @param fc the frame count
    * @return SDL_Rect - the sprite
    */
   SDL_Rect get_sprite_pacman(const Direction &dir, int fc) const;
@@ -58,7 +75,7 @@ public:
    * @brief Get the Sprite object for ghost red
    *
    * @param dir the direction of the sprite
-   * @param fc the frame count (0..=1)
+   * @param fc the frame count
    * @return SDL_Rect - the sprite
    */
   SDL_Rect get_sprite_ghost_red(const Direction &dir, int fc) const;
@@ -66,7 +83,7 @@ public:
    * @brief Get the Sprite object for ghost pink
    *
    * @param dir the direction of the sprite
-   * @param fc the frame count (0..=1)
+   * @param fc the frame count
    * @return SDL_Rect - the sprite
    */
   SDL_Rect get_sprite_ghost_pink(const Direction &dir, int fc) const;
@@ -74,7 +91,7 @@ public:
    * @brief Get the Sprite object for ghost blue
    *
    * @param dir the direction of the sprite
-   * @param fc the frame count (0..=1)
+   * @param fc the frame count
    * @return SDL_Rect - the sprite
    */
   SDL_Rect get_sprite_ghost_blue(const Direction &dir, int fc) const;
@@ -82,7 +99,7 @@ public:
    * @brief Get the Sprite object for ghost orange
    *
    * @param dir the direction of the sprite
-   * @param fc the frame count (0..=1)
+   * @param fc the frame count
    * @return SDL_Rect - the sprite
    */
   SDL_Rect get_sprite_ghost_orange(const Direction &dir, int fc) const;

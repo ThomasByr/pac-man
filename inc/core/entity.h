@@ -8,7 +8,8 @@
 
 class Entity : public Showable {
 private:
-  int m_x, m_y; // position of the entity on the map
+  int m_cx, m_cy; // center position of the entity on the map
+  int w, h;       // width and height of the entity
 
 public:
   Entity();
