@@ -1,7 +1,7 @@
 0 : empty (we could possibly go here)
 1 : wall
 2 : dot
-3 : power pellet
+3 : power dot
 4 : ghost house door
 5 : portal
 9 : start position
