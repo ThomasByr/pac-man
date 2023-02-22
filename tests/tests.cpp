@@ -1,3 +1,4 @@
+
 #include <iostream>
 
 #include "ctpl_test.hpp"
@@ -6,7 +7,7 @@
 
 unsigned long _no_asserts = 0;
 
-int main(void) {
+int main() {
   json_test::json_test();
   ini_test::ini_test();
   ctpl_test::ctpl_test();
