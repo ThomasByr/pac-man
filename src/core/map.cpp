@@ -11,12 +11,11 @@
 
 #include "utils.h"
 
-Map::Map(double size, const std::string &path) {
+Map::Map(double size, const std::string &path) : m_map{}, size{size} {
   using namespace std;
 
-  this->size = size;
   ifstream file{path};
-  string line;
+  string line = "";
 
   // pass until we find the <!-- .* --> tag
   while (getline(file, line)) {
@@ -29,11 +28,9 @@ Map::Map(double size, const std::string &path) {
     if (line.find("<!--") != string::npos) { continue; }
     try {
       if (isspace(line.at(0))) { continue; }
-    } catch (const out_of_range &e) {
-      continue;
-    }
+    } catch (const out_of_range &e) { continue; }
 
-    vector<Tile> row;
+    vector<Tile> row{};
     for (char c : line) {
       row.push_back(Tile{static_cast<int>(c - '0'), i, j, size});
       j++;

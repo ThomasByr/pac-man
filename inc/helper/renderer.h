@@ -28,7 +28,7 @@ private:
   double m_scale;         // scale of the window
   double size;            // size of a tile
 
-  std::vector<Config> m_config_stack; // stack of configurations
+  std::vector<Config> m_config_stack{}; // stack of configurations
 
   RectMode m_rect_mode;     // rect mode
   double m_trans_x, m_trans_y; // translation

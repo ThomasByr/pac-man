@@ -9,9 +9,8 @@
 
 #include "core/game.h"
 
-Game::Game(const std::string &config_path) {
+Game::Game(const std::string &config_path) : m_running{true} {
   m_renderer = std::make_shared<Renderer>("Pacman", config_path);
-  m_running = true;
   m_assets = m_renderer->get_assets();
 
   m_map = std::make_unique<Map>(m_renderer->get_size());
@@ -25,9 +24,9 @@ Game::Game(const std::string &config_path) {
   // GhostType::ORANGE));
 }
 
-Game::~Game() {}
+Game::~Game() = default;
 
-void Game::run(void) {
+void Game::run() {
   while (m_running) {
     // handle quit event
     SDL_Event event;

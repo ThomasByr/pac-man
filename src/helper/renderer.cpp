@@ -7,7 +7,10 @@
 
 #include "utils.h"
 
-Renderer::Renderer(const std::string &title, const std::string &config_path) {
+Renderer::Renderer(const std::string &title, const std::string &config_path)
+    : m_window{nullptr}, m_surface{nullptr}, m_sprites{nullptr}, m_scale{1},
+      size{0}, m_config_stack{},
+      m_rect_mode{RectMode::CORNER}, m_trans_x{0}, m_trans_y{0} {
   ini::IniFile data;
   try {
     data.load(config_path);
@@ -52,9 +55,6 @@ Renderer::Renderer(const std::string &title, const std::string &config_path) {
   double scale_y = static_cast<double>(m_height) / src_bg.h;
   m_scale = std::min(scale_x, scale_y);
   size *= m_scale;
-
-  m_rect_mode = RectMode::CORNER;
-  m_trans_x = 0, m_trans_y = 0;
 }
 
 Renderer::~Renderer() {
@@ -63,25 +63,26 @@ Renderer::~Renderer() {
   m_surface = nullptr;
 }
 
-std::shared_ptr<Assets> Renderer::get_assets(void) const { return m_assets; }
-double Renderer::get_scale(void) const { return m_scale; }
-double Renderer::get_size(void) const { return size; }
+std::shared_ptr<Assets> Renderer::get_assets() const { return m_assets; }
+double Renderer::get_scale() const { return m_scale; }
+double Renderer::get_size() const { return size; }
 
-void Renderer::flip(void) {
+void Renderer::flip() {
+  static const int ms_in_sec = 1000;
   SDL_UpdateWindowSurface(m_window);
-  SDL_Delay(1000 / m_fps);
+  SDL_Delay(ms_in_sec / m_fps);
 }
 
-void Renderer::clear(void) {
+void Renderer::clear() {
   SDL_FillRect(m_surface, nullptr, SDL_MapRGB(m_surface->format, 0, 0, 0));
 }
 
 void Renderer::blit(SDL_Rect src, int x, int y) {
 
-  double w = static_cast<double>(src.w * m_scale);
-  double h = static_cast<double>(src.h * m_scale);
-  double real_x = static_cast<double>(x);
-  double real_y = static_cast<double>(y);
+  auto w = static_cast<double>(src.w * m_scale);
+  auto h = static_cast<double>(src.h * m_scale);
+  auto real_x = static_cast<double>(x);
+  auto real_y = static_cast<double>(y);
 
   switch (m_rect_mode) {
   case RectMode::CENTER: real_x -= w / 2; real_y -= h / 2;
@@ -120,12 +121,12 @@ void Renderer::translate(int x, int y) {
   m_trans_y += static_cast<double>(y);
 }
 
-void Renderer::push(void) {
+void Renderer::push() {
   Config c{m_rect_mode, m_trans_x, m_trans_y};
   m_config_stack.push_back(c);
 }
 
-void Renderer::pop(void) {
+void Renderer::pop() {
   Config c = m_config_stack.back();
   m_config_stack.pop_back();
   m_rect_mode = c.rect_mode;
@@ -133,11 +134,9 @@ void Renderer::pop(void) {
   m_trans_y = c.trans_y;
 }
 
-Config::Config(RectMode rect_mode, double trans_x, double trans_y) {
-  this->rect_mode = rect_mode;
-  this->trans_x = trans_x;
-  this->trans_y = trans_y;
-}
-Config::~Config() {}
+Config::Config(RectMode rect_mode, double trans_x, double trans_y)
+    : rect_mode{rect_mode}, trans_x{trans_x}, trans_y{trans_y} {}
+
+Config::~Config() = default;
 
 void Renderer::rect_mode(RectMode mode) { m_rect_mode = mode; }
