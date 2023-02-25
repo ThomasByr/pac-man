@@ -14,7 +14,7 @@
 
 class Map : public Showable {
 private:
-  std::vector<std::vector<Tile>> m_map;
+  std::vector<std::vector<Tile>> m_map{};
   double size;
 
 public:
