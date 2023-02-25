@@ -122,21 +122,16 @@ void Renderer::translate(int x, int y) {
 }
 
 void Renderer::push() {
-  Config c{m_rect_mode, m_trans_x, m_trans_y};
+  struct Config c{m_rect_mode, m_trans_x, m_trans_y};
   m_config_stack.push_back(c);
 }
 
 void Renderer::pop() {
-  Config c = m_config_stack.back();
+  struct Config c = m_config_stack.back();
   m_config_stack.pop_back();
   m_rect_mode = c.rect_mode;
   m_trans_x = c.trans_x;
   m_trans_y = c.trans_y;
 }
-
-Config::Config(RectMode rect_mode, double trans_x, double trans_y)
-    : rect_mode{rect_mode}, trans_x{trans_x}, trans_y{trans_y} {}
-
-Config::~Config() = default;
 
 void Renderer::rect_mode(RectMode mode) { m_rect_mode = mode; }
