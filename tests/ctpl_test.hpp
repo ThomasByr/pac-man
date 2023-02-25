@@ -43,11 +43,36 @@ void ctpl_test_0(void) {
   assert_leq(std::abs(duration - 1000), 100);
 }
 
+void ctpl_test_1(void) {
+  std::vector<int> v;
+  std::vector<int> w;
+  std::vector<std::future<int>> futures;
+  const int n = 1000;
+
+  ctpl::thread_pool p{4};
+  for (int i = 0; i < n; ++i) {
+    futures.push_back(p.push([i, &v](int) {
+      v.push_back(i);
+      return i;
+    }));
+  }
+  for (auto &f : futures) { w.push_back(f.get()); }
+  assert_eq(v.size(), n);
+  assert_eq(futures.size(), n);
+
+  std::sort(v.begin(), v.end());
+  for (int i = 0; i < n; ++i) {
+    assert_eq(v[i], i);
+    assert_eq(w[i], i);
+  }
+}
+
 } // namespace detail
 
 void ctpl_test(void) {
   using namespace detail;
   test_case(ctpl_test_0);
+  test_case(ctpl_test_1);
 }
 
 } // namespace ctpl_test
