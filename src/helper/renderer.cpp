@@ -69,13 +69,11 @@ double Renderer::get_size() const { return size; }
 int Renderer::get_window_width() const { return m_width; }
 int Renderer::get_window_height() const { return m_height; }
 
-void Renderer::flip(double delta){
-  
+void Renderer::flip(double delta) {
+
   Uint64 delay = 1000 / m_fps;
   auto real_delay = static_cast<Uint64>(delta * 1000);
-  if (real_delay < delay) {
-    SDL_Delay(delay - real_delay);
-  }
+  if (real_delay < delay) { SDL_Delay(delay - real_delay); }
 
   SDL_UpdateWindowSurface(m_window);
 }
@@ -109,9 +107,7 @@ void Renderer::text(const std::string &text, int x, int y) {
   // we can use sprites for that
   // we have to render each character separately (each is 7)
 
-  auto w = static_cast<double>(7 * m_scale);
-  SDL_Rect dest = {static_cast<int>(x), static_cast<int>(y),
-                   static_cast<int>(w), static_cast<int>(w)};
+  SDL_Rect dest = {static_cast<int>(x), static_cast<int>(y), 0, 0};
   for (auto c : text) {
     switch (c) {
     case '\n':
@@ -121,7 +117,7 @@ void Renderer::text(const std::string &text, int x, int y) {
     }
     SDL_Rect src = m_assets->get_sprite_alpha_numerical(c);
     blit(src, dest.x, dest.y);
-    dest.x += dest.w;
+    dest.x += src.w * m_scale;
   }
 }
 
