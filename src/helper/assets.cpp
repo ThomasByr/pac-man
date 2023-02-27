@@ -72,6 +72,27 @@ Assets::Assets(const std::string &path) {
   for (int i = 0; i < 10; i++) { /* 0-9 */
     m_alpha_numerical.insert(make_pair{'0' + i, {x + i * (w + 1), y, w, h}});
   }
+  m_alpha_numerical.insert(make_pair{'-', {x + 10 * (w + 1), y, w, h}});
+  m_alpha_numerical.insert(make_pair{'/', {x + 11 * (w + 1), y, w, h}});
+  m_alpha_numerical.insert(make_pair{'!', {x + 12 * (w + 1), y, w, h}});
+  m_alpha_numerical.insert(make_pair{',', {x + 13 * (w + 1), y, w, h}});
+  // set " [A-O]"
+  y += h + 1;
+  m_alpha_numerical.insert(make_pair{' ', {x, y, w, h}});
+  for (int i = 0; i < 15; i++) { /* A-O */
+    m_alpha_numerical.insert(
+        make_pair{'A' + i, {x + (i + 1) * (w + 1), y, w, h}});
+  }
+  // set "[P-Z].> c""
+  y += h + 1;
+  for (int i = 0; i < 11; i++) { /* P-Z */
+    m_alpha_numerical.insert(
+        make_pair{'P' + i, {x + i * (w + 1), y, w, h}});
+  }
+  m_alpha_numerical.insert(make_pair{'.', {x + 11 * (w + 1), y, w, h}});
+  m_alpha_numerical.insert(make_pair{'>', {x + 12 * (w + 1), y, w, h}});
+  m_alpha_numerical.insert(make_pair{'c', {x + 13 * (w + 1), y, w, h}});
+  m_alpha_numerical.insert(make_pair{'"', {x + 14 * (w + 1), y, w, h}});
 
   // set m_pacman_up for all frames
   auto _data_pacman_up = data["pacman_up"];

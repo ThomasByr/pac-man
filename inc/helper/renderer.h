@@ -48,8 +48,10 @@ public:
   std::shared_ptr<Assets> get_assets(void) const;
   double get_scale(void) const;
   double get_size(void) const;
+  int get_window_width(void) const;
+  int get_window_height(void) const;
 
-  void flip(void);
+  void flip(double delta);
   void clear(void);
   void blit(SDL_Rect src, int x, int y);
 

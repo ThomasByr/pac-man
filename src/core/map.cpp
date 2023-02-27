@@ -46,3 +46,6 @@ void Map::show(std::shared_ptr<Renderer> renderer) {
     for (auto &tile : row) { tile.show(renderer); }
   }
 }
+
+int Map::get_width() const { return m_map[0].size() * size; }
+int Map::get_height() const { return m_map.size() * size; }

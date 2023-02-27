@@ -20,6 +20,9 @@ private:
 public:
   Map(double size, const std::string &path = "assets/map.txt");
   void show(std::shared_ptr<Renderer> renderer) override;
+
+  int get_width(void) const;
+  int get_height(void) const;
 };
 
 #endif // __inc_core_map_H__

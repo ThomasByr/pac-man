@@ -6,12 +6,22 @@
 
 #include <memory>
 #include <vector>
+#include <deque>
 
 #include "helper/renderer.h"
 
 #include "ghost.h"
 #include "map.h"
 #include "pcmn.h"
+
+class FPSCounter {
+private:
+  std::deque<Uint64> last_second_frames{};
+public:
+  FPSCounter();
+  ~FPSCounter();
+  size_t tick(void);
+};
 
 class Game {
 private:
@@ -23,6 +33,7 @@ private:
   std::shared_ptr<Assets> m_assets;
 
   bool m_running;
+  int w_sep;
 
 public:
   Game(const std::string &config_path = ".ini");
