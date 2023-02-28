@@ -73,6 +73,7 @@ void Renderer::flip(double delta) {
 
   Uint64 delay = 1000 / m_fps;
   auto real_delay = static_cast<Uint64>(delta * 1000);
+  if (delta < 0) { real_delay = 0; }
   if (real_delay < delay) { SDL_Delay(delay - real_delay); }
 
   SDL_UpdateWindowSurface(m_window);
@@ -107,23 +108,25 @@ void Renderer::text(const std::string &text, int x, int y) {
   // we can use sprites for that
   // we have to render each character separately (each is 7)
 
+  SDL_Rect src = m_assets->get_sprite_alpha_numerical(' ');
+
   SDL_Rect dest = {static_cast<int>(x), static_cast<int>(y), 0, 0};
   for (auto c : text) {
     switch (c) {
     case '\n':
       dest.x = x;
-      dest.y += dest.h;
+      dest.y += src.h * m_scale;
       continue;
     }
-    SDL_Rect src = m_assets->get_sprite_alpha_numerical(c);
+    src = m_assets->get_sprite_alpha_numerical(c);
     blit(src, dest.x, dest.y);
     dest.x += src.w * m_scale;
   }
 }
 
-void Renderer::translate(int x, int y) {
-  m_trans_x += static_cast<double>(x);
-  m_trans_y += static_cast<double>(y);
+void Renderer::translate(double x, double y) {
+  m_trans_x += x;
+  m_trans_y += y;
 }
 
 void Renderer::push() {

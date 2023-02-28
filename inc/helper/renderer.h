@@ -51,14 +51,14 @@ public:
   int get_window_width(void) const;
   int get_window_height(void) const;
 
-  void flip(double delta);
+  void flip(double delta = -1);
   void clear(void);
   void blit(SDL_Rect src, int x, int y);
 
   void text(const std::string &text, int x, int y);
 
   void rect_mode(RectMode mode);
-  void translate(int x = 0, int y = 0);
+  void translate(double x = 0, double y = 0);
   void push(void);
   void pop(void);
 };
