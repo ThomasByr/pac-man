@@ -12,7 +12,7 @@
 
 class Pacman : public Entity {
 public:
-  Pacman();
+  Pacman(const double cx, const double cy, const double w, const double h);
   Pacman(const Pacman &other) = delete;
   void show(std::shared_ptr<Renderer> renderer);
 };

@@ -12,11 +12,11 @@
 
 class Entity : public Showable {
 private:
-  int m_cx, m_cy; // center position of the entity on the map
-  int w, h;       // width and height of the entity
+  double m_cx, m_cy; // center position of the entity on the map
+  double w, h;       // width and height of the entity
 
 public:
-  Entity();
+  Entity(const double cx, const double cy, const double w, const double h);
   virtual void show(std::shared_ptr<Renderer> renderer) = 0;
 };
 

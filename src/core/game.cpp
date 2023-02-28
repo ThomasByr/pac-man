@@ -29,16 +29,12 @@ Game::Game(const std::string &config_path) : m_running{true}, w_sep{0} {
   m_assets = m_renderer->get_assets();
 
   m_map = std::make_unique<Map>(m_renderer->get_size());
-  m_pacman = std::make_unique<Pacman>();
+  m_pacman = std::make_unique<Pacman>(0, 0, 0, 0);
   m_ghosts = std::vector<std::unique_ptr<Ghost>>{4};
 
   w_sep = m_map->get_width();
 
-  // m_ghosts.push_back(std::make_unique<Ghost>(config_path, GhostType::RED));
-  // m_ghosts.push_back(std::make_unique<Ghost>(config_path, GhostType::PINK));
-  // m_ghosts.push_back(std::make_unique<Ghost>(config_path, GhostType::BLUE));
-  // m_ghosts.push_back(std::make_unique<Ghost>(config_path,
-  // GhostType::ORANGE));
+  // todo: make ghosts
 }
 
 Game::~Game() = default;
@@ -57,7 +53,8 @@ void Game::run() {
     }
     // update
     now = SDL_GetPerformanceCounter();
-    auto delta = static_cast<double>(now - prev) / (double)SDL_GetPerformanceFrequency();
+    auto delta =
+        static_cast<double>(now - prev) / (double)SDL_GetPerformanceFrequency();
     prev = now;
     fps = fps_counter.tick();
 
@@ -68,5 +65,6 @@ void Game::run() {
     m_map->show(m_renderer);
 
     m_renderer->flip(delta);
+    // m_renderer->flip(); (void)delta;
   }
 }

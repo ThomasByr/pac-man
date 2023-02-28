@@ -10,9 +10,14 @@
 
 #include "entity.h"
 
+enum class GhostType { BLINKY, PINKY, INKY, CLYDE };
+
 class Ghost : public Entity {
+private:
+  GhostType type;
+
 public:
-  Ghost();
+  Ghost(const double cx, const double cy, const double w, const double h, GhostType type);
   Ghost(const Ghost &other) = delete;
   void show(std::shared_ptr<Renderer> renderer);
 };
