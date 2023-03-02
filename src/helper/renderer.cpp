@@ -70,9 +70,10 @@ int Renderer::get_window_width() const { return m_width; }
 int Renderer::get_window_height() const { return m_height; }
 
 void Renderer::flip(double delta) {
+  const Uint64 ms_in_s = 1000;
+  const Uint64 delay = ms_in_s / m_fps;
 
-  Uint64 delay = 1000 / m_fps;
-  auto real_delay = static_cast<Uint64>(delta * 1000);
+  auto real_delay = static_cast<Uint64>(delta * ms_in_s);
   if (delta < 0) { real_delay = 0; }
   if (real_delay < delay) { SDL_Delay(delay - real_delay); }
 

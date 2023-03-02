@@ -3,8 +3,10 @@
 
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "helper/assets.h"
 #include "json.hpp"
@@ -25,7 +27,7 @@ SDL_Rect from_json(const nlohmann::json &j) {
   return rect;
 }
 
-Assets::Assets(const std::string &path) {
+Assets::Assets(const std::string &path) : m_surface{nullptr} {
   using make_pair = std::pair<char, SDL_Rect>;
 
   const std::string filename = path.substr(0, path.find_last_of('.'));
@@ -86,13 +88,12 @@ Assets::Assets(const std::string &path) {
   // set "[P-Z].> c""
   y += h + 1;
   for (int i = 0; i < 11; i++) { /* P-Z */
-    m_alpha_numerical.insert(
-        make_pair{'P' + i, {x + i * (w + 1), y, w, h}});
+    m_alpha_numerical.insert(make_pair{'P' + i, {x + i * (w + 1), y, w, h}});
   }
   m_alpha_numerical.insert(make_pair{'.', {x + 11 * (w + 1), y, w, h}});
   m_alpha_numerical.insert(make_pair{'>', {x + 12 * (w + 1), y, w, h}});
-  m_alpha_numerical.insert(make_pair{'c', {x + 13 * (w + 1), y, w, h}});
-  m_alpha_numerical.insert(make_pair{'"', {x + 14 * (w + 1), y, w, h}});
+  m_alpha_numerical.insert(make_pair{'c', {x + 14 * (w + 1), y, w, h}});
+  m_alpha_numerical.insert(make_pair{'"', {x + 15 * (w + 1), y, w, h}});
 
   // set m_pacman_up for all frames
   auto _data_pacman_up = data["pacman_up"];
@@ -113,7 +114,7 @@ SDL_Rect Assets::get_sprite_alpha_numerical(char c) const {
   return it->second;
 }
 
-SDL_Surface *Assets::get_surface(void) const { return m_surface; }
+SDL_Surface *Assets::get_surface() const { return m_surface; }
 
-SDL_Rect Assets::get_sprite_dot(void) const { return m_dot; }
-SDL_Rect Assets::get_sprite_power_dot(void) const { return m_power_dot; }
+SDL_Rect Assets::get_sprite_dot() const { return m_dot; }
+SDL_Rect Assets::get_sprite_power_dot() const { return m_power_dot; }

@@ -58,6 +58,7 @@ void Game::run() {
     prev = now;
     fps = fps_counter.tick();
 
+    // render
     m_renderer->clear();
     m_renderer->blit(m_assets->m_bg, 0, 0);
     m_renderer->text(fmt::format("FPS %d", fps), w_sep, 0);
