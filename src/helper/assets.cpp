@@ -33,7 +33,7 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   const std::string filename = path.substr(0, path.find_last_of('.'));
   const std::ifstream file(fmt::format("%s.json", filename.c_str()));
 
-  std::stringstream buffer;
+  std::stringstream buffer{};
   buffer << file.rdbuf();
   auto data = nlohmann::json::parse(buffer.str());
 
@@ -58,7 +58,7 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
 
   // set the alpha-numerical characters
   auto _data_alpha_numerical = data["alpha-numerical-default"];
-  int x, y, w, h;
+  int x = -1, y = -1, w = -1, h = -1;
   x = _data_alpha_numerical["x"];
   y = _data_alpha_numerical["y"];
   w = _data_alpha_numerical["w"];
