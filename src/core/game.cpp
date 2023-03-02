@@ -28,9 +28,9 @@ Game::Game(const std::string &config_path) : m_running{true}, w_sep{0} {
   m_renderer = std::make_shared<Renderer>("Pacman", config_path);
   m_assets = m_renderer->get_assets();
 
-  m_map = std::make_unique<Map>(m_renderer->get_size());
-  m_pacman = std::make_unique<Pacman>(0, 0, 0, 0);
-  m_ghosts = std::vector<std::unique_ptr<Ghost>>{4};
+  m_map = std::make_shared<Map>(m_renderer->get_size());
+  m_pacman = std::make_shared<Pacman>(0, 0, 0, 0);
+  m_ghosts = std::vector<std::shared_ptr<Ghost>>{4};
 
   w_sep = m_map->get_width();
 

@@ -25,9 +25,9 @@ public:
 
 class Game {
 private:
-  std::unique_ptr<Map> m_map{};
-  std::unique_ptr<Pacman> m_pacman{};
-  std::vector<std::unique_ptr<Ghost>> m_ghosts{};
+  std::shared_ptr<Map> m_map{};
+  std::shared_ptr<Pacman> m_pacman{};
+  std::vector<std::shared_ptr<Ghost>> m_ghosts{};
 
   std::shared_ptr<Renderer> m_renderer;
   std::shared_ptr<Assets> m_assets;
