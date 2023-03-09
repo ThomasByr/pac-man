@@ -19,6 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Update apt
+        run: sudo apt-get update
+
       - name: Install Valgrind
         run: |
           sudo apt-get install valgrind > /dev/null
