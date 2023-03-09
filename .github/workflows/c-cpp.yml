@@ -16,12 +16,12 @@ jobs:
 
       - name: Install Valgrind
         run: |
-          sudo apt install valgrind > /dev/null
+          sudo apt-get install valgrind > /dev/null
           echo "Valgrind installed!"
 
       - name: Install libsdl2-dev
         run: |
-          sudo apt install libsdl2-dev > /dev/null
+          sudo apt-get install libsdl2-dev > /dev/null
           echo "libsdl2-dev installed!"
 
       - name: make check

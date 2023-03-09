@@ -13,7 +13,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            artifact_name: sos
+            artifact_name: pcmn
             target: x86_64-unknown-linux-gnu
 
     steps:
@@ -21,12 +21,12 @@ jobs:
 
       - name: Install Valgrind
         run: |
-          sudo apt install valgrind > /dev/null
+          sudo apt-get install valgrind > /dev/null
           echo "Valgrind installed!"
 
       - name: Install libsdl2-dev
         run: |
-          sudo apt install libsdl2-dev > /dev/null
+          sudo apt-get install libsdl2-dev > /dev/null
           echo "libsdl2-dev installed!"
 
       - name: setup
