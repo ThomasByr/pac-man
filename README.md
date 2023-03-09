@@ -67,9 +67,10 @@ We provide a [makefile](makefile) to ease the compilation process. It is compose
 - `make release` : compiles the program in release mode
 - `make debug` : compiles the program in debug mode
 - `make clean` : cleans the build directory and the binary
+- `make run` : runs the program
 - `make docs` : generates the documentation and opens it in your default browser
 
-To build the documentation, you will need `doxygen` and `graphviz` installed :
+There would be more to it, but these are the basics. To build the documentation, you will need `doxygen` and `graphviz` installed :
 
 ```bash
 sudo apt-get install doxygen graphviz
