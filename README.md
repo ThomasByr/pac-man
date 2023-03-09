@@ -62,6 +62,21 @@ The produced executable binary is to be found inside of the `bin` folder.
 > - ini.hpp, a single-file header-only library for INI files
 > - json.hpp, a single-file header-only library for JSON (by Niels Lohmann)
 
+We provide a [makefile](makefile) to ease the compilation process. It is composed of the following targets :
+
+- `make release` : compiles the program in release mode
+- `make debug` : compiles the program in debug mode
+- `make clean` : cleans the build directory and the binary
+- `make docs` : generates the documentation and opens it in your default browser
+
+To build the documentation, you will need `doxygen` and `graphviz` installed :
+
+```bash
+sudo apt-get install doxygen graphviz
+```
+
+The documentation is to be found inside of the `html` folder.
+
 ## 🧪 Testing
 
 Oh god... please don't.
