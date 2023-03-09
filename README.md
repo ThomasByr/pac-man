@@ -30,11 +30,11 @@
 Please make sure you have `libsdl2` installed :
 
 ```bash
-sudo apt install libsdl2-dev
+sudo apt-get update && sudo apt-get install libsdl2-dev
 ```
 
 <details>
-  <summary>  For Windows 11 WSLg users (click here to expand) </summary>
+  <summary> For Windows 11 WSLg users (click here to expand) </summary>
   Please make sure you have graphical x11 support installed:
 
   ```bash
