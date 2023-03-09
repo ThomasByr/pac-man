@@ -51,6 +51,11 @@ docs:
 	@cp -r assets/* html/assets
 	@doxygen ./Doxyfile > /dev/null 2>&1
 	@echo "\033[97mDocumentation built!\033[0m"
+	@( \
+	(  wslview html/index.html \
+	|| xdg-open html/index.html \
+	|| open html/index.html ) > /dev/null 2>&1 & ) \
+	|| echo "\033[91mCould not open documentation in browser.\033[0m"
 
 debug: CFLAGS += -Og -DDEBUG -g -ggdb -DYYDEBUG
 debug: YFLAGS += -v
