@@ -41,6 +41,14 @@ sudo apt-get update && sudo apt-get install libsdl2-dev
   sudo apt-get install libgl1 libxkbcommon-x11-0
   ```
 
+  Also, make sure `wsl --version` outputs at least the following :
+
+  ```bash
+  WSL    Version : 1.1.3.0
+  kernel Version : 5.15.90.1
+  WSLg   Version : 1.0.49
+  ```
+
 </details>
 
 Then compile a release version of the program with :
