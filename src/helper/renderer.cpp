@@ -84,10 +84,10 @@ void Renderer::clear() {
   SDL_FillRect(m_surface, nullptr, SDL_MapRGB(m_surface->format, 0, 0, 0));
 }
 
-void Renderer::blit(SDL_Rect src, int x, int y) {
+void Renderer::blit(SDL_Rect src, int x, int y, double scale) {
 
-  auto w = static_cast<double>(src.w * m_scale);
-  auto h = static_cast<double>(src.h * m_scale);
+  auto w = static_cast<double>(src.w * m_scale) * scale;
+  auto h = static_cast<double>(src.h * m_scale) * scale;
   auto real_x = static_cast<double>(x);
   auto real_y = static_cast<double>(y);
 

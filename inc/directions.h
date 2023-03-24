@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-enum class Direction { UP, DOWN, LEFT, RIGHT };
+enum class Direction { UP, DOWN, LEFT, RIGHT, NONE };
 
 std::ostream &operator<<(std::ostream &os, const Direction &dir);
 std::string to_string(const Direction &dir);

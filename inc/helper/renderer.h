@@ -53,7 +53,7 @@ public:
 
   void flip(double delta = -1);
   void clear(void);
-  void blit(SDL_Rect src, int x, int y);
+  void blit(SDL_Rect src, int x, int y, double scale = 1);
 
   void text(const std::string &text, int x, int y);
 
