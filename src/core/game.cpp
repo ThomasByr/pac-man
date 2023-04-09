@@ -49,6 +49,7 @@ void Game::run() {
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) { m_running = false; }
     }
+
     // update
     fps = fps_counter.tick();
 
