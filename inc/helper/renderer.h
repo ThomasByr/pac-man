@@ -25,6 +25,8 @@ private:
   double m_scale;         // scale of the window
   double size;            // size of a tile
 
+  size_t m_fps_counter; // counter for fps
+
   std::vector<struct Config> m_config_stack{}; // stack of configurations
 
   RectMode m_rect_mode;        // rect mode
@@ -51,7 +53,7 @@ public:
   int get_window_width(void) const;
   int get_window_height(void) const;
 
-  void flip(double delta = -1);
+  void flip(void);
   void clear(void);
   void blit(SDL_Rect src, int x, int y, double scale = 1);
 
@@ -61,6 +63,8 @@ public:
   void translate(double x = 0, double y = 0);
   void push(void);
   void pop(void);
+
+  size_t get_fps_count(void) const;
 };
 
 #endif // __inc_helper_renderer_H__

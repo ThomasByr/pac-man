@@ -1,5 +1,4 @@
 
-
 #include "ini.hpp"
 
 #include "helper/assets.h"
@@ -55,6 +54,7 @@ Renderer::Renderer(const std::string &title, const std::string &config_path)
   double scale_y = static_cast<double>(m_height) / src_bg.h;
   m_scale = std::min(scale_x, scale_y);
   size *= m_scale;
+  m_fps_counter = 0;
 }
 
 Renderer::~Renderer() {
@@ -69,15 +69,21 @@ double Renderer::get_size() const { return size; }
 int Renderer::get_window_width() const { return m_width; }
 int Renderer::get_window_height() const { return m_height; }
 
-void Renderer::flip(double delta) {
-  const Uint64 ms_in_s = 1000;
-  const Uint64 delay = ms_in_s / m_fps;
+void Renderer::flip() {
+  static Uint64 last_time = 0;
+  static const double ms_in_s = 1000;
 
-  auto real_delay = static_cast<Uint64>(delta * ms_in_s);
-  if (delta < 0) { real_delay = 0; }
-  if (real_delay < delay) { SDL_Delay(delay - real_delay); }
+  Uint64 current_time = SDL_GetTicks64(); // this should be the very first thing
+  Uint64 elapsed_time = current_time - last_time;
 
-  SDL_UpdateWindowSurface(m_window);
+  double target_delay = ms_in_s / m_fps;
+  auto wait_time = target_delay - static_cast<double>(elapsed_time);
+  if (wait_time > 0) SDL_Delay(static_cast<Uint32>(wait_time));
+
+  SDL_UpdateWindowSurface(m_window); // update window as soon as we delay
+  m_fps_counter++;                   // update total frame count
+  last_time = SDL_GetTicks64();      // here we can't use current_time, because
+                                     // SDL_Delay() takes some time too :)
 }
 
 void Renderer::clear() {
@@ -145,4 +151,5 @@ void Renderer::pop() {
   m_trans_y = c.trans_y;
 }
 
+size_t Renderer::get_fps_count() const { return m_fps_counter; }
 void Renderer::rect_mode(RectMode mode) { m_rect_mode = mode; }

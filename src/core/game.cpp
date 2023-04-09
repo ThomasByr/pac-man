@@ -43,8 +43,6 @@ void Game::run() {
   FPSCounter fps_counter;
   Uint64 fps = 0;
 
-  Uint64 prev = 0, now = 0;
-
   while (m_running) {
     // handle quit event
     SDL_Event event;
@@ -52,10 +50,6 @@ void Game::run() {
       if (event.type == SDL_QUIT) { m_running = false; }
     }
     // update
-    now = SDL_GetPerformanceCounter();
-    auto delta =
-        static_cast<double>(now - prev) / (double)SDL_GetPerformanceFrequency();
-    prev = now;
     fps = fps_counter.tick();
 
     // render
@@ -64,8 +58,6 @@ void Game::run() {
     m_renderer->text(fmt::format("FPS %d", fps), w_sep, 0);
 
     m_map->show(m_renderer);
-
-    m_renderer->flip(delta);
-    // m_renderer->flip(); (void)delta;
+    m_renderer->flip();
   }
 }
