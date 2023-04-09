@@ -9,3 +9,8 @@
 - brought back `ctpl.hpp` (thread pool)
 - added `ini.hpp` (INI files) and `json.hpp` (JSON files)
 - made some header files for game logic
+
+**v0.1.1** fps counter
+
+- added fps with bitmap font
+- target fps is now respected (🥳)
