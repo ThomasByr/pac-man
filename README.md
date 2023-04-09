@@ -138,10 +138,23 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - added `ini.hpp` (INI files) and `json.hpp` (JSON files)
 - made some header files for game logic
 
+**v0.1.1** fps counter
+
+- added fps with bitmap font
+- target fps is now respected (🥳)
+
 </details>
 
 ## 🐛 Bugs & TODO
 
 **known bugs** (final correction patch version) [see Issues](https://github.com/ThomasByr/pac-man/issues)
 
+- `target fps bypassed` (resolved by re-updating timers after each frame)
+
 **todo** (first implementation version)
+
+- [ ] show pacman
+- [ ] show ghosts
+- [ ] implement pacman direction and collisions logic
+- [ ] implement ghosts tracking algorithms
+- [ ] create levels, scores, lives and a save system
