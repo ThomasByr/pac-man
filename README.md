@@ -49,6 +49,14 @@ sudo apt-get update && sudo apt-get install libsdl2-dev
   WSLg   Version : 1.0.49
   ```
 
+  If not, please update your WSLg version by following the instructions [here](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel#update-the-wsl-2-linux-kernel). tl;dr : type this in your powershell :
+
+  ```ps1
+  # will only work if you have the latest Windows 11 update
+  wsl --shutdown
+  wsl --update
+  ```
+
 </details>
 
 Then compile a release version of the program with :
