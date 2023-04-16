@@ -1,5 +1,5 @@
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <memory>
 #include <vector>
@@ -48,6 +48,28 @@ void Game::run() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) { m_running = false; }
+
+      // handle key events
+      if (event.type == SDL_KEYDOWN) {
+        switch (event.key.keysym.sym) {
+
+        case SDLK_UP:
+          m_pacman->set_direction(Direction::UP);
+          break;
+        case SDLK_DOWN:
+          m_pacman->set_direction(Direction::DOWN);
+          break;
+        case SDLK_LEFT:
+          m_pacman->set_direction(Direction::LEFT);
+          break;
+        case SDLK_RIGHT:
+          m_pacman->set_direction(Direction::RIGHT);
+          break;
+        default:
+          break;
+
+        }
+      }
     }
 
     // update

@@ -1,4 +1,6 @@
 
+#include <SDL.h>
+
 #include "core/ghost.h"
 
 Ghost::Ghost(const double cx, const double cy, const double w, const double h,
