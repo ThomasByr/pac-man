@@ -2,7 +2,7 @@
 #ifndef __inc_helper_assets_H__
 #define __inc_helper_assets_H__
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <map>
 #include <string>

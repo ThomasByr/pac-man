@@ -2,7 +2,7 @@
 #ifndef __inc_core_game_H__
 #define __inc_core_game_H__
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <memory>
 #include <vector>

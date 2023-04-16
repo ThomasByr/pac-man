@@ -2,7 +2,7 @@
 #ifndef __inc_core_pcmn_H__
 #define __inc_core_pcmn_H__
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <memory>
 
@@ -14,6 +14,12 @@ class Pacman : public Entity {
 public:
   Pacman(const double cx, const double cy, const double w, const double h);
   Pacman(const Pacman &other) = delete;
+  Pacman(Pacman &&other) = delete;
+  Pacman &operator=(const Pacman &other) = delete;
+  Pacman &operator=(Pacman &&other) = delete;
+
+  virtual ~Pacman() = default;
+
   void show(std::shared_ptr<Renderer> renderer);
 };
 

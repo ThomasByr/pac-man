@@ -2,7 +2,7 @@
 #ifndef __inc_helper_renderer_H__
 #define __inc_helper_renderer_H__
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <memory>
 #include <string>

@@ -2,7 +2,7 @@
 #ifndef __inc_core_ghost_H__
 #define __inc_core_ghost_H__
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <memory>
 
@@ -19,7 +19,13 @@ private:
 public:
   Ghost(const double cx, const double cy, const double w, const double h, GhostType type);
   Ghost(const Ghost &other) = delete;
-  void show(std::shared_ptr<Renderer> renderer);
+  Ghost(Ghost &&other) = delete;
+  Ghost &operator=(const Ghost &other) = delete;
+  Ghost &operator=(Ghost &&other) = delete;
+
+  virtual ~Ghost() = default;
+
+  void show(std::shared_ptr<Renderer> renderer) override;
 };
 
 #endif // __inc_core_ghost_H__
