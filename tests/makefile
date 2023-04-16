@@ -1,7 +1,7 @@
 CC = g++
 
-CFLAGS = -Og -pipe -std=gnu++17 -Wpedantic -fprofile-arcs -ftest-coverage -Wall -Wextra -Werror -DDEBUG -g -ggdb $(sdl2-config --libs --cflags)
-LDLIBS = -pthread -lSDL2
+CFLAGS = -Og -pipe -std=gnu++17 -Wpedantic -fprofile-arcs -ftest-coverage -Wall -Wextra -Werror -DDEBUG -g -ggdb $(shell sdl2-config --cflags)
+LDLIBS = -pthread $(shell sdl2-config --libs)
 
 LEXYACC_PATH = ../gen
 INCLUDE_PATH = ../inc
