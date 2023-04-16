@@ -158,6 +158,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 **known bugs** (final correction patch version) [see Issues](https://github.com/ThomasByr/pac-man/issues)
 
 - ~~target fps bypassed~~ (resolved by re-updating timers after each frame)
+- pac-man speed is set to 1.0f (won't fix)
 
 **todo** (first implementation version)
 
