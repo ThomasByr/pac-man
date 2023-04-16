@@ -2,9 +2,9 @@ CC = g++
 
 ## variables [leave blank if not needed]
 
-CFLAGS = -pipe -std=gnu++17 -Wpedantic -Wall -Wextra -Werror $(sdl2-config --cflags --libs)
+CFLAGS = -pipe -std=gnu++17 -Wpedantic -Wall -Wextra -Werror $(shell sdl2-config --cflags)
 YFLAGS =
-LDLIBS = -lpthread -lSDL2
+LDLIBS = -lpthread $(shell sdl2-config --libs)
 
 LEXYACC_PATH =
 INCLUDE_PATH = inc
