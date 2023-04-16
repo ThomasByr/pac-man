@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/SDL2"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "intelliSenseMode": "${default}",
+            "configurationProvider": "vscode-clangd",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++17"
+        }
+    ],
+    "version": 4
+}
