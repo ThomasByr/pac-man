@@ -21,6 +21,9 @@ public:
   virtual ~Pacman() = default;
 
   void show(std::shared_ptr<Renderer> renderer);
+
+  bool can_go(const Map &map, const Direction &dir) const;
+  bool can_change_direction(const Map &map) const;
 };
 
 #endif // __inc_core_pcmn_H__

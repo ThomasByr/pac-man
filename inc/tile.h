@@ -3,7 +3,9 @@
 #define __inc_tile_H__
 
 #include <SDL.h>
+#include <optional>
 
+#include "directions.h"
 #include "helper/renderer.h"
 
 /* from map.txt
@@ -30,12 +32,14 @@ class Tile {
 private:
   TileType m_type; // type of the tile
   int m_i, m_j;    // position of the tile in the array
-  double size;        // size of the tile
+  double size;     // size of the tile
 
 public:
   Tile(const int type, const int x, const int y, const double size);
 
   void show(std::shared_ptr<Renderer> renderer);
+
+  bool can_go(const std::optional<Tile> &target) const;
 };
 
 #endif // __inc_tile_H__
