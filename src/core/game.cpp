@@ -64,7 +64,7 @@ void Game::run() {
 
     // update
     fps = fps_counter.tick();
-    // todo: update pacman and ghosts here
+    m_pacman->update(m_map);
 
     // render
     m_renderer->clear();

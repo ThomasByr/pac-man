@@ -10,7 +10,7 @@ Pacman::Pacman(const double cx, const double cy, const double w, const double h)
 
 void Pacman::show(std::shared_ptr<Renderer> renderer) {
   const SDL_Rect asset = renderer->get_assets()->get_sprite_pacman(
-    m_direction, renderer->get_fps_count() / renderer->get_update_interval());
+    m_direction, renderer->get_fps_anim_count());
 
   renderer->push();
   renderer->rect_mode(RectMode::CENTER);
@@ -19,17 +19,17 @@ void Pacman::show(std::shared_ptr<Renderer> renderer) {
   renderer->pop();
 }
 
-bool Pacman::can_go(const Map &map, const Direction &dir) const {
+bool Pacman::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
   int i = -1, j = -1;
-  std::tie(i, j) = get_ij(map.get_size());
+  std::tie(i, j) = get_ij(map->get_size());
   if (i == -1 || j == -1) { return false; }
 
-  return map.can_go(i, j, dir);
+  return map->can_go(i, j, dir);
 }
 
-bool Pacman::can_change_direction(const Map &map) const {
+bool Pacman::can_change_direction(std::shared_ptr<Map> map) const {
   static const double epsilon = 1e-1;
-  double tile_size = map.get_size();
+  double tile_size = map->get_size();
 
   // the relative x position of the entity on the tile
   double relative_x = std::fmod(m_cx, tile_size);
@@ -39,4 +39,18 @@ bool Pacman::can_change_direction(const Map &map) const {
   // if the entity is in the middle of the tile
   return std::abs(relative_x - tile_size / 2) < epsilon &&
          std::abs(relative_y - tile_size / 2) < epsilon;
+}
+
+void Pacman::update(std::shared_ptr<Map> map) {
+  (void)map;
+
+  switch (m_direction) {
+  case Direction::UP: m_cy -= 1; break;
+  case Direction::DOWN: m_cy += 1; break;
+  case Direction::LEFT: m_cx -= 1; break;
+  case Direction::RIGHT: m_cx += 1; break;
+  default: break;
+  }
+  if (m_reg_direction != Direction::NONE) { m_direction = m_reg_direction; }
+  m_reg_direction = Direction::NONE;
 }

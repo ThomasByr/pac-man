@@ -151,6 +151,10 @@ void Renderer::pop() {
   m_trans_y = c.trans_y;
 }
 
+void Renderer::rect_mode(RectMode mode) { m_rect_mode = mode; }
+
 size_t Renderer::get_fps_count() const { return m_fps_counter; }
 int Renderer::get_update_interval() const { return m_update_interval; }
-void Renderer::rect_mode(RectMode mode) { m_rect_mode = mode; }
+size_t Renderer::get_fps_anim_count() const {
+  return m_fps_counter / m_update_interval;
+}
