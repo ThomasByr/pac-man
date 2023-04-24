@@ -37,8 +37,8 @@ void ini_test_0(void) {
   assert_eq(std::strcmp(data["database"]["server"].as<const char *>(), ""), 0);
   assert_eq(data["database"]["port"].as<int>(), 143);
   assert_eq(
-      std::strcmp(data["database"]["file"].as<const char *>(), "\"payroll.dat\""),
-      0);
+    std::strcmp(data["database"]["file"].as<const char *>(), "\"payroll.dat\""),
+    0);
 }
 
 } // namespace detail
