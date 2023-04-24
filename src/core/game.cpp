@@ -29,7 +29,7 @@ Game::Game(const std::string &config_path) : m_running{true}, w_sep{0} {
   m_assets = m_renderer->get_assets();
 
   m_map = std::make_shared<Map>(m_renderer->get_size());
-  m_pacman = std::make_shared<Pacman>(0, 0, 0, 0);
+  m_pacman = std::make_shared<Pacman>(150, 150, 0, 0);
   m_ghosts = std::vector<std::shared_ptr<Ghost>>{4};
 
   w_sep = m_map->get_width();
@@ -64,6 +64,7 @@ void Game::run() {
 
     // update
     fps = fps_counter.tick();
+    // todo: update pacman and ghosts here
 
     // render
     m_renderer->clear();
@@ -71,6 +72,11 @@ void Game::run() {
     m_renderer->text(fmt::format("FPS %d", fps), w_sep, 0);
 
     m_map->show(m_renderer);
+
+    // show entities after map & bg
+    m_pacman->show(m_renderer);
+
+    // flip buffers
     m_renderer->flip();
   }
 }

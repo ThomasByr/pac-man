@@ -96,9 +96,24 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   m_alpha_numerical.insert(make_pair{'"', {x + 15 * (w + 1), y, w, h}});
 
   // set m_pacman_up for all frames
-  auto _data_pacman_up = data["pacman_up"];
+  auto _data_pacman_up = data["m_pacman_up"];
   for (size_t i = 0; i < _data_pacman_up.size(); i++) {
     m_pacman_up.push_back(from_json(_data_pacman_up[i]));
+  }
+  // set m_pacman_down for all frames
+  auto _data_pacman_down = data["m_pacman_down"];
+  for (size_t i = 0; i < _data_pacman_down.size(); i++) {
+    m_pacman_down.push_back(from_json(_data_pacman_down[i]));
+  }
+  // set m_pacman_left for all frames
+  auto _data_pacman_left = data["m_pacman_left"];
+  for (size_t i = 0; i < _data_pacman_left.size(); i++) {
+    m_pacman_left.push_back(from_json(_data_pacman_left[i]));
+  }
+  // set m_pacman_right for all frames
+  auto _data_pacman_right = data["m_pacman_right"];
+  for (size_t i = 0; i < _data_pacman_right.size(); i++) {
+    m_pacman_right.push_back(from_json(_data_pacman_right[i]));
   }
 }
 

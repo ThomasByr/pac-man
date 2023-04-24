@@ -152,4 +152,5 @@ void Renderer::pop() {
 }
 
 size_t Renderer::get_fps_count() const { return m_fps_counter; }
+int Renderer::get_update_interval() const { return m_update_interval; }
 void Renderer::rect_mode(RectMode mode) { m_rect_mode = mode; }
