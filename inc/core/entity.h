@@ -4,8 +4,8 @@
 
 #include <SDL.h>
 
-#include <tuple>
 #include <memory>
+#include <tuple>
 
 #include "core/map.h"
 #include "helper/renderer.h"
@@ -29,14 +29,14 @@ public:
 
   /**
    * @brief Get the i and j of the entity on the map (index of the tile)
-   * 
+   *
    * @param size size of the tile
-   * @return std::tuple<int, int> 
+   * @return std::tuple<int, int>
    */
   std::tuple<int, int> get_ij(double size) const;
   /**
    * @brief Check if the entity can go to the direction
-   * 
+   *
    * @param map map of the game
    * @param dir direction to check
    * @return true if the entity can go to the direction ;
@@ -45,8 +45,9 @@ public:
   virtual bool can_go(const Map &map, const Direction &dir) const = 0;
   /**
    * @brief Check if the entity can change direction
-   * @note Does not check if the entity can go to any direction, only if it is in the middle of a tile
-   * 
+   * @note Does not check if the entity can go to any direction, only if it is
+   * in the middle of a tile
+   *
    * @param map map of the game
    * @return true if the entity is somewhere in the middle of a tile
    * @return false otherwise

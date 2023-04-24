@@ -11,7 +11,7 @@
 #include "utils.h"
 
 Tile::Tile(const int type, const int x, const int y, const double size)
-    : m_type{static_cast<TileType>(type)}, m_i{x}, m_j{y}, size{size} {}
+  : m_type{static_cast<TileType>(type)}, m_i{x}, m_j{y}, size{size} {}
 
 void Tile::show(std::shared_ptr<Renderer> renderer) {
 
