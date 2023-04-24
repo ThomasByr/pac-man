@@ -83,7 +83,7 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   m_alpha_numerical.insert(make_pair{' ', {x, y, w, h}});
   for (int i = 0; i < 15; i++) { /* A-O */
     m_alpha_numerical.insert(
-        make_pair{'A' + i, {x + (i + 1) * (w + 1), y, w, h}});
+      make_pair{'A' + i, {x + (i + 1) * (w + 1), y, w, h}});
   }
   // set "[P-Z].> c""
   y += h + 1;
@@ -121,14 +121,10 @@ SDL_Rect Assets::get_sprite_power_dot() const { return m_power_dot; }
 
 SDL_Rect Assets::get_sprite_pacman(const Direction &dir, int fc) const {
   switch (dir) {
-  case Direction::UP:
-    return m_pacman_up[fc % m_pacman_up.size()];
-  case Direction::DOWN:
-    return m_pacman_down[fc % m_pacman_down.size()];
-  case Direction::LEFT:
-    return m_pacman_left[fc % m_pacman_left.size()];
-  case Direction::RIGHT:
-    return m_pacman_right[fc % m_pacman_right.size()];
+  case Direction::UP: return m_pacman_up[fc % m_pacman_up.size()];
+  case Direction::DOWN: return m_pacman_down[fc % m_pacman_down.size()];
+  case Direction::LEFT: return m_pacman_left[fc % m_pacman_left.size()];
+  case Direction::RIGHT: return m_pacman_right[fc % m_pacman_right.size()];
   default: // fallback for Direction::NONE
     return m_pacman_up[0];
   }

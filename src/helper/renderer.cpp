@@ -7,9 +7,9 @@
 #include "utils.h"
 
 Renderer::Renderer(const std::string &title, const std::string &config_path)
-    : m_window{nullptr}, m_surface{nullptr}, m_sprites{nullptr}, m_scale{1},
-      size{0}, m_config_stack{},
-      m_rect_mode{RectMode::CORNER}, m_trans_x{0}, m_trans_y{0} {
+  : m_window{nullptr}, m_surface{nullptr}, m_sprites{nullptr}, m_scale{1},
+    size{0}, m_config_stack{},
+    m_rect_mode{RectMode::CORNER}, m_trans_x{0}, m_trans_y{0} {
   ini::IniFile data;
   try {
     data.load(config_path);

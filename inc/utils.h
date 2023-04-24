@@ -77,7 +77,8 @@ template <typename... Args> void alert(const std::string &fmt, Args &&...args);
  * @param fmt   format string
  * @param args  format arguments
  */
-template <typename... Args> void [[noreturn]] panic(const std::string &fmt, Args &&...args);
+template <typename... Args>
+void [[noreturn]] panic(const std::string &fmt, Args &&...args);
 
 } // namespace fmt
 

@@ -108,9 +108,7 @@ extern unsigned long _no_asserts;
 
 #ifndef QUIET
 #define exe(f) \
-  do {         \
-    f();       \
-  } while (0);
+  do { f(); } while (0);
 #else
 #define exe(f)                                \
   do {                                        \

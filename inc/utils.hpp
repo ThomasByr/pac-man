@@ -31,10 +31,8 @@ template <typename T> auto convert(T &&t) {
 template <typename... Args>
 std::string string_format(const std::string &format, Args &&...args) {
   const auto size =
-      snprintf(nullptr, 0, format.c_str(), std::forward<Args>(args)...) + 1;
-  if (size <= 0) {
-    throw std::runtime_error("Error during formatting.");
-  }
+    snprintf(nullptr, 0, format.c_str(), std::forward<Args>(args)...) + 1;
+  if (size <= 0) { throw std::runtime_error("Error during formatting."); }
   std::unique_ptr<char[]> buf(new char[size]);
   snprintf(buf.get(), size, format.c_str(), args...);
   return std::string(buf.get(), buf.get() + size - 1);
@@ -70,7 +68,8 @@ template <typename... Args> void alert(const std::string &fmt, Args &&...args) {
   cerr << FG_RED << "   alert " << RST << format(fmt, args...) << endl;
 }
 
-template <typename... Args> void [[noreturn]] panic(const std::string &fmt, Args &&...args) {
+template <typename... Args>
+void [[noreturn]] panic(const std::string &fmt, Args &&...args) {
   using namespace std;
   using namespace internal;
   cerr << FG_RED << "   panic " << RST << format(fmt, args...) << endl;

@@ -11,7 +11,7 @@
 #include "utils.h"
 
 Tile::Tile(const int type, const int x, const int y, const double size)
-    : m_type{static_cast<TileType>(type)}, m_i{x}, m_j{y}, size{size} {}
+  : m_type{static_cast<TileType>(type)}, m_i{x}, m_j{y}, size{size} {}
 
 void Tile::show(std::shared_ptr<Renderer> renderer) {
 
@@ -36,4 +36,13 @@ void Tile::show(std::shared_ptr<Renderer> renderer) {
   }
   renderer->blit(assets, static_cast<int>(x), static_cast<int>(y));
   renderer->pop();
+}
+
+bool Tile::can_go(const std::optional<Tile> &target) const {
+
+  TileType target_type = TileType::WALL; // init to something we can't go to
+  if (target.has_value()) { target_type = target.value().m_type; }
+
+  return target_type == TileType::EMPTY || target_type == TileType::DOT ||
+         target_type == TileType::POWER_DOT;
 }

@@ -4,9 +4,9 @@
 
 #include <SDL.h>
 
+#include <deque>
 #include <memory>
 #include <vector>
-#include <deque>
 
 #include "helper/renderer.h"
 
@@ -17,6 +17,7 @@
 class FPSCounter {
 private:
   std::deque<Uint64> last_second_frames{};
+
 public:
   FPSCounter();
   ~FPSCounter();

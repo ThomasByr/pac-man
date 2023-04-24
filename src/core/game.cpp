@@ -53,21 +53,11 @@ void Game::run() {
       if (event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
 
-        case SDLK_UP:
-          m_pacman->set_direction(Direction::UP);
-          break;
-        case SDLK_DOWN:
-          m_pacman->set_direction(Direction::DOWN);
-          break;
-        case SDLK_LEFT:
-          m_pacman->set_direction(Direction::LEFT);
-          break;
-        case SDLK_RIGHT:
-          m_pacman->set_direction(Direction::RIGHT);
-          break;
-        default:
-          break;
-
+        case SDLK_UP: m_pacman->set_direction(Direction::UP); break;
+        case SDLK_DOWN: m_pacman->set_direction(Direction::DOWN); break;
+        case SDLK_LEFT: m_pacman->set_direction(Direction::LEFT); break;
+        case SDLK_RIGHT: m_pacman->set_direction(Direction::RIGHT); break;
+        default: break;
         }
       }
     }
