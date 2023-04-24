@@ -57,6 +57,12 @@ docs:
 	|| open html/index.html ) > /dev/null 2>&1 & ) \
 	|| echo "\033[91mCould not open documentation in browser.\033[0m"
 
+.PHONY : format
+format:
+# we exclude the lib directory because it may contain very large files
+	@find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.${FILEXT}" \) -not -path "./lib/*" -exec clang-format --style=file -i {} \;
+	@echo "\033[92mFormatting complete!\033[0m"
+
 debug: CFLAGS += -Og -DDEBUG -g -ggdb -DYYDEBUG
 debug: YFLAGS += -v
 debug: $(PATH_TO_EXE)
