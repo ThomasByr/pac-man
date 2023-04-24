@@ -4,7 +4,9 @@
 #include <cctype>
 #include <fstream>
 #include <iostream>
+#include <optional>
 #include <string>
+#include <vector>
 
 #include "core/map.h"
 #include "tile.h"
@@ -49,3 +51,25 @@ void Map::show(std::shared_ptr<Renderer> renderer) {
 
 int Map::get_width() const { return m_map[0].size() * size; }
 int Map::get_height() const { return m_map.size() * size; }
+double Map::get_size() const { return size; }
+
+bool Map::can_go(const int i, const int j, const Direction &dir) const {
+  Tile my_tile = m_map[i][j];
+  std::optional<Tile> target = std::nullopt;
+  switch (dir) {
+  case Direction::UP:
+    if (i > 0) { target = m_map[i - 1][j]; }
+    break;
+  case Direction::DOWN:
+    if (i < static_cast<int>(m_map.size() - 1)) { target = m_map[i + 1][j]; }
+    break;
+  case Direction::LEFT:
+    if (j > 0) { target = m_map[i][j - 1]; }
+    break;
+  case Direction::RIGHT:
+    if (j < static_cast<int>(m_map[0].size() - 1)) { target = m_map[i][j + 1]; }
+    break;
+  case Direction::NONE: break;
+  }
+  return my_tile.can_go(target);
+}
