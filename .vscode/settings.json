@@ -1,0 +1,14 @@
+{
+  "files.associations": {
+    "*.s": "asm-intel-x86-generic",
+    "Doxyfile": "plaintext",
+    "*.lex": "lex",
+    "LICENSE": "plaintext",
+    "array": "cpp",
+    "string_view": "cpp",
+    "initializer_list": "cpp",
+    "ranges": "cpp",
+    "utility": "cpp",
+    "valarray": "cpp"
+  }
+}
