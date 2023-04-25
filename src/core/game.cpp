@@ -2,6 +2,7 @@
 #include <SDL.h>
 
 #include <memory>
+#include <tuple>
 #include <vector>
 
 #include "helper/assets.h"
@@ -29,7 +30,9 @@ Game::Game(const std::string &config_path) : m_running{true}, w_sep{0} {
   m_assets = m_renderer->get_assets();
 
   m_map = std::make_shared<Map>(m_renderer->get_size());
-  m_pacman = std::make_shared<Pacman>(150, 150, 0, 0);
+  double cx, cy;
+  std::tie(cx, cy) = m_map->get_start_tile_c();
+  m_pacman = std::make_shared<Pacman>(cx, cy, 0, 0);
   m_ghosts = std::vector<std::shared_ptr<Ghost>>{4};
 
   w_sep = m_map->get_width();
@@ -69,7 +72,7 @@ void Game::run() {
     // render
     m_renderer->clear();
     m_renderer->blit(m_assets->m_bg, 0, 0);
-    m_renderer->text(fmt::format("FPS %d", fps), w_sep, 0);
+    m_renderer->text(fmt::format("FPS %d", fps), w_sep + 10, 10);
 
     m_map->show(m_renderer);
 

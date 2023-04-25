@@ -106,7 +106,7 @@ void Renderer::blit(SDL_Rect src, int x, int y, double scale) {
 
   SDL_Rect dest = {static_cast<int>(real_x), static_cast<int>(real_y),
                    static_cast<int>(w), static_cast<int>(h)};
-  SDL_SetColorKey(m_sprites, false, 0);
+  SDL_SetColorKey(m_sprites, true, 0);
   SDL_BlitScaled(m_sprites, &src, m_surface, &dest);
 }
 

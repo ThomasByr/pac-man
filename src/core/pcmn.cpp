@@ -24,11 +24,12 @@ bool Pacman::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
   std::tie(i, j) = get_ij(map->get_size());
   if (i == -1 || j == -1) { return false; }
 
-  return map->can_go(i, j, dir);
+  return map->can_go(j, i, dir); // why j, i and not i, j ?
+                                 // well ...
 }
 
 bool Pacman::can_change_direction(std::shared_ptr<Map> map) const {
-  static const double epsilon = 1e-1;
+  static const double epsilon = 1.5;
   double tile_size = map->get_size();
 
   // the relative x position of the entity on the tile
@@ -51,6 +52,20 @@ void Pacman::update(std::shared_ptr<Map> map) {
   case Direction::RIGHT: m_cx += 1; break;
   default: break;
   }
-  if (m_reg_direction != Direction::NONE) { m_direction = m_reg_direction; }
-  m_reg_direction = Direction::NONE;
+
+  // first check if we can still go in the current direction
+  if (can_change_direction(map) && !can_go(map, m_direction)) {
+    // in that case we simply stop
+    m_direction = Direction::NONE;
+  }
+
+  // then we check if the registered direction is valid
+  // we do not want to check if the current direction is NONE because we can
+  // change direction while in motion
+  if (can_change_direction(map) && can_go(map, m_reg_direction)) {
+    if (m_reg_direction != m_direction) {
+      m_direction = m_reg_direction;
+      m_reg_direction = Direction::NONE;
+    }
+  }
 }

@@ -13,7 +13,8 @@
 
 #include "utils.h"
 
-Map::Map(double size, const std::string &path) : m_map{}, size{size} {
+Map::Map(double size, const std::string &path)
+  : m_map{}, size{size}, m_start_tile_cx{0}, m_start_tile_cy{0} {
   using namespace std;
 
   ifstream file{path};
@@ -35,12 +36,21 @@ Map::Map(double size, const std::string &path) : m_map{}, size{size} {
     vector<Tile> row{};
     for (char c : line) {
       row.push_back(Tile{static_cast<int>(c - '0'), i, j, size});
+      if (c == '9') {
+        m_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        m_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      } // save the center position of the start tile
       j++;
     }
     m_map.push_back(row);
     i++;
     j = 0;
   }
+  if (m_start_tile_cx == 0 && m_start_tile_cy == 0) {
+    fmt::panic("Map::Map: no start tile found");
+  }
+  fmt::debug("Map::Map: start tile found at (%f, %f)", m_start_tile_cx,
+             m_start_tile_cy);
 }
 
 void Map::show(std::shared_ptr<Renderer> renderer) {
@@ -52,6 +62,10 @@ void Map::show(std::shared_ptr<Renderer> renderer) {
 int Map::get_width() const { return m_map[0].size() * size; }
 int Map::get_height() const { return m_map.size() * size; }
 double Map::get_size() const { return size; }
+
+std::tuple<double, double> Map::get_start_tile_c() const {
+  return {m_start_tile_cx, m_start_tile_cy};
+}
 
 bool Map::can_go(const int i, const int j, const Direction &dir) const {
   Tile my_tile = m_map[i][j];
