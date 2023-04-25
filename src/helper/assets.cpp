@@ -96,9 +96,36 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   m_alpha_numerical.insert(make_pair{'"', {x + 15 * (w + 1), y, w, h}});
 
   // set m_pacman_up for all frames
-  auto _data_pacman_up = data["pacman_up"];
+  auto _data_pacman_up = data["m_pacman_up"];
   for (size_t i = 0; i < _data_pacman_up.size(); i++) {
     m_pacman_up.push_back(from_json(_data_pacman_up[i]));
+  }
+  for (size_t i = _data_pacman_up.size() - 1; i > 0; i--) {
+    m_pacman_up.push_back(from_json(_data_pacman_up[i]));
+  }
+  // set m_pacman_down for all frames
+  auto _data_pacman_down = data["m_pacman_down"];
+  for (size_t i = 0; i < _data_pacman_down.size(); i++) {
+    m_pacman_down.push_back(from_json(_data_pacman_down[i]));
+  }
+  for (size_t i = _data_pacman_down.size() - 1; i > 0; i--) {
+    m_pacman_down.push_back(from_json(_data_pacman_down[i]));
+  }
+  // set m_pacman_left for all frames
+  auto _data_pacman_left = data["m_pacman_left"];
+  for (size_t i = 0; i < _data_pacman_left.size(); i++) {
+    m_pacman_left.push_back(from_json(_data_pacman_left[i]));
+  }
+  for (size_t i = _data_pacman_left.size() - 1; i > 0; i--) {
+    m_pacman_left.push_back(from_json(_data_pacman_left[i]));
+  }
+  // set m_pacman_right for all frames
+  auto _data_pacman_right = data["m_pacman_right"];
+  for (size_t i = 0; i < _data_pacman_right.size(); i++) {
+    m_pacman_right.push_back(from_json(_data_pacman_right[i]));
+  }
+  for (size_t i = _data_pacman_right.size() - 1; i > 0; i--) {
+    m_pacman_right.push_back(from_json(_data_pacman_right[i]));
   }
 }
 
@@ -121,11 +148,11 @@ SDL_Rect Assets::get_sprite_power_dot() const { return m_power_dot; }
 
 SDL_Rect Assets::get_sprite_pacman(const Direction &dir, int fc) const {
   switch (dir) {
-  case Direction::UP: return m_pacman_up[fc % m_pacman_up.size()];
-  case Direction::DOWN: return m_pacman_down[fc % m_pacman_down.size()];
-  case Direction::LEFT: return m_pacman_left[fc % m_pacman_left.size()];
-  case Direction::RIGHT: return m_pacman_right[fc % m_pacman_right.size()];
+  case Direction::UP: return m_pacman_up.at(fc % m_pacman_up.size());
+  case Direction::DOWN: return m_pacman_down.at(fc % m_pacman_down.size());
+  case Direction::LEFT: return m_pacman_left.at(fc % m_pacman_left.size());
+  case Direction::RIGHT: return m_pacman_right.at(fc % m_pacman_right.size());
   default: // fallback for Direction::NONE
-    return m_pacman_up[0];
+    return m_pacman_up.at(0);
   }
 }

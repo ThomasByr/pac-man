@@ -65,6 +65,8 @@ public:
   void pop(void);
 
   size_t get_fps_count(void) const;
+  int get_update_interval(void) const;
+  size_t get_fps_anim_count(void) const;
 };
 
 #endif // __inc_helper_renderer_H__

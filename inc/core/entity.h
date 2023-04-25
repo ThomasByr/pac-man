@@ -17,6 +17,8 @@ protected:
   double m_cx, m_cy; // center position of the entity on the map
   double w, h;       // width and height of the entity
 
+  size_t m_score; // score of the entity (only makes sense for pacman ?)
+
   Direction m_direction, m_reg_direction;
 
 public:
@@ -42,7 +44,7 @@ public:
    * @return true if the entity can go to the direction ;
    * @return false otherwise
    */
-  virtual bool can_go(const Map &map, const Direction &dir) const = 0;
+  virtual bool can_go(std::shared_ptr<Map> map, const Direction &dir) const = 0;
   /**
    * @brief Check if the entity can change direction
    * @note Does not check if the entity can go to any direction, only if it is
@@ -52,7 +54,7 @@ public:
    * @return true if the entity is somewhere in the middle of a tile
    * @return false otherwise
    */
-  virtual bool can_change_direction(const Map &map) const = 0;
+  virtual bool can_change_direction(std::shared_ptr<Map> map) const = 0;
 };
 
 #endif // __inc_core_entity_H__

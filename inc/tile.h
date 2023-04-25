@@ -25,6 +25,7 @@ enum class TileType {
   POWER_DOT,
   GHOST_HOUSE_DOOR,
   PORTAL,
+  BONUS,             // this one is not in the map.txt file
   START_POSITION = 9 // so that we can use static_cast<TileType>(9)
 };
 
@@ -35,7 +36,11 @@ private:
   double size;     // size of the tile
 
 public:
+  Tile() = default;
   Tile(const int type, const int x, const int y, const double size);
+
+  TileType get_type(void) const;
+  void set_type(const TileType &type);
 
   void show(std::shared_ptr<Renderer> renderer);
 

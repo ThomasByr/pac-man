@@ -106,7 +106,7 @@ void Renderer::blit(SDL_Rect src, int x, int y, double scale) {
 
   SDL_Rect dest = {static_cast<int>(real_x), static_cast<int>(real_y),
                    static_cast<int>(w), static_cast<int>(h)};
-  SDL_SetColorKey(m_sprites, false, 0);
+  SDL_SetColorKey(m_sprites, true, 0);
   SDL_BlitScaled(m_sprites, &src, m_surface, &dest);
 }
 
@@ -151,5 +151,10 @@ void Renderer::pop() {
   m_trans_y = c.trans_y;
 }
 
-size_t Renderer::get_fps_count() const { return m_fps_counter; }
 void Renderer::rect_mode(RectMode mode) { m_rect_mode = mode; }
+
+size_t Renderer::get_fps_count() const { return m_fps_counter; }
+int Renderer::get_update_interval() const { return m_update_interval; }
+size_t Renderer::get_fps_anim_count() const {
+  return m_fps_counter / m_update_interval;
+}
