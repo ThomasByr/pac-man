@@ -5,19 +5,25 @@
 
 #include "utils.h"
 
-Pacman::Pacman(const double cx, const double cy, const double w, const double h)
-  : Entity{cx, cy, w, h} {}
+Pacman::Pacman(const double cx, const double cy,
+               const struct PacmanConfig &config)
+  : Entity{cx, cy, 0, 0}, m_points_per_dot{config.m_points_per_dot},
+    m_points_per_power_dot{config.m_points_per_power_dot},
+    m_points_per_ghost{config.m_points_per_ghost} {}
 
 void Pacman::show(std::shared_ptr<Renderer> renderer) {
+  static const double custom_scale = 0.5;
   const SDL_Rect asset = renderer->get_assets()->get_sprite_pacman(
     m_direction, renderer->get_fps_anim_count());
 
   renderer->push();
   renderer->rect_mode(RectMode::CENTER);
   renderer->translate(m_cx, m_cy);
-  renderer->blit(asset, 0, 0, .5);
+  renderer->blit(asset, 0, 0, custom_scale);
   renderer->pop();
 }
+
+size_t Pacman::get_score() const { return m_score; }
 
 bool Pacman::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
   int i = -1, j = -1;
@@ -42,9 +48,25 @@ bool Pacman::can_change_direction(std::shared_ptr<Map> map) const {
          std::abs(relative_y - tile_size / 2) < epsilon;
 }
 
-void Pacman::update(std::shared_ptr<Map> map) {
-  (void)map;
+bool Pacman::ate_food(std::shared_ptr<Map> map) {
+  int i = -1, j = -1;
+  std::tie(i, j) = get_ij(map->get_size());
+  if (i == -1 || j == -1) { return false; }
 
+  return map->ate_food(j, i); // why j, i and not i, j ? well ...
+}
+
+void Pacman::eat_food(std::shared_ptr<Map> map) {
+  int i = -1, j = -1;
+  std::tie(i, j) = get_ij(map->get_size());
+  if (i == -1 || j == -1) { return; }
+
+  map->eat_food(j, i); // those damn vectors
+
+  m_score += m_points_per_dot;
+}
+
+void Pacman::update(std::shared_ptr<Map> map) {
   switch (m_direction) {
   case Direction::UP: m_cy -= 1; break;
   case Direction::DOWN: m_cy += 1; break;
@@ -52,6 +74,9 @@ void Pacman::update(std::shared_ptr<Map> map) {
   case Direction::RIGHT: m_cx += 1; break;
   default: break;
   }
+
+  // do we eat food before or after updating the direction ?
+  if (ate_food(map)) { eat_food(map); }
 
   // first check if we can still go in the current direction
   if (can_change_direction(map) && !can_go(map, m_direction)) {

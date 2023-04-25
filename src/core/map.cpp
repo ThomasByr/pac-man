@@ -87,3 +87,13 @@ bool Map::can_go(const int i, const int j, const Direction &dir) const {
   }
   return my_tile.can_go(target);
 }
+
+bool Map::ate_food(const int i, const int j) const {
+  return m_map[i][j].get_type() == TileType::DOT;
+}
+
+void Map::eat_food(const int i, const int j) {
+  if (m_map[i][j].get_type() == TileType::DOT) {
+    m_map[i][j].set_type(TileType::EMPTY);
+  }
+}
