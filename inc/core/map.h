@@ -35,6 +35,9 @@ public:
   /// @brief Get the center coordinates of the start tile for pacman
   std::tuple<double, double> get_start_tile_c() const;
 
+  bool ate_food(const int i, const int j) const;
+  void eat_food(const int i, const int j);
+
   bool can_go(const int i, const int j, const Direction &dir) const;
 };
 

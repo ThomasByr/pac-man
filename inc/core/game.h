@@ -36,6 +36,9 @@ private:
   bool m_running;
   int w_sep;
 
+  int m_points_per_dot, m_points_per_power_dot;
+  int m_points_per_ghost;
+
 public:
   Game(const std::string &config_path = ".ini");
   ~Game();
