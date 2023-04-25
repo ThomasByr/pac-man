@@ -46,6 +46,5 @@ bool Tile::can_go(const std::optional<Tile> &target) const {
   TileType target_type = TileType::WALL; // init to something we can't go to
   if (target.has_value()) { target_type = target.value().m_type; }
 
-  return target_type == TileType::EMPTY || target_type == TileType::DOT ||
-         target_type == TileType::POWER_DOT;
+  return target_type != TileType::WALL && target_type != TileType::GHOST_HOUSE_DOOR;
 }
