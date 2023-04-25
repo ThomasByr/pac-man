@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "helper/renderer.h"
+#include "state.h"
 
 #include "ghost.h"
 #include "map.h"

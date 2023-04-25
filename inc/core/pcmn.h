@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "helper/renderer.h"
+#include "state.h"
 
 #include "entity.h"
 
