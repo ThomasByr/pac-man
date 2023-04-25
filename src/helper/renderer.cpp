@@ -115,6 +115,7 @@ void Renderer::text(const std::string &text, int x, int y) {
   // we can use sprites for that
   // we have to render each character separately (each is 7)
 
+  static const double custom_scale = 0.7;
   SDL_Rect src = m_assets->get_sprite_alpha_numerical(' ');
 
   SDL_Rect dest = {static_cast<int>(x), static_cast<int>(y), 0, 0};
@@ -126,7 +127,7 @@ void Renderer::text(const std::string &text, int x, int y) {
       continue;
     }
     src = m_assets->get_sprite_alpha_numerical(c);
-    blit(src, dest.x, dest.y);
+    blit(src, dest.x, dest.y, custom_scale);
     dest.x += src.w * m_scale;
   }
 }
