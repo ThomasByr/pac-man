@@ -35,7 +35,10 @@ private:
   double size;     // size of the tile
 
 public:
+  Tile() = default;
   Tile(const int type, const int x, const int y, const double size);
+
+  TileType get_type(void) const;
 
   void show(std::shared_ptr<Renderer> renderer);
 
