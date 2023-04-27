@@ -4,9 +4,9 @@
 
 #include <SDL.h>
 
+#include <deque>
 #include <memory>
 #include <vector>
-#include <deque>
 
 #include "helper/renderer.h"
 
@@ -17,6 +17,7 @@
 class FPSCounter {
 private:
   std::deque<Uint64> last_second_frames{};
+
 public:
   FPSCounter();
   ~FPSCounter();
@@ -34,6 +35,9 @@ private:
 
   bool m_running;
   int w_sep;
+
+  int m_points_per_dot, m_points_per_power_dot;
+  int m_points_per_ghost;
 
 public:
   Game(const std::string &config_path = ".ini");
