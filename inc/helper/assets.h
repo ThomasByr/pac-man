@@ -36,15 +36,36 @@ private:
   SDL_Rect m_pacman_closed;            // closed mouth
   std::vector<SDL_Rect> m_pacman_dead; // dead pacman
 
-  std::vector<SDL_Rect> m_ghost_red;    // red ghost
-  std::vector<SDL_Rect> m_ghost_pink;   // pink ghost
-  std::vector<SDL_Rect> m_ghost_blue;   // blue ghost
-  std::vector<SDL_Rect> m_ghost_orange; // orange ghost
+  std::vector<SDL_Rect> m_ghost_red_right; // red ghost right
+  std::vector<SDL_Rect> m_ghost_red_left;  // facing left
+  std::vector<SDL_Rect> m_ghost_red_up;    // facing up
+  std::vector<SDL_Rect> m_ghost_red_down;  // facing down
+
+  std::vector<SDL_Rect> m_ghost_pink_right; // pink ghost
+  std::vector<SDL_Rect> m_ghost_pink_left;
+  std::vector<SDL_Rect> m_ghost_pink_up;
+  std::vector<SDL_Rect> m_ghost_pink_down;
+
+  std::vector<SDL_Rect> m_ghost_blue_right; // blue ghost
+  std::vector<SDL_Rect> m_ghost_blue_left;
+  std::vector<SDL_Rect> m_ghost_blue_up;
+  std::vector<SDL_Rect> m_ghost_blue_down;
+
+  std::vector<SDL_Rect> m_ghost_orange_right; // orange ghost
+  std::vector<SDL_Rect> m_ghost_orange_left;
+  std::vector<SDL_Rect> m_ghost_orange_up;
+  std::vector<SDL_Rect> m_ghost_orange_down;
 
   // todo add vector for direction
 
-  std::vector<SDL_Rect> m_ghost_frightened; // frightened ghost
-  std::vector<SDL_Rect> m_ghost_dead_eye;   // dead ghost eye
+  std::vector<SDL_Rect> m_weak_ghost; // frightened ghost
+
+  std::vector<SDL_Rect> m_weak_ghost_ending; // frightened ghost blinking
+
+  std::vector<SDL_Rect> m_eyes_right; // dead ghost eye
+  std::vector<SDL_Rect> m_eyes_left;  // facing left...
+  std::vector<SDL_Rect> m_eyes_up;
+  std::vector<SDL_Rect> m_eyes_down;
 
 public:
   SDL_Rect m_bg; // background

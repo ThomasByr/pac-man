@@ -132,3 +132,9 @@ SDL_Rect Assets::get_sprite_pacman(const Direction &dir, int fc) const {
     return m_pacman_up[0];
   }
 }
+
+SDL_Rect get_sprite_ghost_red(const Direction &dir, int fc) const {
+  switch (dir) {
+  case Direction::UP: return
+  }
+}
