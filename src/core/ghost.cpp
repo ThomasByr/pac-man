@@ -10,6 +10,7 @@ Ghost::Ghost(const double cx, const double cy, const double w, const double h,
 void Ghost::show(std::shared_ptr<Renderer> renderer) {
 
   SDL_Rect asset;
+  static const double custom_scale = 0.5;
 
   switch (type) {
   case GhostType::BLINKY:
@@ -29,6 +30,6 @@ void Ghost::show(std::shared_ptr<Renderer> renderer) {
   renderer->push();
   renderer->rect_mode(RectMode::CENTER);
   renderer->translate(m_cx, m_cy);
-  renderer->blit(asset, 0, 0);
+  renderer->blit(asset, 0, 0, custom_scale);
   renderer->pop();
 }

@@ -27,6 +27,8 @@ public:
   virtual ~Ghost() = default;
 
   void show(std::shared_ptr<Renderer> renderer) override;
+
+  bool can_go(std::shared_ptr<Map> map, const Direction &dir) const;
 };
 
 #endif // __inc_core_ghost_H__
