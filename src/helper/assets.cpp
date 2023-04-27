@@ -159,49 +159,54 @@ SDL_Rect Assets::get_sprite_pacman(const Direction &dir, int fc) const {
 
 SDL_Rect Assets::get_sprite_ghost_red(const Direction &dir, int fc) const {
   switch (dir) {
-  case Direction::UP: return m_redghost_up[fc % m_redghost_up.size()];
-  case Direction::DOWN: return m_redghost_down[fc % m_redghost_down.size()];
-  case Direction::LEFT: return m_redghost_left[fc % m_redghost_left.size()];
-  case Direction::RIGHT: return m_redghost_right[fc % m_redghost_right.size()];
+  case Direction::UP: return m_redghost_up.at(fc % m_redghost_up.size());
+  case Direction::DOWN: return m_redghost_down.at(fc % m_redghost_down.size());
+  case Direction::LEFT: return m_redghost_left.at(fc % m_redghost_left.size());
+  case Direction::RIGHT:
+    return m_redghost_right.at(fc % m_redghost_right.size());
   default: // fallback for Direction::NONE
-    return m_redghost_up[0];
+    return m_redghost_up.at(0);
   }
 }
 
 SDL_Rect Assets::get_sprite_ghost_blue(const Direction &dir, int fc) const {
   switch (dir) {
-  case Direction::UP: return m_cyanghost_up[fc % m_cyanghost_up.size()];
-  case Direction::DOWN: return m_cyanghost_down[fc % m_cyanghost_down.size()];
-  case Direction::LEFT: return m_cyanghost_left[fc % m_cyanghost_left.size()];
+  case Direction::UP: return m_cyanghost_up.at(fc % m_cyanghost_up.size());
+  case Direction::DOWN:
+    return m_cyanghost_down.at(fc % m_cyanghost_down.size());
+  case Direction::LEFT:
+    return m_cyanghost_left.at(fc % m_cyanghost_left.size());
   case Direction::RIGHT:
-    return m_cyanghost_right[fc % m_cyanghost_right.size()];
+    return m_cyanghost_right.at(fc % m_cyanghost_right.size());
   default: // fallback for Direction::NONE
-    return m_cyanghost_up[0];
+    return m_cyanghost_up.at(0);
   }
 }
 
 SDL_Rect Assets::get_sprite_ghost_pink(const Direction &dir, int fc) const {
   switch (dir) {
-  case Direction::UP: return m_pinkghost_up[fc % m_pinkghost_up.size()];
-  case Direction::DOWN: return m_pinkghost_down[fc % m_pinkghost_down.size()];
-  case Direction::LEFT: return m_pinkghost_left[fc % m_pinkghost_left.size()];
+  case Direction::UP: return m_pinkghost_up.at(fc % m_pinkghost_up.size());
+  case Direction::DOWN:
+    return m_pinkghost_down.at(fc % m_pinkghost_down.size());
+  case Direction::LEFT:
+    return m_pinkghost_left.at(fc % m_pinkghost_left.size());
   case Direction::RIGHT:
-    return m_pinkghost_right[fc % m_pinkghost_right.size()];
+    return m_pinkghost_right.at(fc % m_pinkghost_right.size());
   default: // fallback for Direction::NONE
-    return m_pinkghost_up[0];
+    return m_pinkghost_up.at(0);
   }
 }
 
 SDL_Rect Assets::get_sprite_ghost_orange(const Direction &dir, int fc) const {
   switch (dir) {
-  case Direction::UP: return m_orangeghost_up[fc % m_orangeghost_up.size()];
+  case Direction::UP: return m_orangeghost_up.at(fc % m_orangeghost_up.size());
   case Direction::DOWN:
-    return m_orangeghost_down[fc % m_orangeghost_down.size()];
+    return m_orangeghost_down.at(fc % m_orangeghost_down.size());
   case Direction::LEFT:
-    return m_orangeghost_left[fc % m_orangeghost_left.size()];
+    return m_orangeghost_left.at(fc % m_orangeghost_left.size());
   case Direction::RIGHT:
-    return m_orangeghost_right[fc % m_orangeghost_right.size()];
+    return m_orangeghost_right.at(fc % m_orangeghost_right.size());
   default: // fallback for Direction::NONE
-    return m_orangeghost_up[0];
+    return m_orangeghost_up.at(0);
   }
 }
