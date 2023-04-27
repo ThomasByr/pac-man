@@ -100,6 +100,9 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   for (size_t i = 0; i < _data_pacman_up.size(); i++) {
     m_pacman_up.push_back(from_json(_data_pacman_up[i]));
   }
+
+  // set m_red_ghost_up
+  auto _data_red_ghost_up = data["m_redghost_up"];
 }
 
 Assets::~Assets() { SDL_FreeSurface(m_surface); }
@@ -121,14 +124,10 @@ SDL_Rect Assets::get_sprite_power_dot() const { return m_power_dot; }
 
 SDL_Rect Assets::get_sprite_pacman(const Direction &dir, int fc) const {
   switch (dir) {
-  case Direction::UP:
-    return m_pacman_up[fc % m_pacman_up.size()];
-  case Direction::DOWN:
-    return m_pacman_down[fc % m_pacman_down.size()];
-  case Direction::LEFT:
-    return m_pacman_left[fc % m_pacman_left.size()];
-  case Direction::RIGHT:
-    return m_pacman_right[fc % m_pacman_right.size()];
+  case Direction::UP: return m_pacman_up[fc % m_pacman_up.size()];
+  case Direction::DOWN: return m_pacman_down[fc % m_pacman_down.size()];
+  case Direction::LEFT: return m_pacman_left[fc % m_pacman_left.size()];
+  case Direction::RIGHT: return m_pacman_right[fc % m_pacman_right.size()];
   default: // fallback for Direction::NONE
     return m_pacman_up[0];
   }

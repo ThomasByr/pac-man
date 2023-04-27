@@ -41,6 +41,8 @@ private:
   std::vector<SDL_Rect> m_ghost_blue;   // blue ghost
   std::vector<SDL_Rect> m_ghost_orange; // orange ghost
 
+  // todo add vector for direction
+
   std::vector<SDL_Rect> m_ghost_frightened; // frightened ghost
   std::vector<SDL_Rect> m_ghost_dead_eye;   // dead ghost eye
 
