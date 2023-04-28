@@ -14,3 +14,10 @@
 
 - added fps with bitmap font
 - target fps is now respected (🥳)
+
+**v0.2.x** pacman entity logic
+
+- pacman correctly responds to user input
+- stops when hitting a wall
+- changes direction (if registered) when hitting a wall
+- eats dots

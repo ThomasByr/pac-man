@@ -2,6 +2,8 @@
 
 #include "directions.h"
 
+#include "utils.h"
+
 std::ostream &operator<<(std::ostream &os, const Direction &dir) {
   os << to_string(dir);
   return os;
@@ -15,7 +17,7 @@ std::string to_string(const Direction &dir) {
   case Direction::LEFT: str = "LEFT"; break;
   case Direction::RIGHT: str = "RIGHT"; break;
   case Direction::NONE: str = "NONE"; break;
-  default: throw std::runtime_error("Invalid direction");
+  default: fmt::panic("Invalid direction");
   }
   return str;
 }
@@ -27,7 +29,7 @@ Direction opposite(const Direction &dir) {
   case Direction::DOWN: opposite = Direction::UP; break;
   case Direction::LEFT: opposite = Direction::RIGHT; break;
   case Direction::RIGHT: opposite = Direction::LEFT; break;
-  default: throw std::runtime_error("Invalid direction to get opposite");
+  default: fmt::panic("Invalid direction to get opposite");
   }
   return opposite;
 }
@@ -39,7 +41,7 @@ Direction turn_left(const Direction &dir) {
   case Direction::DOWN: left = Direction::RIGHT; break;
   case Direction::LEFT: left = Direction::DOWN; break;
   case Direction::RIGHT: left = Direction::UP; break;
-  default: throw std::runtime_error("Invalid direction to turn left");
+  default: fmt::panic("Invalid direction to turn left");
   }
   return left;
 }
@@ -52,7 +54,7 @@ Direction turn_right(const Direction &dir) {
   case Direction::DOWN: right = Direction::LEFT; break;
   case Direction::LEFT: right = Direction::UP; break;
   case Direction::RIGHT: right = Direction::DOWN; break;
-  default: throw std::runtime_error("Invalid direction to turn right");
+  default: fmt::panic("Invalid direction to turn right");
   }
   return right;
 }

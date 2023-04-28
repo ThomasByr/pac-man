@@ -151,19 +151,26 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - added fps with bitmap font
 - target fps is now respected (🥳)
 
+**v0.2.x** pacman entity logic
+
+- pacman correctly responds to user input
+- stops when hitting a wall
+- changes direction (if registered) when hitting a wall
+- eats dots
+
 </details>
 
 ## 🐛 Bugs & TODO
 
-**known bugs** (final correction patch version) [see Issues](https://github.com/ThomasByr/pac-man/issues)
+**known bugs** (final correction patch) [see Issues](https://github.com/ThomasByr/pac-man/issues)
 
 - ~~target fps bypassed~~ (resolved by re-updating timers after each frame)
 - pac-man speed is set to 1.0f (won't fix)
 
 **todo** (first implementation version)
 
-- [ ] show pacman
+- [x] show pacman (v0.2)
 - [ ] show ghosts
-- [ ] implement pacman direction and collisions logic
+- [x] implement pacman direction and collisions logic (v0.2)
 - [ ] implement ghosts tracking algorithms
 - [ ] create levels, scores, lives and a save system
