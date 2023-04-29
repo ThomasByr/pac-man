@@ -3,7 +3,9 @@
 #include <termios.h>
 #include <unistd.h>
 
+#include <chrono>
 #include <cstdio>
+#include <optional>
 
 #include "utils.h"
 
@@ -47,8 +49,8 @@ int _kbhit() {
 }
 
 void _after() {
-  getchar();
-  printf("\b \b");
+  getchar();       // consume the key
+  printf("\b \b"); // go back, print space, go back :)
 }
 
 } // namespace internal
@@ -66,6 +68,19 @@ bool wait_for_next_keypress() {
   switch (_kbhit()) {
   case 1: _after(); return true;
   case 0: return false;
+  }
+  fmt::unreachable("invalid return value from _kbhit()");
+}
+
+bool wait_for(useconds_t usec) {
+  using namespace std::chrono;
+  static auto start = std::optional<steady_clock::time_point>();
+  if (!start) { start = steady_clock::now(); }
+  auto now = steady_clock::now();
+  auto diff = duration_cast<microseconds>(now - *start);
+  if (diff.count() >= usec) {
+    start.reset();
+    return true;
   }
   return false;
 }

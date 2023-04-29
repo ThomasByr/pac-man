@@ -75,7 +75,7 @@ template <typename... Args> void error(const std::string &fmt, Args &&...args) {
 }
 
 template <typename... Args>
-void [[noreturn]] panic(const std::string &fmt, Args &&...args) {
+[[noreturn]] void panic(const std::string &fmt, Args &&...args) {
   using namespace std;
   using namespace internal;
   cerr << FG_RED << "   panic " << RST << format(fmt, args...) << endl;
@@ -83,7 +83,7 @@ void [[noreturn]] panic(const std::string &fmt, Args &&...args) {
 }
 
 template <typename... Args>
-void [[noreturn]] unreachable(const std::string &fmt, Args &&...args) {
+[[noreturn]] void unreachable(const std::string &fmt, Args &&...args) {
   using namespace std;
   using namespace internal;
   cerr << FG_RED << "   panic " << RST << "code is unreachable" << endl;
