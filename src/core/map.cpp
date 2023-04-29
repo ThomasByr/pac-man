@@ -99,6 +99,22 @@ std::tuple<double, double> Map::get_start_tile_c() const {
   return {m_start_tile_cx, m_start_tile_cy};
 }
 
+std::tuple<double, double> Map::get_blinky_start_tile_c() const {
+  return {blinky_start_tile_cx, blinky_start_tile_cy};
+}
+
+std::tuple<double, double> Map::get_pinky_start_tile_c() const {
+  return {pinky_start_tile_cx, pinky_start_tile_cy};
+}
+
+std::tuple<double, double> Map::get_inky_start_tile_c() const {
+  return {inky_start_tile_cx, inky_start_tile_cy};
+}
+
+std::tuple<double, double> Map::get_clyde_start_tile_c() const {
+  return {clyde_start_tile_cx, clyde_start_tile_cy};
+}
+
 bool Map::can_go(const int i, const int j, const Direction &dir) const {
   Tile my_tile = m_map[i][j];
   std::optional<Tile> target = std::nullopt;

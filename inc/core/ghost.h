@@ -18,8 +18,7 @@ private:
   GhostType type;
 
 public:
-  Ghost(const double cx, const double cy, const double w, const double h,
-        GhostType type);
+  Ghost(const double cx, const double cy, GhostType type);
   Ghost(const Ghost &other) = delete;
   Ghost(Ghost &&other) = delete;
   Ghost &operator=(const Ghost &other) = delete;

@@ -3,9 +3,8 @@
 
 #include "core/ghost.h"
 
-Ghost::Ghost(const double cx, const double cy, const double w, const double h,
-             GhostType type)
-  : Entity{cx, cy, w, h}, type{type} {}
+Ghost::Ghost(const double cx, const double cy, GhostType type)
+  : Entity{cx, cy, 0, 0}, type{type} {}
 
 void Ghost::show(std::shared_ptr<Renderer> renderer) {
 
@@ -14,16 +13,20 @@ void Ghost::show(std::shared_ptr<Renderer> renderer) {
 
   switch (type) {
   case GhostType::BLINKY:
-    asset = renderer->get_assets()->get_sprite_ghost_red(m_direction, 0);
+    asset = renderer->get_assets()->get_sprite_ghost_red(
+      m_direction, renderer->get_fps_anim_count());
     break;
   case GhostType::PINKY:
-    asset = renderer->get_assets()->get_sprite_ghost_pink(m_direction, 0);
+    asset = renderer->get_assets()->get_sprite_ghost_pink(
+      m_direction, renderer->get_fps_anim_count());
     break;
   case GhostType::INKY:
-    asset = renderer->get_assets()->get_sprite_ghost_blue(m_direction, 0);
+    asset = renderer->get_assets()->get_sprite_ghost_blue(
+      m_direction, renderer->get_fps_anim_count());
     break;
   case GhostType::CLYDE:
-    asset = renderer->get_assets()->get_sprite_ghost_orange(m_direction, 0);
+    asset = renderer->get_assets()->get_sprite_ghost_orange(
+      m_direction, renderer->get_fps_anim_count());
     break;
   }
 
@@ -57,15 +60,16 @@ bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
          std::abs(relative_y - tile_size / 2) < epsilon;
 }
 
-void Ghost::blinky_chase(std::tuple<int, int> Pacman_pos) {}
+void Ghost::blinky_chase(std::tuple<int, int> Pacman_pos) { (void)Pacman_pos; }
 
-void Ghost::pinky_chase(std::tuple<int, int> Pacman_pos) {}
+void Ghost::pinky_chase(std::tuple<int, int> Pacman_pos) { (void)Pacman_pos; }
 
-void Ghost::inky_chase(std::tuple<int, int> Pacman_pos) {}
+void Ghost::inky_chase(std::tuple<int, int> Pacman_pos) { (void)Pacman_pos; }
 
-void Ghost::clyde_chase(std::tuple<int, int> Pacman_pos) {}
+void Ghost::clyde_chase(std::tuple<int, int> Pacman_pos) { (void)Pacman_pos; }
 
 void Ghost::chase_pacman(std::tuple<int, int> Pacman_pos) {
+  (void)Pacman_pos;
   switch (type) {
   case GhostType::BLINKY: break;
   case GhostType::PINKY: break;
@@ -76,6 +80,8 @@ void Ghost::chase_pacman(std::tuple<int, int> Pacman_pos) {
 }
 
 void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
+  (void)Pacman_pos;
+  (void)map;
 
   switch (m_direction) {
   case Direction::UP: m_cy -= 1; break;
