@@ -83,7 +83,7 @@ void Renderer::flip() {
   // update window as soon as we delay
   switch (SDL_UpdateWindowSurface(m_window)) {
   case 0: break;
-  default: fmt::alert("Failed to update window surface: %s", SDL_GetError());
+  default: fmt::error("Failed to update window surface: %s", SDL_GetError());
   }
   m_fps_counter++;              // update total frame count
   last_time = SDL_GetTicks64(); // here we can't use current_time, because
@@ -94,7 +94,7 @@ void Renderer::clear() {
   switch (
     SDL_FillRect(m_surface, nullptr, SDL_MapRGB(m_surface->format, 0, 0, 0))) {
   case 0: break;
-  default: fmt::alert("Failed to reset background: %s", SDL_GetError());
+  default: fmt::error("Failed to reset background: %s", SDL_GetError());
   }
 }
 
@@ -116,7 +116,7 @@ void Renderer::blit(SDL_Rect src, int x, int y, double scale) {
                    static_cast<int>(w), static_cast<int>(h)};
   switch (SDL_SetColorKey(m_sprites, true, 0)) {
   case 0: break;
-  default: fmt::alert("Failed to set color key: %s", SDL_GetError());
+  default: fmt::error("Failed to set color key: %s", SDL_GetError());
   }
   SDL_BlitScaled(m_sprites, &src, m_surface, &dest); // confusing macro
 }

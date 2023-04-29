@@ -17,7 +17,7 @@ std::string to_string(const GameState &state) {
   case GameState::PAUSE: str = "PAUSE"; break;
   case GameState::GAME_OVER: str = "GAME_OVER"; break;
   case GameState::EXIT: str = "EXIT"; break;
-  default: fmt::panic("Invalid game state");
+  default: fmt::unreachable("Invalid game state");
   }
   return str;
 }
@@ -33,7 +33,7 @@ std::string to_string(const PcmnState &state) {
   case PcmnState::ALIVE: str = "ALIVE"; break;
   case PcmnState::DEAD: str = "DEAD"; break;
   case PcmnState::POWERED: str = "POWERED"; break;
-  default: fmt::panic("Invalid pacman state");
+  default: fmt::unreachable("Invalid pacman state");
   }
   return str;
 }
