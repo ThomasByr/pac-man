@@ -7,10 +7,10 @@
 enum class GameState { MENU, GAME, PAUSE, GAME_OVER, EXIT };
 enum class PcmnState { ALIVE, DEAD, POWERED };
 
-std::ostream &operator<<(std::ostream &os, const GameState &dir);
-std::string to_string(const GameState &dir);
+std::ostream &operator<<(std::ostream &os, const GameState &state);
+std::string to_string(const GameState &state);
 
-std::ostream &operator<<(std::ostream &os, const PcmnState &dir);
-std::string to_string(const PcmnState &dir);
+std::ostream &operator<<(std::ostream &os, const PcmnState &state);
+std::string to_string(const PcmnState &state);
 
 #endif

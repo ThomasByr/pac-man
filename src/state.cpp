@@ -4,14 +4,14 @@
 
 #include "utils.h"
 
-std::ostream &operator<<(std::ostream &os, const GameState &dir) {
-  os << to_string(dir);
+std::ostream &operator<<(std::ostream &os, const GameState &state) {
+  os << to_string(state);
   return os;
 }
 
-std::string to_string(const GameState &dir) {
+std::string to_string(const GameState &state) {
   std::string str;
-  switch (dir) {
+  switch (state) {
   case GameState::MENU: str = "MENU"; break;
   case GameState::GAME: str = "GAME"; break;
   case GameState::PAUSE: str = "PAUSE"; break;
@@ -22,14 +22,14 @@ std::string to_string(const GameState &dir) {
   return str;
 }
 
-std::ostream &operator<<(std::ostream &os, const PcmnState &dir) {
-  os << to_string(dir);
+std::ostream &operator<<(std::ostream &os, const PcmnState &state) {
+  os << to_string(state);
   return os;
 }
 
-std::string to_string(const PcmnState &dir) {
+std::string to_string(const PcmnState &state) {
   std::string str;
-  switch (dir) {
+  switch (state) {
   case PcmnState::ALIVE: str = "ALIVE"; break;
   case PcmnState::DEAD: str = "DEAD"; break;
   case PcmnState::POWERED: str = "POWERED"; break;
