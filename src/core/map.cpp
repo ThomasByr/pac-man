@@ -40,6 +40,19 @@ Map::Map(double size, const std::string &path)
         m_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
         m_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
       } // save the center position of the start tile
+      else if (c == 'i') {
+        inky_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        inky_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      } else if (c == 'p') {
+        pinky_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        pinky_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      } else if (c == 'c') {
+        clyde_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        clyde_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      } else if (c == 'b') {
+        blinky_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        blinky_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      }
       j++;
     }
     m_map.push_back(row);
@@ -47,10 +60,29 @@ Map::Map(double size, const std::string &path)
     j = 0;
   }
   if (m_start_tile_cx == 0 && m_start_tile_cy == 0) {
-    fmt::panic("Map::Map: no start tile found");
+    fmt::panic("Map::Map: pacman no start tile found");
+  } else if (inky_start_tile_cx == 0 && inky_start_tile_cy == 0) {
+    fmt::panic("Map::Map: inky no start tile found");
+  } else if (pinky_start_tile_cx == 0 && pinky_start_tile_cy == 0) {
+    fmt::panic("Map::Map: pinky no start tile found");
+  } else if (blinky_start_tile_cx == 0 && blinky_start_tile_cy == 0) {
+    fmt::panic("Map::Map: blinky no start tile found");
+  } else if (clyde_start_tile_cx == 0 && clyde_start_tile_cy == 0) {
+    fmt::panic("Map::Map: clyde no start tile found");
   }
-  fmt::debug("Map::Map: start tile found at (%f, %f)", m_start_tile_cx,
+
+  fmt::debug("Map::Map: pacman start tile found at (%f, %f)", m_start_tile_cx,
              m_start_tile_cy);
+
+  fmt::debug("Map::Map: inky start tile found at (%f, %f)", inky_start_tile_cx,
+             inky_start_tile_cy);
+
+  fmt::debug("Map::Map: pinky start tile found at (%f, %f)",
+             pinky_start_tile_cx, pinky_start_tile_cy);
+  fmt::debug("Map::Map: blinky start tile found at (%f, %f)",
+             blinky_start_tile_cx, blinky_start_tile_cy);
+  fmt::debug("Map::Map: clyde start tile found at (%f, %f)",
+             clyde_start_tile_cx, clyde_start_tile_cy);
 }
 
 void Map::show(std::shared_ptr<Renderer> renderer) {
