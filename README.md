@@ -170,7 +170,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 **todo** (first implementation version)
 
 - [x] show pacman (v0.2)
-- [ ] show ghosts
+- [x] show ghosts (v0.1)
 - [x] implement pacman direction and collisions logic (v0.2)
 - [ ] implement ghosts tracking algorithms
 - [ ] create levels, scores, lives and a save system
