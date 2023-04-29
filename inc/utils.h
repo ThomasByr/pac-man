@@ -131,7 +131,7 @@ bool wait_for_next_keypress(void);
  * @return true  when the time is elapsed
  * @return false otherwise
  */
-bool wait_for(useconds_t usec);
+bool wait_for_ms(useconds_t usec);
 
 } // namespace sys_pause
 

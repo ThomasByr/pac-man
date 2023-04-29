@@ -72,7 +72,7 @@ bool wait_for_next_keypress() {
   fmt::unreachable("invalid return value from _kbhit()");
 }
 
-bool wait_for(useconds_t usec) {
+bool wait_for_ms(useconds_t usec) {
   using namespace std::chrono;
   static auto start = std::optional<steady_clock::time_point>();
   if (!start) { start = steady_clock::now(); }
