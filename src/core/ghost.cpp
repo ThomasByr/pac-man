@@ -3,6 +3,8 @@
 
 #include "core/ghost.h"
 
+#include "utils.h"
+
 Ghost::Ghost(const double cx, const double cy, GhostType type)
   : Entity{cx, cy, 0, 0}, type{type} {}
 

@@ -114,6 +114,12 @@ void Game::run() {
 
     // show entities after map & bg
     m_pacman->show(m_renderer);
+
+    m_ghosts[0]->set_direction(Direction::UP);
+    m_ghosts[1]->set_direction(Direction::UP);
+    m_ghosts[2]->set_direction(Direction::UP);
+    m_ghosts[3]->set_direction(Direction::UP);
+
     m_ghosts[0]->show(m_renderer);
     m_ghosts[1]->show(m_renderer);
     m_ghosts[2]->show(m_renderer);
