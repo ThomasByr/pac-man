@@ -4,6 +4,10 @@
 3 : power dot
 4 : ghost house door
 5 : portal
+b : blinky start position
+p : pinky start position
+i : inky start position
+c : clyde start position
 9 : start position
 
 <!-- map -->
