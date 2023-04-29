@@ -67,16 +67,6 @@ void Pacman::eat_food(std::shared_ptr<Map> map) {
 }
 
 void Pacman::update(std::shared_ptr<Map> map) {
-  switch (m_direction) {
-  case Direction::UP: m_cy -= 1; break;
-  case Direction::DOWN: m_cy += 1; break;
-  case Direction::LEFT: m_cx -= 1; break;
-  case Direction::RIGHT: m_cx += 1; break;
-  default: break;
-  }
-
-  // do we eat food before or after updating the direction ?
-  if (ate_food(map)) { eat_food(map); }
 
   // first check if we can still go in the current direction
   if (can_change_direction(map) && !can_go(map, m_direction)) {
@@ -101,4 +91,13 @@ void Pacman::update(std::shared_ptr<Map> map) {
       can_go(map, opposite(m_direction))) {
     m_direction = opposite(m_direction);
   }
+
+  switch (m_direction) {
+  case Direction::UP: m_cy -= 1; break;
+  case Direction::DOWN: m_cy += 1; break;
+  case Direction::LEFT: m_cx -= 1; break;
+  case Direction::RIGHT: m_cx += 1; break;
+  default: break;
+  }
+  if (ate_food(map)) { eat_food(map); }
 }
