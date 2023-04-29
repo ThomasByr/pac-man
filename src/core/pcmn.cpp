@@ -93,4 +93,12 @@ void Pacman::update(std::shared_ptr<Map> map) {
       m_reg_direction = Direction::NONE;
     }
   }
+
+  // finally we can check if we can go in the opposite direction
+  // even if we are not in the middle of the tile
+  if (m_direction != Direction::NONE &&
+      m_reg_direction == opposite(m_direction) &&
+      can_go(map, opposite(m_direction))) {
+    m_direction = opposite(m_direction);
+  }
 }

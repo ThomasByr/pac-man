@@ -4,6 +4,8 @@
 //! Copyright (c) 2022, ThomasByr.
 //! All rights reserved.
 //!
+//! This software is licensed under the AGPL 3.0 license. Additionally:
+//!
 //! Redistribution and use in source and binary forms, with or without
 //! modification, are permitted provided that the following conditions are met:
 //!

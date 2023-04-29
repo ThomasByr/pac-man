@@ -80,14 +80,22 @@ void Renderer::flip() {
   auto wait_time = target_delay - static_cast<double>(elapsed_time);
   if (wait_time > 0) SDL_Delay(static_cast<Uint32>(wait_time));
 
-  SDL_UpdateWindowSurface(m_window); // update window as soon as we delay
-  m_fps_counter++;                   // update total frame count
-  last_time = SDL_GetTicks64();      // here we can't use current_time, because
-                                     // SDL_Delay() takes some time too :)
+  // update window as soon as we delay
+  switch (SDL_UpdateWindowSurface(m_window)) {
+  case 0: break;
+  default: fmt::alert("Failed to update window surface: %s", SDL_GetError());
+  }
+  m_fps_counter++;              // update total frame count
+  last_time = SDL_GetTicks64(); // here we can't use current_time, because
+                                // SDL_Delay() takes some time too :)
 }
 
 void Renderer::clear() {
-  SDL_FillRect(m_surface, nullptr, SDL_MapRGB(m_surface->format, 0, 0, 0));
+  switch (
+    SDL_FillRect(m_surface, nullptr, SDL_MapRGB(m_surface->format, 0, 0, 0))) {
+  case 0: break;
+  default: fmt::alert("Failed to reset background: %s", SDL_GetError());
+  }
 }
 
 void Renderer::blit(SDL_Rect src, int x, int y, double scale) {
@@ -106,8 +114,11 @@ void Renderer::blit(SDL_Rect src, int x, int y, double scale) {
 
   SDL_Rect dest = {static_cast<int>(real_x), static_cast<int>(real_y),
                    static_cast<int>(w), static_cast<int>(h)};
-  SDL_SetColorKey(m_sprites, true, 0);
-  SDL_BlitScaled(m_sprites, &src, m_surface, &dest);
+  switch (SDL_SetColorKey(m_sprites, true, 0)) {
+  case 0: break;
+  default: fmt::alert("Failed to set color key: %s", SDL_GetError());
+  }
+  SDL_BlitScaled(m_sprites, &src, m_surface, &dest); // confusing macro
 }
 
 void Renderer::text(const std::string &text, int x, int y) {
@@ -115,6 +126,7 @@ void Renderer::text(const std::string &text, int x, int y) {
   // we can use sprites for that
   // we have to render each character separately (each is 7)
 
+  static const double custom_scale = 0.7;
   SDL_Rect src = m_assets->get_sprite_alpha_numerical(' ');
 
   SDL_Rect dest = {static_cast<int>(x), static_cast<int>(y), 0, 0};
@@ -126,7 +138,7 @@ void Renderer::text(const std::string &text, int x, int y) {
       continue;
     }
     src = m_assets->get_sprite_alpha_numerical(c);
-    blit(src, dest.x, dest.y);
+    blit(src, dest.x, dest.y, custom_scale);
     dest.x += src.w * m_scale;
   }
 }

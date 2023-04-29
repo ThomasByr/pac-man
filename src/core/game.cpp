@@ -91,14 +91,14 @@ void Game::run() {
     m_renderer->blit(m_assets->m_bg, 0, 0);
     m_renderer->text(fmt::format("FPS %d", fps), w_sep + 10, 10);
     m_renderer->text(fmt::format("SCORE %d", m_pacman->get_score()), w_sep + 10,
-                     40);
+                     30);
 
     m_map->show(m_renderer);
 
     // show entities after map & bg
     m_pacman->show(m_renderer);
 
-    // flip buffers
+    // flip buffers and wait
     m_renderer->flip();
   }
 }
