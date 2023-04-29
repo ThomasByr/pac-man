@@ -35,7 +35,7 @@ sudo apt-get update && sudo apt-get install libsdl2-dev
 
 <details>
   <summary> For Windows 11 WSLg users (click here to expand) </summary>
-  Please make sure you have graphical x11 support installed:
+  Please make sure you have graphical x11 support installed (should be installed by default) :
 
   ```bash
   sudo apt-get install libgl1 libxkbcommon-x11-0
@@ -44,9 +44,9 @@ sudo apt-get update && sudo apt-get install libsdl2-dev
   Also, make sure `wsl --version` outputs at least the following :
 
   ```bash
-  WSL    Version : 1.1.3.0
+  WSL    Version : 1.2.5.0
   kernel Version : 5.15.90.1
-  WSLg   Version : 1.0.49
+  WSLg   Version : 1.0.51
   ```
 
   If not, please update your WSLg version by following the instructions [here](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel#update-the-wsl-2-linux-kernel). tl;dr : type this in your powershell :
@@ -65,7 +65,7 @@ Then compile a release version of the program with :
 make release
 ```
 
-The produced executable binary is to be found inside of the `bin` folder.
+This project uses the `-std=gnu++17` flag to compile and the produced executable binary is to be found inside of the `bin` folder.
 
 ## 💁 More infos and Usage
 
@@ -125,7 +125,7 @@ Happy coding ! 🙂
 
 ## ⚖️ License
 
-This project is licensed under the AGPL-3.0 new or revised license. Please read the [LICENSE](LICENSE) file.
+This project is licensed under the AGPL-3.0 new or revised license. Please read the [LICENSE](LICENSE) file. In addition :
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
