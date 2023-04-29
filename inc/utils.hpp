@@ -1,10 +1,9 @@
 
-#ifndef __fmt_utils_HPP__
-#define __fmt_utils_HPP__
+#ifndef __inc_utils_HPP__
+#define __inc_utils_HPP__
 
 #include <iostream>
 
-#include "utils.h"
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -78,4 +77,4 @@ void [[noreturn]] panic(const std::string &fmt, Args &&...args) {
 
 } // namespace fmt
 
-#endif // __fmt_utils_HPP__
+#endif // __inc_utils_HPP__

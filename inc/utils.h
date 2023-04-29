@@ -82,6 +82,27 @@ void [[noreturn]] panic(const std::string &fmt, Args &&...args);
 
 } // namespace fmt
 
+/**
+ * @brief System pause related functions
+ *
+ */
+namespace sys_pause {
+
+/**
+ * @brief pause the program until the user press any key
+ *
+ */
+void wait_for_key(void);
+
+/**
+ * @brief wait for the user to press any key and return true
+ * @note this function is non-blocking and meant to be used in a loop
+ *
+ */
+bool wait_for_next_keypress(void);
+
+} // namespace sys_pause
+
 #include "utils.hpp"
 
 #endif // __inc_utils_H__
