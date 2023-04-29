@@ -158,6 +158,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - changes direction (if registered) when hitting a wall
 - eats dots
 
+**v0.3.x** some system pause and wait stuff
+
+- added pseudo keypressed event checkers
+- `wait_for_ms` w/ internal chrono
+
 </details>
 
 ## 🐛 Bugs & TODO
@@ -166,6 +171,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 - ~~target fps bypassed~~ (resolved by re-updating timers after each frame)
 - pac-man speed is set to 1.0f (won't fix)
+- first animation sprite depends on current frame count (won't fix)
 
 **todo** (first implementation version)
 
