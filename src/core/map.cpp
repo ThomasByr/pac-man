@@ -281,8 +281,8 @@ Direction Map::reconstruct_path(std::vector<Node> closedlist, Node target,
   while (current_cost != 1) {
     current_node = closedlist[find_precedent(closedlist, current_node)];
     current_cost--;
-    fmt::debug("analyse du chemin retour: x = %i, y = %i, cost = %i",
-               current_node.x, current_node.y, current_cost);
+    /*fmt::debug("analyse du chemin retour: x = %i, y = %i, cost = %i",
+               current_node.x, current_node.y, current_cost);*/
   }
 
   // Une fois qu'on a l'avant dernier on récupère la direction
@@ -302,11 +302,11 @@ Direction Map::reconstruct_path(std::vector<Node> closedlist, Node target,
 Direction Map::shortest_path(Node target, Node starter) const {
   // Liste des noeuds qu'on a déjà exploré
 
-  fmt::debug("--------------------------------------------------");
+  /*fmt::debug("--------------------------------------------------");
   fmt::debug("target Node: x: %i, y: %i, cost: %i, heuri: %f", target.x,
              target.y, target.cost, target.heuristic);
   fmt::debug("starter Node: x: %i, y: %i, cost: %i, heuri: %f", starter.x,
-             starter.y, starter.cost, starter.heuristic);
+             starter.y, starter.cost, starter.heuristic);*/
 
   std::vector<Node> closedlist{};
 

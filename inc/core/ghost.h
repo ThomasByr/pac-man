@@ -16,9 +16,10 @@ enum class GhostType { BLINKY, PINKY, INKY, CLYDE };
 class Ghost : public Entity {
 private:
   GhostType type;
+  bool is_at_home;
 
 public:
-  Ghost(const double cx, const double cy, GhostType type);
+  Ghost(const double cx, const double cy, GhostType type, bool is_at_home);
   Ghost(const Ghost &other) = delete;
   Ghost(Ghost &&other) = delete;
   Ghost &operator=(const Ghost &other) = delete;

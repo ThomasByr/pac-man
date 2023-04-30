@@ -66,10 +66,13 @@ Game::Game(const std::string &config_path)
   m_ghosts = std::vector<std::shared_ptr<Ghost>>{4};
 
   m_ghosts[0] =
-    std::make_shared<Ghost>(cx_blinky, cy_blinky, GhostType::BLINKY);
-  m_ghosts[1] = std::make_shared<Ghost>(cx_pinky, cy_pinky, GhostType::PINKY);
-  m_ghosts[2] = std::make_shared<Ghost>(cx_inky, cy_inky, GhostType::INKY);
-  m_ghosts[3] = std::make_shared<Ghost>(cx_clyde, cy_clyde, GhostType::CLYDE);
+    std::make_shared<Ghost>(cx_blinky, cy_blinky, GhostType::BLINKY, false);
+  m_ghosts[1] =
+    std::make_shared<Ghost>(cx_pinky, cy_pinky, GhostType::PINKY, true);
+  m_ghosts[2] =
+    std::make_shared<Ghost>(cx_inky, cy_inky, GhostType::INKY, true);
+  m_ghosts[3] =
+    std::make_shared<Ghost>(cx_clyde, cy_clyde, GhostType::CLYDE, true);
 }
 
 Game::~Game() = default;
@@ -77,6 +80,11 @@ Game::~Game() = default;
 void Game::run() {
   FPSCounter fps_counter;
   Uint64 fps = 0;
+
+  // pour les allers retours
+  m_ghosts[1]->set_direction(Direction::UP);
+  m_ghosts[2]->set_direction(Direction::DOWN);
+  m_ghosts[3]->set_direction(Direction::DOWN);
 
   while (m_running) {
     // handle quit event

@@ -5,8 +5,8 @@
 
 #include "utils.h"
 
-Ghost::Ghost(const double cx, const double cy, GhostType type)
-  : Entity{cx, cy, 0, 0}, type{type} {}
+Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
+  : Entity{cx, cy, 0, 0}, type{type}, is_at_home{is_at_home} {}
 
 void Ghost::show(std::shared_ptr<Renderer> renderer) {
 
@@ -105,20 +105,36 @@ void Ghost::chase_pacman(std::shared_ptr<Map> map,
 
 void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
 
-  chase_pacman(map, Pacman_pos);
+  if (is_at_home) {
 
-  if (m_reg_direction != Direction::NONE &&
-      m_direction == opposite(m_reg_direction)) {
-    m_direction = m_reg_direction;
+    if (m_direction == Direction::NONE) { m_direction = m_reg_direction; }
+
+    // first check if we can still go in the current direction
+    if (!can_go(map, m_direction)) {
+      // in that case we simply stop
+      m_direction = opposite(m_direction);
+      auto pos = get_ij(map->get_size());
+      fmt::debug("type %i : %i %i", type, std::get<0>(pos), std::get<1>(pos));
+    }
+
   }
 
-  // then we check if the registered direction is valid
-  // we do not want to check if the current direction is NONE because we can
-  // change direction while in motion
-  if (can_change_direction(map) && can_go(map, m_reg_direction)) {
-    if (m_reg_direction != m_direction) {
+  else {
+    chase_pacman(map, Pacman_pos);
+
+    if (m_reg_direction != Direction::NONE &&
+        m_direction == opposite(m_reg_direction)) {
       m_direction = m_reg_direction;
-      m_reg_direction = Direction::NONE;
+    }
+
+    // then we check if the registered direction is valid
+    // we do not want to check if the current direction is NONE because we can
+    // change direction while in motion
+    if (can_change_direction(map) && can_go(map, m_reg_direction)) {
+      if (m_reg_direction != m_direction) {
+        m_direction = m_reg_direction;
+        m_reg_direction = Direction::NONE;
+      }
     }
   }
 
