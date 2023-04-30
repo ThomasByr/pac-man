@@ -6,6 +6,7 @@
 
 enum class GameState { MENU, GAME, PAUSE, GAME_OVER, EXIT };
 enum class PcmnState { ALIVE, DEAD, POWERED };
+enum class GhstState { CHASE, SCATTER, FRIGHTENED };
 
 std::ostream &operator<<(std::ostream &os, const GameState &state);
 std::string to_string(const GameState &state);

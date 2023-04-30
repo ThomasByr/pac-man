@@ -127,6 +127,90 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   for (size_t i = _data_pacman_right.size() - 1; i > 0; i--) {
     m_pacman_right.push_back(from_json(_data_pacman_right[i]));
   }
+
+  // set m_redghost_xx for all frames
+  auto _data_redghost_up = data["m_redghost_up"];
+  for (size_t i = 0; i < _data_redghost_up.size(); i++) {
+    m_redghost_up.push_back(from_json(_data_redghost_up[i]));
+  }
+
+  auto _data_redghost_left = data["m_redghost_left"];
+  for (size_t i = 0; i < _data_redghost_left.size(); i++) {
+    m_redghost_left.push_back(from_json(_data_redghost_left[i]));
+  }
+
+  auto _data_redghost_right = data["m_redghost_right"];
+  for (size_t i = 0; i < _data_redghost_right.size(); i++) {
+    m_redghost_right.push_back(from_json(_data_redghost_right[i]));
+  }
+
+  auto _data_redghost_down = data["m_redghost_down"];
+  for (size_t i = 0; i < _data_redghost_down.size(); i++) {
+    m_redghost_down.push_back(from_json(_data_redghost_down[i]));
+  }
+
+  // set m_cyanghost_xx for all frames
+  auto _data_cyanghost_up = data["m_cyanghost_up"];
+  for (size_t i = 0; i < _data_cyanghost_up.size(); i++) {
+    m_cyanghost_up.push_back(from_json(_data_cyanghost_up[i]));
+  }
+
+  auto _data_cyanghost_left = data["m_cyanghost_left"];
+  for (size_t i = 0; i < _data_cyanghost_left.size(); i++) {
+    m_cyanghost_left.push_back(from_json(_data_cyanghost_left[i]));
+  }
+
+  auto _data_cyanghost_right = data["m_cyanghost_right"];
+  for (size_t i = 0; i < _data_cyanghost_right.size(); i++) {
+    m_cyanghost_right.push_back(from_json(_data_cyanghost_right[i]));
+  }
+
+  auto _data_cyanghost_down = data["m_cyanghost_down"];
+  for (size_t i = 0; i < _data_cyanghost_down.size(); i++) {
+    m_cyanghost_down.push_back(from_json(_data_cyanghost_down[i]));
+  }
+
+  // set m_pinkghost_xx for all frames
+  auto _data_pinkghost_up = data["m_pinkghost_up"];
+  for (size_t i = 0; i < _data_pinkghost_up.size(); i++) {
+    m_pinkghost_up.push_back(from_json(_data_pinkghost_up[i]));
+  }
+
+  auto _data_pinkghost_left = data["m_pinkghost_left"];
+  for (size_t i = 0; i < _data_pinkghost_left.size(); i++) {
+    m_pinkghost_left.push_back(from_json(_data_pinkghost_left[i]));
+  }
+
+  auto _data_pinkghost_right = data["m_pinkghost_right"];
+  for (size_t i = 0; i < _data_pinkghost_right.size(); i++) {
+    m_pinkghost_right.push_back(from_json(_data_pinkghost_right[i]));
+  }
+
+  auto _data_pinkghost_down = data["m_pinkghost_down"];
+  for (size_t i = 0; i < _data_pinkghost_down.size(); i++) {
+    m_pinkghost_down.push_back(from_json(_data_pinkghost_down[i]));
+  }
+
+  // set m_orangeghost_xx for all frames
+  auto _data_orangeghost_up = data["m_orangeghost_up"];
+  for (size_t i = 0; i < _data_orangeghost_up.size(); i++) {
+    m_orangeghost_up.push_back(from_json(_data_orangeghost_up[i]));
+  }
+
+  auto _data_orangeghost_left = data["m_orangeghost_left"];
+  for (size_t i = 0; i < _data_orangeghost_left.size(); i++) {
+    m_orangeghost_left.push_back(from_json(_data_orangeghost_left[i]));
+  }
+
+  auto _data_orangeghost_right = data["m_orangeghost_right"];
+  for (size_t i = 0; i < _data_orangeghost_right.size(); i++) {
+    m_orangeghost_right.push_back(from_json(_data_orangeghost_right[i]));
+  }
+
+  auto _data_orangeghost_down = data["m_orangeghost_down"];
+  for (size_t i = 0; i < _data_orangeghost_down.size(); i++) {
+    m_orangeghost_down.push_back(from_json(_data_orangeghost_down[i]));
+  }
 }
 
 Assets::~Assets() { SDL_FreeSurface(m_surface); }
@@ -154,5 +238,59 @@ SDL_Rect Assets::get_sprite_pacman(const Direction &dir, int fc) const {
   case Direction::RIGHT: return m_pacman_right.at(fc % m_pacman_right.size());
   default: // fallback for Direction::NONE
     return m_pacman_up.at(0);
+  }
+}
+
+SDL_Rect Assets::get_sprite_ghost_red(const Direction &dir, int fc) const {
+  switch (dir) {
+  case Direction::UP: return m_redghost_up.at(fc % m_redghost_up.size());
+  case Direction::DOWN: return m_redghost_down.at(fc % m_redghost_down.size());
+  case Direction::LEFT: return m_redghost_left.at(fc % m_redghost_left.size());
+  case Direction::RIGHT:
+    return m_redghost_right.at(fc % m_redghost_right.size());
+  default: // fallback for Direction::NONE
+    return m_redghost_up.at(0);
+  }
+}
+
+SDL_Rect Assets::get_sprite_ghost_blue(const Direction &dir, int fc) const {
+  switch (dir) {
+  case Direction::UP: return m_cyanghost_up.at(fc % m_cyanghost_up.size());
+  case Direction::DOWN:
+    return m_cyanghost_down.at(fc % m_cyanghost_down.size());
+  case Direction::LEFT:
+    return m_cyanghost_left.at(fc % m_cyanghost_left.size());
+  case Direction::RIGHT:
+    return m_cyanghost_right.at(fc % m_cyanghost_right.size());
+  default: // fallback for Direction::NONE
+    return m_cyanghost_up.at(0);
+  }
+}
+
+SDL_Rect Assets::get_sprite_ghost_pink(const Direction &dir, int fc) const {
+  switch (dir) {
+  case Direction::UP: return m_pinkghost_up.at(fc % m_pinkghost_up.size());
+  case Direction::DOWN:
+    return m_pinkghost_down.at(fc % m_pinkghost_down.size());
+  case Direction::LEFT:
+    return m_pinkghost_left.at(fc % m_pinkghost_left.size());
+  case Direction::RIGHT:
+    return m_pinkghost_right.at(fc % m_pinkghost_right.size());
+  default: // fallback for Direction::NONE
+    return m_pinkghost_up.at(0);
+  }
+}
+
+SDL_Rect Assets::get_sprite_ghost_orange(const Direction &dir, int fc) const {
+  switch (dir) {
+  case Direction::UP: return m_orangeghost_up.at(fc % m_orangeghost_up.size());
+  case Direction::DOWN:
+    return m_orangeghost_down.at(fc % m_orangeghost_down.size());
+  case Direction::LEFT:
+    return m_orangeghost_left.at(fc % m_orangeghost_left.size());
+  case Direction::RIGHT:
+    return m_orangeghost_right.at(fc % m_orangeghost_right.size());
+  default: // fallback for Direction::NONE
+    return m_orangeghost_up.at(0);
   }
 }
