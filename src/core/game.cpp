@@ -70,8 +70,6 @@ Game::Game(const std::string &config_path)
   m_ghosts[1] = std::make_shared<Ghost>(cx_pinky, cy_pinky, GhostType::PINKY);
   m_ghosts[2] = std::make_shared<Ghost>(cx_inky, cy_inky, GhostType::INKY);
   m_ghosts[3] = std::make_shared<Ghost>(cx_clyde, cy_clyde, GhostType::CLYDE);
-
-  // todo: make ghosts
 }
 
 Game::~Game() = default;
@@ -114,11 +112,6 @@ void Game::run() {
 
     // show entities after map & bg
     m_pacman->show(m_renderer);
-
-    m_ghosts[0]->set_direction(Direction::UP);
-    m_ghosts[1]->set_direction(Direction::UP);
-    m_ghosts[2]->set_direction(Direction::UP);
-    m_ghosts[3]->set_direction(Direction::UP);
 
     m_ghosts[0]->show(m_renderer);
     m_ghosts[1]->show(m_renderer);

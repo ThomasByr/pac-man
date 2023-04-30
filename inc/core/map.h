@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 
+#include <cmath>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -11,6 +12,12 @@
 
 #include "helper/renderer.h"
 #include "tile.h"
+
+struct Node {
+  const int x, y;
+  int cost;
+  float heuristic;
+};
 
 class Map {
 private:
@@ -55,6 +62,24 @@ public:
   void eat_food(const int i, const int j);
 
   bool can_go(const int i, const int j, const Direction &dir) const;
+
+  Direction shortest_path(std::shared_ptr<Node> target,
+                          std::shared_ptr<Node> starter) const;
+
+  // return the position of the node with the lowest heuristic
+  int lowest_heuristic(std::vector<std::shared_ptr<Node>> list) const;
+
+  void find_voisin(std::vector<std::shared_ptr<Node>> voisin,
+                   std::shared_ptr<Node> current) const;
+
+  bool find_node(std::vector<std::shared_ptr<Node>> list,
+                 std::shared_ptr<Node> current) const;
+
+  bool check_open(std::vector<std::shared_ptr<Node>> list,
+                  std::shared_ptr<Node> current) const;
+
+  float calc_norm_eucl(std::shared_ptr<Node> start,
+                       std::shared_ptr<Node> target) const;
 };
 
 #endif // __inc_core_map_H__
