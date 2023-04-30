@@ -11,7 +11,7 @@ Ghost::Ghost(const double cx, const double cy, GhostType type)
 void Ghost::show(std::shared_ptr<Renderer> renderer) {
 
   SDL_Rect asset;
-  static const double custom_scale = 0.5;
+  static const double custom_scale = 0.6;
 
   switch (type) {
   case GhostType::BLINKY:
@@ -49,7 +49,7 @@ bool Ghost::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
 }
 
 bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
-  static const double epsilon = 1.5;
+  static const double epsilon = 0.01;
   double tile_size = map->get_size();
 
   // the relative x position of the entity on the tile
@@ -107,37 +107,26 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
 
   chase_pacman(map, Pacman_pos);
 
-  switch (m_direction) {
-  case Direction::UP: fmt::debug("start haut"); break;
-  case Direction::DOWN: fmt::debug("start bas"); break;
-  case Direction::LEFT: fmt::debug("start gauche"); break;
-  case Direction::RIGHT: fmt::debug("start droite"); break;
-
-  default: break;
-  }
-
   if (m_reg_direction != Direction::NONE &&
       m_direction == opposite(m_reg_direction)) {
     m_direction = m_reg_direction;
   }
 
+  // then we check if the registered direction is valid
+  // we do not want to check if the current direction is NONE because we can
+  // change direction while in motion
+  if (can_change_direction(map) && can_go(map, m_reg_direction)) {
+    if (m_reg_direction != m_direction) {
+      m_direction = m_reg_direction;
+      m_reg_direction = Direction::NONE;
+    }
+  }
+
   switch (m_direction) {
-  case Direction::UP:
-    m_cy -= 1;
-    fmt::debug("final haut");
-    break;
-  case Direction::DOWN:
-    m_cy += 1;
-    fmt::debug("final bas");
-    break;
-  case Direction::LEFT:
-    m_cx -= 1;
-    fmt::debug("final gauche");
-    break;
-  case Direction::RIGHT:
-    m_cx += 1;
-    fmt::debug("final droite");
-    break;
+  case Direction::UP: m_cy -= 1; break;
+  case Direction::DOWN: m_cy += 1; break;
+  case Direction::LEFT: m_cx -= 1; break;
+  case Direction::RIGHT: m_cx += 1; break;
 
   default: break;
   }
