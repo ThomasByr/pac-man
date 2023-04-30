@@ -53,8 +53,23 @@ Game::Game(const std::string &config_path)
   const struct PacmanConfig c = {m_points_per_dot, m_points_per_power_dot,
                                  m_points_per_ghost};
   m_pacman = std::make_shared<Pacman>(cx, cy, c);
+
+  double cx_pinky = 0, cy_pinky = 0;
+  double cx_inky = 0, cy_inky = 0;
+  double cx_blinky = 0, cy_blinky = 0;
+  double cx_clyde = 0, cy_clyde = 0;
+  std::tie(cx_pinky, cy_pinky) = m_map->get_pinky_start_tile_c();
+  std::tie(cx_inky, cy_inky) = m_map->get_inky_start_tile_c();
+  std::tie(cx_blinky, cy_blinky) = m_map->get_blinky_start_tile_c();
+  std::tie(cx_clyde, cy_clyde) = m_map->get_clyde_start_tile_c();
+
   m_ghosts = std::vector<std::shared_ptr<Ghost>>{4};
-  // todo: make ghosts
+
+  m_ghosts[0] =
+    std::make_shared<Ghost>(cx_blinky, cy_blinky, GhostType::BLINKY);
+  m_ghosts[1] = std::make_shared<Ghost>(cx_pinky, cy_pinky, GhostType::PINKY);
+  m_ghosts[2] = std::make_shared<Ghost>(cx_inky, cy_inky, GhostType::INKY);
+  m_ghosts[3] = std::make_shared<Ghost>(cx_clyde, cy_clyde, GhostType::CLYDE);
 }
 
 Game::~Game() = default;
@@ -97,6 +112,11 @@ void Game::run() {
 
     // show entities after map & bg
     m_pacman->show(m_renderer);
+
+    m_ghosts[0]->show(m_renderer);
+    m_ghosts[1]->show(m_renderer);
+    m_ghosts[2]->show(m_renderer);
+    m_ghosts[3]->show(m_renderer);
 
     // flip buffers and wait
     m_renderer->flip();
