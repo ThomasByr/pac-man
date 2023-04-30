@@ -14,7 +14,7 @@
 #include "tile.h"
 
 struct Node {
-  const int x, y;
+  int x, y;
   int cost;
   float heuristic;
 };
@@ -63,23 +63,23 @@ public:
 
   bool can_go(const int i, const int j, const Direction &dir) const;
 
-  Direction shortest_path(std::shared_ptr<Node> target,
-                          std::shared_ptr<Node> starter) const;
+  Direction shortest_path(Node target, Node starter) const;
 
   // return the position of the node with the lowest heuristic
-  int lowest_heuristic(std::vector<std::shared_ptr<Node>> list) const;
+  int lowest_heuristic(std::vector<Node> list) const;
 
-  void find_voisin(std::vector<std::shared_ptr<Node>> voisin,
-                   std::shared_ptr<Node> current) const;
+  void find_voisin(std::vector<Node> *voisin, Node current) const;
 
-  bool find_node(std::vector<std::shared_ptr<Node>> list,
-                 std::shared_ptr<Node> current) const;
+  bool find_node(std::vector<Node> list, Node current) const;
 
-  bool check_open(std::vector<std::shared_ptr<Node>> list,
-                  std::shared_ptr<Node> current) const;
+  bool check_open(std::vector<Node> list, Node current) const;
 
-  float calc_norm_eucl(std::shared_ptr<Node> start,
-                       std::shared_ptr<Node> target) const;
+  float calc_norm_eucl(Node start, Node target) const;
+
+  Direction reconstruct_path(std::vector<Node> closedlist, Node target,
+                             Node starter) const;
+
+  int find_precedent(std::vector<Node> closedlist, Node current) const;
 };
 
 #endif // __inc_core_map_H__

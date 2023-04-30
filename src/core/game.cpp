@@ -101,6 +101,13 @@ void Game::run() {
     fps = fps_counter.tick();
     m_pacman->update(m_map);
 
+    std::tuple<int, int> pacman_pos = m_pacman->get_ij(m_map->get_size());
+
+    m_ghosts[0]->update(m_map, pacman_pos);
+    m_ghosts[1]->update(m_map, pacman_pos);
+    m_ghosts[2]->update(m_map, pacman_pos);
+    m_ghosts[3]->update(m_map, pacman_pos);
+
     // render
     m_renderer->clear();
     m_renderer->blit(m_assets->m_bg, 0, 0);

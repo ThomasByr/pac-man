@@ -32,17 +32,17 @@ public:
 
   bool can_change_direction(std::shared_ptr<Map> map) const;
 
-  void update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos);
+  void update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
 
-  void chase_pacman(std::tuple<int, int> Pacman_pos);
+  void chase_pacman(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
 
-  void blinky_chase(std::tuple<int, int> Pacman_pos);
+  void blinky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
 
-  void pinky_chase(std::tuple<int, int> Pacman_pos);
+  void pinky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
 
-  void inky_chase(std::tuple<int, int> Pacman_pos);
+  void inky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
 
-  void clyde_chase(std::tuple<int, int> Pacman_pos);
+  void clyde_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
 };
 
 #endif // __inc_core_ghost_H__
