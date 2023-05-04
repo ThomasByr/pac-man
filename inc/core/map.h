@@ -8,15 +8,25 @@
 #include <memory>
 #include <string>
 #include <tuple>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "helper/renderer.h"
 #include "tile.h"
 
 struct Node {
-  int x, y;
-  int cost;
-  float heuristic;
+  int i, j;
+};
+
+inline bool operator==(const Node &lhs, const Node &rhs) {
+  return lhs.i == rhs.i && lhs.j == rhs.j;
+}
+
+struct NodeHash {
+  std::size_t operator()(const Node &n) const {
+    return std::hash<int>()(n.i) ^ std::hash<int>()(n.j);
+  }
 };
 
 class Map {
@@ -63,23 +73,11 @@ public:
 
   bool can_go(const int i, const int j, const Direction &dir) const;
 
-  Direction shortest_path(Node target, Node starter) const;
-
-  // return the position of the node with the lowest heuristic
-  int lowest_heuristic(std::vector<Node> list) const;
-
-  void find_voisin(std::vector<Node> *voisin, Node current) const;
-
-  bool find_node(std::vector<Node> list, Node current) const;
-
-  bool check_open(std::vector<Node> list, Node current) const;
-
-  float calc_norm_eucl(Node start, Node target) const;
-
-  Direction reconstruct_path(std::vector<Node> closedlist, Node target,
-                             Node starter) const;
-
-  int find_precedent(std::vector<Node> closedlist, Node current) const;
+  std::vector<Node> get_neighbors(struct Node current) const;
+  double heuristic_cost_estimate(struct Node start, struct Node end) const;
+  Direction reconstruct_path(std::unordered_map<Node, Node, NodeHash> came_from,
+                             Node current) const;
+  Direction astar(struct Node start, struct Node end) const;
 };
 
 #endif // __inc_core_map_H__
