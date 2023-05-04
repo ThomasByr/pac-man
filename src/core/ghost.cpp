@@ -113,8 +113,6 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
     if (!can_go(map, m_direction)) {
       // in that case we simply stop
       m_direction = opposite(m_direction);
-      auto pos = get_ij(map->get_size());
-      fmt::debug("type %i : %i %i", type, std::get<0>(pos), std::get<1>(pos));
     }
 
   }
@@ -126,17 +124,26 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
         m_direction == opposite(m_reg_direction)) {
       m_direction = m_reg_direction;
     }
-
     // then we check if the registered direction is valid
     // we do not want to check if the current direction is NONE because we can
     // change direction while in motion
-    if (can_change_direction(map) && can_go(map, m_reg_direction)) {
-      if (m_reg_direction != m_direction) {
-        m_direction = m_reg_direction;
-        m_reg_direction = Direction::NONE;
-      }
+    if (!can_go(map, m_direction)) { return; }
+
+    if (!can_change_direction(map)) {
+      m_direction = m_reg_direction;
+      m_reg_direction = Direction::NONE;
+
+      move();
+      return;
     }
+
+    move();
+
+    m_reg_direction = m_direction;
   }
+}
+
+void Ghost::move() {
 
   switch (m_direction) {
   case Direction::UP: m_cy -= 1; break;
@@ -146,6 +153,4 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
 
   default: break;
   }
-
-  m_reg_direction = m_direction;
 }

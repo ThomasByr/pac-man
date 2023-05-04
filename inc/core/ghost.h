@@ -44,6 +44,8 @@ public:
   void inky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
 
   void clyde_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
+
+  void move();
 };
 
 #endif // __inc_core_ghost_H__
