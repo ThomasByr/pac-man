@@ -62,13 +62,23 @@ template <typename... Args> void debug(const std::string &fmt, Args &&...args);
 template <typename... Args> void info(const std::string &fmt, Args &&...args);
 
 /**
- * @brief print alert message on std::cerr
+ * @brief print warning message on std::cerr
  *
  * @tparam Args template arguments
  * @param fmt   format string
  * @param args  format arguments
  */
-template <typename... Args> void alert(const std::string &fmt, Args &&...args);
+template <typename... Args>
+void warning(const std::string &fmt, Args &&...args);
+
+/**
+ * @brief print error message on std::cerr
+ *
+ * @tparam Args template arguments
+ * @param fmt   format string
+ * @param args  format arguments
+ */
+template <typename... Args> void error(const std::string &fmt, Args &&...args);
 
 /**
  * @brief print error message on std::cerr and abort
@@ -78,9 +88,52 @@ template <typename... Args> void alert(const std::string &fmt, Args &&...args);
  * @param args  format arguments
  */
 template <typename... Args>
-void [[noreturn]] panic(const std::string &fmt, Args &&...args);
+[[noreturn]] void panic(const std::string &fmt, Args &&...args);
+
+/**
+ * @brief print error message on std::cerr and abort
+ *
+ * @tparam Args template arguments
+ * @param fmt   format string
+ * @param args  format arguments
+ */
+template <typename... Args>
+[[noreturn]] void unreachable(const std::string &fmt, Args &&...args);
 
 } // namespace fmt
+
+/**
+ * @brief System pause related functions
+ *
+ */
+namespace sys_pause {
+
+/**
+ * @brief pause the program until the user press any key
+ *
+ */
+void wait_for_key(void);
+
+/**
+ * @brief wait for the user to press any key and return true
+ * @note this function is non-blocking and meant to be used in a loop
+ *
+ */
+bool wait_for_next_keypress(void);
+
+/**
+ * @brief wait for the given amount of time
+ * @note this function is non-blocking and meant to be used in a loop ;
+ * when the time is elapsed, it resets the internal timer
+ * so you can call it again with another duration
+ *
+ * @param usec   time to wait in microseconds
+ * @return true  when the time is elapsed
+ * @return false otherwise
+ */
+bool wait_for_ms(useconds_t usec);
+
+} // namespace sys_pause
 
 #include "utils.hpp"
 

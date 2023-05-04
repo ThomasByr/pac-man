@@ -41,8 +41,7 @@
 
 #include "utils.h"
 
-int main() /* we take no cmd line arguments */
-{
+int main(/* we take no cmd line arguments */) {
 
   // welcome
   fmt::info("Welcome to pac-man!");

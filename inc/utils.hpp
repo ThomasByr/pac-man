@@ -1,10 +1,9 @@
 
-#ifndef __fmt_utils_HPP__
-#define __fmt_utils_HPP__
+#ifndef __inc_utils_HPP__
+#define __inc_utils_HPP__
 
 #include <iostream>
 
-#include "utils.h"
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -62,20 +61,36 @@ template <typename... Args> void info(const std::string &fmt, Args &&...args) {
   cerr << FG_GRN << "    info " << RST << format(fmt, args...) << endl;
 }
 
-template <typename... Args> void alert(const std::string &fmt, Args &&...args) {
+template <typename... Args>
+void warning(const std::string &fmt, Args &&...args) {
   using namespace std;
   using namespace internal;
-  cerr << FG_RED << "   alert " << RST << format(fmt, args...) << endl;
+  cerr << FG_YEL << " warning " << RST << format(fmt, args...) << endl;
+}
+
+template <typename... Args> void error(const std::string &fmt, Args &&...args) {
+  using namespace std;
+  using namespace internal;
+  cerr << FG_RED << "   error " << RST << format(fmt, args...) << endl;
 }
 
 template <typename... Args>
-void [[noreturn]] panic(const std::string &fmt, Args &&...args) {
+[[noreturn]] void panic(const std::string &fmt, Args &&...args) {
   using namespace std;
   using namespace internal;
   cerr << FG_RED << "   panic " << RST << format(fmt, args...) << endl;
   abort();
 }
 
+template <typename... Args>
+[[noreturn]] void unreachable(const std::string &fmt, Args &&...args) {
+  using namespace std;
+  using namespace internal;
+  cerr << FG_RED << "   panic " << RST << "code is unreachable" << endl;
+  cerr << FG_RED << "      -> " << RST << format(fmt, args...) << endl;
+  abort();
+}
+
 } // namespace fmt
 
-#endif // __fmt_utils_HPP__
+#endif // __inc_utils_HPP__

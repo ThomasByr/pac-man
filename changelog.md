@@ -21,3 +21,8 @@
 - stops when hitting a wall
 - changes direction (if registered) when hitting a wall
 - eats dots
+
+**v0.3.x** some system pause and wait stuff
+
+- added pseudo keypressed event checkers
+- `wait_for_ms` w/ internal chrono
