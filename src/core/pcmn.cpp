@@ -93,10 +93,10 @@ void Pacman::update(std::shared_ptr<Map> map) {
   }
 
   switch (m_direction) {
-  case Direction::UP: m_cy -= 1; break;
-  case Direction::DOWN: m_cy += 1; break;
-  case Direction::LEFT: m_cx -= 1; break;
-  case Direction::RIGHT: m_cx += 1; break;
+  case Direction::UP: m_cy -= 2; break;
+  case Direction::DOWN: m_cy += 2; break;
+  case Direction::LEFT: m_cx -= 2; break;
+  case Direction::RIGHT: m_cx += 2; break;
   default: break;
   }
   if (ate_food(map)) { eat_food(map); }
