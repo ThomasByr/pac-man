@@ -129,13 +129,13 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
     // change direction while in motion
     if (!can_go(map, m_direction)) { return; }
 
-    if (!can_change_direction(map)) {
+    /* if (!can_change_direction(map)) {
       m_direction = m_reg_direction;
       m_reg_direction = Direction::NONE;
 
       move();
       return;
-    }
+    }*/
 
     move();
 
