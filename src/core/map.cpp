@@ -1,11 +1,14 @@
 
 #include <SDL.h>
 
+#include <algorithm>
 #include <cctype>
 #include <fstream>
 #include <iostream>
 #include <optional>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "core/map.h"
@@ -146,206 +149,85 @@ void Map::eat_food(const int i, const int j) {
   }
 }
 
-int Map::lowest_heuristic(std::vector<Node> list) const {
-
-  if (list.size() == 0) {
-    fmt::panic("lowest_heuristic reading in nothing");
-  } else if (list.size() == 1) {
-    return list[0].heuristic;
-  }
-
-  int best_value = list[0].heuristic;
-  int best_position = 0;
-
-  int taille = list.size();
-
-  for (int i = 1; i < taille; i++) {
-    if (list[i].heuristic < best_value) {
-      best_value = list[i].heuristic;
-      best_position = i;
-    }
-  }
-
-  return best_position;
+double Map::heuristic_cost_estimate(struct Node start, struct Node end) const {
+  return std::sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
 }
 
-void Map::find_voisin(std::vector<Node> *voisin, Node current) const {
-
-  // idk x,y sont inversés mdr sur la lecture de la carte
-
-  // On récupère la tile du dessus
-  Tile upper_tile = m_map[current.y - 1][current.x];
-
-  // On régarde si on peut y accéder : ie ce n'est pas un mur et un portail
-  if (upper_tile.get_type() != TileType::WALL &&
-      upper_tile.get_type() != TileType::GHOST_HOUSE_DOOR) {
-    Node uppervoisin = {current.x, current.y - 1, 0, 0};
-    voisin->push_back(uppervoisin);
+std::vector<Node> Map::get_neighbors(struct Node current) const {
+  std::vector<Node> neighbours;
+  if (can_go(current.i, current.j, Direction::UP)) {
+    neighbours.push_back({current.i - 1, current.j});
   }
-
-  Tile lower_tile = m_map[current.y + 1][current.x];
-
-  if (lower_tile.get_type() != TileType::WALL &&
-      lower_tile.get_type() != TileType::GHOST_HOUSE_DOOR) {
-    Node lowervoisin = {current.x, current.y + 1, 0, 0};
-    voisin->push_back(lowervoisin);
+  if (can_go(current.i, current.j, Direction::DOWN)) {
+    neighbours.push_back({current.i + 1, current.j});
   }
-
-  Tile left_tile = m_map[current.y][current.x - 1];
-
-  if (left_tile.get_type() != TileType::WALL &&
-      left_tile.get_type() != TileType::GHOST_HOUSE_DOOR) {
-    Node leftvoisin = Node{current.x - 1, current.y, 0, 0};
-    voisin->push_back(leftvoisin);
+  if (can_go(current.i, current.j, Direction::LEFT)) {
+    neighbours.push_back({current.i, current.j - 1});
   }
-
-  Tile right_tile = m_map[current.y][current.x + 1];
-  if (right_tile.get_type() != TileType::WALL &&
-      right_tile.get_type() != TileType::GHOST_HOUSE_DOOR) {
-    Node rightvoisin = {current.x + 1, current.y, 0, 0};
-    voisin->push_back(rightvoisin);
+  if (can_go(current.i, current.j, Direction::RIGHT)) {
+    neighbours.push_back({current.i, current.j + 1});
   }
+  return neighbours;
 }
 
-bool Map::find_node(std::vector<Node> list, Node current) const {
-
-  int taille = list.size();
-  // on regarde si notre noeud est dans la liste
-  for (int i = 0; i < taille; i++) {
-    if (list[i].x == current.x && list[i].y == current.y) return true;
+Direction Map::reconstruct_path(
+  std::unordered_map<Node, Node, NodeHash> came_from, Node current) const {
+  std::vector<Node> total_path;
+  total_path.push_back(current);
+  while (came_from.find(current) != came_from.end()) {
+    current = came_from[current];
+    total_path.push_back(current);
   }
-
-  return false;
-}
-
-// Fonction qui regarde si un noeud est présent dans la liste et si son coût est
-// inférieur à l'actuel
-bool Map::check_open(std::vector<Node> list, Node current) const {
-
-  int taille = list.size();
-  // on regarde si notre noeud est dans la liste
-  for (int i = 0; i < taille; i++) {
-    if (list[i].x == current.x && list[i].y == current.y) {
-      // on regarde si son coût est inférieur à l'actuel
-      if (list[i].cost <= current.cost) { return true; }
-    };
-  }
-
-  return false;
-}
-
-float Map::calc_norm_eucl(Node start, Node target) const {
-
-  return sqrt(pow(start.x - target.x, 2) + pow((start.y - target.y), 2));
-}
-
-int Map::find_precedent(std::vector<Node> closedlist, Node current) const {
-
-  int taille = closedlist.size();
-  if (taille == 0) { return 0; }
-
-  for (int i = 0; i < taille; i++) {
-    // on regarde si le coût précède bien à l'actuel
-    if (closedlist[i].cost == current.cost - 1) {
-      // et que ça a du sens niveau coordonné
-      if (closedlist[i].x == current.x + 1 ||
-          closedlist[i].x == current.x - 1 ||
-          closedlist[i].y == current.y + 1 ||
-          closedlist[i].y == current.y - 1) {
-        return i;
-      }
-    }
-  }
-
-  int taille_bis = closedlist.size();
-
-  for (int i = 0; i < taille_bis; i++) {
-    fmt::debug("Tile %i: x = %i, y = %i , cost = %i", i, closedlist[i].x,
-               closedlist[i].y, closedlist[i].cost);
-  }
-  fmt::debug("Must meet: x = %i, y = %i , cost = %i", current.x, current.y,
-             current.cost);
-  fmt::panic("pas de voisins précédents ???");
-  return -1;
-}
-
-Direction Map::reconstruct_path(std::vector<Node> closedlist, Node target,
-                                Node starter) const {
-
-  Node current_node = target;
-  int current_cost = target.cost;
-
-  if (current_cost == 0) { return Direction::NONE; }
-
-  // on recherche le voisin précédent et on recule
-  while (current_cost != 1) {
-    current_node = closedlist[find_precedent(closedlist, current_node)];
-    current_cost--;
-    /*fmt::debug("analyse du chemin retour: x = %i, y = %i, cost = %i",
-               current_node.x, current_node.y, current_cost);*/
-  }
-
-  // Une fois qu'on a l'avant dernier on récupère la direction
-  if (current_node.x == starter.x + 1) {
-    return Direction::RIGHT;
-  } else if (current_node.x == starter.x - 1) {
-    return Direction::LEFT;
-  } else if (current_node.y == starter.y + 1) {
-    return Direction::DOWN;
-  } else if (current_node.y == starter.y - 1) {
-    return Direction::UP;
-  }
-
+  total_path.pop_back();
+  Node next = total_path.back();
+  total_path.pop_back();
+  if (next.i == current.i - 1) { return Direction::UP; }
+  if (next.i == current.i + 1) { return Direction::DOWN; }
+  if (next.j == current.j - 1) { return Direction::LEFT; }
+  if (next.j == current.j + 1) { return Direction::RIGHT; }
   return Direction::NONE;
 }
 
-Direction Map::shortest_path(Node target, Node starter) const {
-  // Liste des noeuds qu'on a déjà exploré
+Direction Map::astar(struct Node start, struct Node end) const {
+  std::unordered_set<Node, NodeHash> closed_set;
+  std::unordered_set<Node, NodeHash> open_set;
 
-  /*fmt::debug("--------------------------------------------------");
-  fmt::debug("target Node: x: %i, y: %i, cost: %i, heuri: %f", target.x,
-             target.y, target.cost, target.heuristic);
-  fmt::debug("starter Node: x: %i, y: %i, cost: %i, heuri: %f", starter.x,
-             starter.y, starter.cost, starter.heuristic);*/
+  open_set.insert(start);
 
-  std::vector<Node> closedlist{};
+  std::unordered_map<Node, Node, NodeHash> came_from;
 
-  // Liste des noeuds qu'on va explorer
-  std::vector<Node> openlist{};
+  std::unordered_map<Node, double, NodeHash> g_score;
+  g_score[start] = 0;
 
-  openlist.push_back(starter);
+  std::unordered_map<Node, double, NodeHash> f_score;
+  f_score[start] = heuristic_cost_estimate(start, end);
 
-  // tant qu'on a des noeuds à explorer
-  while (openlist.size() != 0) {
+  while (!open_set.empty()) {
+    Node current = *std::min_element(
+      open_set.begin(), open_set.end(),
+      [&](const Node &a, const Node &b) { return f_score[a] < f_score[b]; });
 
-    // on récupère le noeud avec la plus faible heuristique
-    int i_want_to_analyze = lowest_heuristic(openlist);
-    Node to_analyze = openlist[i_want_to_analyze];
+    if (current == end) { return reconstruct_path(came_from, current); }
 
-    // Si on est arrivé
-    if (to_analyze.x == target.x && to_analyze.y == target.y) {
-      target.cost = to_analyze.cost;
-      // reconstituer le chemin et récupéré la première direction
-      return reconstruct_path(closedlist, target, starter);
-    }
+    open_set.erase(current);
+    closed_set.insert(current);
 
-    // On cherche tous les voisins accessibles de notre tile
-    std::vector<Node> voisin;
-    find_voisin(&voisin, to_analyze);
-    int taille = voisin.size();
-    for (int i = 0; i < taille; i++) {
-      if (!(find_node(closedlist, voisin[i]) ||
-            check_open(openlist, voisin[i]))) {
-        // puis on applique l'algo
-        voisin[i].cost = to_analyze.cost + 1;
-        voisin[i].heuristic =
-          voisin[i].cost + 2.5 * calc_norm_eucl(voisin[i], target);
-        openlist.push_back(voisin[i]);
+    for (auto &neighbor : get_neighbors(current)) {
+      if (closed_set.find(neighbor) != closed_set.end()) { continue; }
+
+      double tentative_g_score = g_score[current] + 1;
+
+      if (open_set.find(neighbor) == open_set.end()) {
+        open_set.insert(neighbor);
+      } else if (tentative_g_score >= g_score[neighbor]) {
+        continue;
       }
+
+      came_from[neighbor] = current;
+      g_score[neighbor] = tentative_g_score;
+      f_score[neighbor] =
+        g_score[neighbor] + heuristic_cost_estimate(neighbor, end);
     }
-    closedlist.push_back(to_analyze);
-    openlist.erase(openlist.begin() + i_want_to_analyze);
   }
-  fmt::panic("A* finding no path");
   return Direction::NONE;
 }

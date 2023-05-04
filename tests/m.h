@@ -132,17 +132,17 @@ extern unsigned long _no_asserts;
  *
  * @param fun function to run
  */
-#define test_case(fun)                                                       \
-  do {                                                                       \
-    _no_asserts = 0;                                                         \
-    fprintf(stderr, FG_BLU " running " RST "%-20s:: %-20s", __FILE__, #fun); \
-    fflush(stderr);                                                          \
-    exe(fun);                                                                \
-    if (_no_asserts > 0) {                                                   \
-      fprintf(stderr, FG_GRN "ok (%lu)\n" RST, _no_asserts);                 \
-    } else {                                                                 \
-      fprintf(stderr, FG_YEL "fake (0)\n" RST);                              \
-    }                                                                        \
+#define test_case(fun)                                                        \
+  do {                                                                        \
+    _no_asserts = 0;                                                          \
+    fprintf(stderr, FG_BLU "  running " RST "%-20s:: %-20s", __FILE__, #fun); \
+    fflush(stderr);                                                           \
+    exe(fun);                                                                 \
+    if (_no_asserts > 0) {                                                    \
+      fprintf(stderr, FG_GRN "ok (%lu)\n" RST, _no_asserts);                  \
+    } else {                                                                  \
+      fprintf(stderr, FG_YEL "fake (0)\n" RST);                               \
+    }                                                                         \
   } while (0);
 
 #endif // __tests_m_H__

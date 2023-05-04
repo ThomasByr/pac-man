@@ -6,7 +6,13 @@
 #include "utils.h"
 
 Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
-  : Entity{cx, cy, 0, 0}, type{type}, is_at_home{is_at_home} {}
+  : Entity{cx, cy, 0, 0}, type{type}, is_at_home{is_at_home} {
+  if (is_at_home) {
+    m_direction = Direction::UP;
+  } else {
+    m_direction = Direction::LEFT;
+  }
+}
 
 void Ghost::show(std::shared_ptr<Renderer> renderer) {
 
@@ -49,7 +55,7 @@ bool Ghost::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
 }
 
 bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
-  static const double epsilon = 0.01;
+  static const double epsilon = 1.5;
   double tile_size = map->get_size();
 
   // the relative x position of the entity on the tile
@@ -65,13 +71,11 @@ bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
 void Ghost::blinky_chase(std::shared_ptr<Map> map,
                          std::tuple<int, int> pacman_pos) {
 
-  Node pacman_tile = {std::get<0>(pacman_pos), std::get<1>(pacman_pos), 0, 0};
+  Node pacman_tile = {std::get<1>(pacman_pos), std::get<0>(pacman_pos)};
+  auto [i, j] = get_ij(map->get_size());
+  Node ghost_tile = {j, i};
 
-  std::tuple<int, int> ghost_pos = get_ij(map->get_size());
-
-  Node ghost_tile = {std::get<0>(ghost_pos), std::get<1>(ghost_pos), 0, 0};
-
-  m_direction = map->shortest_path(pacman_tile, ghost_tile);
+  m_reg_direction = map->astar(ghost_tile, pacman_tile);
 }
 
 void Ghost::pinky_chase(std::shared_ptr<Map> map,
@@ -107,40 +111,30 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
 
   if (is_at_home) {
 
-    if (m_direction == Direction::NONE) { m_direction = m_reg_direction; }
-
     // first check if we can still go in the current direction
-    if (!can_go(map, m_direction)) {
+    if (can_change_direction(map) && can_go(map, opposite(m_direction))) {
       // in that case we simply stop
       m_direction = opposite(m_direction);
     }
-
   }
 
   else {
-    chase_pacman(map, Pacman_pos);
+    chase_pacman(map, Pacman_pos); // update the registered direction
 
-    if (m_reg_direction != Direction::NONE &&
-        m_direction == opposite(m_reg_direction)) {
-      m_direction = m_reg_direction;
+    // if the ghost can no longer go straight
+    if (can_change_direction(map) && !can_go(map, m_direction)) {
+      m_direction = Direction::NONE;
     }
-    // then we check if the registered direction is valid
-    // we do not want to check if the current direction is NONE because we can
-    // change direction while in motion
-    if (!can_go(map, m_direction)) { return; }
 
-    /* if (!can_change_direction(map)) {
-      m_direction = m_reg_direction;
-      m_reg_direction = Direction::NONE;
-
-      move();
-      return;
-    }*/
-
-    move();
-
-    m_reg_direction = m_direction;
+    // check if we can go in the registered direction
+    if (can_change_direction(map) && can_go(map, m_reg_direction)) {
+      if (m_reg_direction != m_direction) {
+        m_direction = m_reg_direction;
+        m_reg_direction = Direction::NONE;
+      }
+    }
   }
+  move();
 }
 
 void Ghost::move() {

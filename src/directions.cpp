@@ -17,7 +17,7 @@ std::string to_string(const Direction &dir) {
   case Direction::LEFT: str = "LEFT"; break;
   case Direction::RIGHT: str = "RIGHT"; break;
   case Direction::NONE: str = "NONE"; break;
-  default: fmt::panic("Invalid direction");
+  default: fmt::unreachable("Invalid direction");
   }
   return str;
 }
