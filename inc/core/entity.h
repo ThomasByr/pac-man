@@ -29,6 +29,9 @@ public:
 
   virtual void set_direction(const Direction direction);
 
+  // return direction
+  Direction get_direction();
+
   /**
    * @brief Get the i and j of the entity on the map (index of the tile)
    *

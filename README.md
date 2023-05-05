@@ -163,6 +163,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - added pseudo keypressed event checkers
 - `wait_for_ms` w/ internal chrono
 
+**v0.4.x** ghost entity logic
+
+- ghost entity on display
+- added chasing algorithms
+
 </details>
 
 ## 🐛 Bugs & TODO
@@ -178,5 +183,5 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - [x] show pacman (v0.2)
 - [x] show ghosts (v0.1)
 - [x] implement pacman direction and collisions logic (v0.2)
-- [ ] implement ghosts tracking algorithms
+- [x] implement ghosts tracking algorithms (v0.4)
 - [ ] create levels, scores, lives and a save system

@@ -9,6 +9,8 @@ Entity::Entity(const double cx, const double cy, const double w, const double h)
   : m_cx{cx}, m_cy{cy}, w{w}, h{h}, m_score{0}, m_direction{Direction::NONE},
     m_reg_direction{Direction::NONE} {}
 
+Direction Entity::get_direction() { return m_direction; }
+
 void Entity::set_direction(const Direction direction) {
   if (direction == Direction::NONE) {
     fmt::debug("Direction::NONE encountered in Entity::set_direction");

@@ -68,7 +68,7 @@ private:
   std::vector<SDL_Rect> m_eyes_down;
 
 public:
-  SDL_Rect m_bg; // background
+  SDL_Rect m_bg, m_bg_menu; // background
 
   /**
    * @brief Construct a new Assets object

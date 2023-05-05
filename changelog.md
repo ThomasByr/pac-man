@@ -26,3 +26,8 @@
 
 - added pseudo keypressed event checkers
 - `wait_for_ms` w/ internal chrono
+
+**v0.4.x** ghost entity logic
+
+- ghost entity on display
+- added chasing algorithms

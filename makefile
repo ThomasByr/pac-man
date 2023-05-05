@@ -30,10 +30,10 @@ OBJECTS0    := $(addprefix $(OBJDIR)/, $(SOURCES:$(SRCDIR)/%.$(FILEXT)=%.o))
 
 LEXSRC      := $(wildcard $(LEXYACC_PATH)/*.l)
 YACCSRC     := $(wildcard $(LEXYACC_PATH)/*.y)
-LEXC				:= $(LEXSRC:$(LEXYACC_PATH)/%.l=$(SRCDIR)/%.c)
-YACCC				:= $(YACCSRC:$(LEXYACC_PATH)/%.y=$(SRCDIR)/%.c)
-LEXOBJ			:= $(LEXSRC:$(LEXYACC_PATH)/%.l=$(OBJDIR)/%.o)
-YACCOBJ			:= $(YACCSRC:$(LEXYACC_PATH)/%.y=$(OBJDIR)/%.o)
+LEXC        := $(LEXSRC:$(LEXYACC_PATH)/%.l=$(SRCDIR)/%.c)
+YACCC       := $(YACCSRC:$(LEXYACC_PATH)/%.y=$(SRCDIR)/%.c)
+LEXOBJ      := $(LEXSRC:$(LEXYACC_PATH)/%.l=$(OBJDIR)/%.o)
+YACCOBJ     := $(YACCSRC:$(LEXYACC_PATH)/%.y=$(OBJDIR)/%.o)
 
 OBJECTS      = $(filter-out $(LEXOBJ) $(YACCOBJ), $(OBJECTS0))
 

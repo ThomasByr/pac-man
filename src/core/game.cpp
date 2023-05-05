@@ -28,8 +28,8 @@ size_t FPSCounter::tick() {
 }
 
 Game::Game(const std::string &config_path)
-  : m_running{true}, w_sep{0}, m_points_per_dot{0}, m_points_per_power_dot{0},
-    m_points_per_ghost{0} {
+  : m_state{GameState::MENU}, m_running{true}, w_sep{0}, m_points_per_dot{0},
+    m_points_per_power_dot{0}, m_points_per_ghost{0} {
   m_renderer = std::make_shared<Renderer>("Pacman", config_path);
   m_assets = m_renderer->get_assets();
 
@@ -93,7 +93,7 @@ void Game::run() {
       if (event.type == SDL_QUIT) { m_running = false; }
 
       // handle key events
-      if (event.type == SDL_KEYDOWN) {
+      if (m_state == GameState::GAME && event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
 
         case SDLK_UP: m_pacman->set_direction(Direction::UP); break;
@@ -103,18 +103,18 @@ void Game::run() {
         default: break;
         }
       }
+      // handle key events
+      if (m_state == GameState::MENU && event.type == SDL_KEYDOWN) {
+        switch (event.key.keysym.sym) {
+
+        case SDLK_RETURN: m_state = GameState::GAME; break;
+        default: break;
+        }
+      }
     }
 
     // update
     fps = fps_counter.tick();
-    m_pacman->update(m_map);
-
-    std::tuple<int, int> pacman_pos = m_pacman->get_ij(m_map->get_size());
-
-    m_ghosts[0]->update(m_map, pacman_pos);
-    m_ghosts[1]->update(m_map, pacman_pos);
-    m_ghosts[2]->update(m_map, pacman_pos);
-    m_ghosts[3]->update(m_map, pacman_pos);
 
     // render
     m_renderer->clear();
@@ -123,15 +123,37 @@ void Game::run() {
     m_renderer->text(fmt::format("SCORE %d", m_pacman->get_score()), w_sep + 10,
                      30);
 
-    m_map->show(m_renderer);
+    std::tuple<int, int> pacman_pos = m_pacman->get_ij(m_map->get_size());
 
-    // show entities after map & bg
-    m_pacman->show(m_renderer);
+    switch (m_state) {
 
-    m_ghosts[0]->show(m_renderer);
-    m_ghosts[1]->show(m_renderer);
-    m_ghosts[2]->show(m_renderer);
-    m_ghosts[3]->show(m_renderer);
+    case GameState::MENU:
+      m_renderer->blit(m_assets->m_bg, 0, 0);
+      m_renderer->rect_mode(RectMode::CENTER);
+      m_renderer->blit(m_assets->m_bg_menu, m_map->get_width() / 2, 200, 0.7);
+      m_renderer->rect_mode(RectMode::CORNER);
+      if (m_renderer->get_fps_anim_count() & 1) {
+        m_renderer->text("PRESS ENTER TO START", 50, 350);
+      }
+      break;
+
+    case GameState::GAME:
+      m_pacman->update(m_map);
+
+      for (auto &ghost : m_ghosts) {
+        ghost->update(m_map, pacman_pos, m_pacman->get_direction());
+      }
+
+      m_map->show(m_renderer);
+
+      // show entities after map & bg
+      m_pacman->show(m_renderer);
+      for (auto &ghost : m_ghosts) { ghost->show(m_renderer); }
+
+      break;
+
+    default: break;
+    }
 
     // flip buffers and wait
     m_renderer->flip();

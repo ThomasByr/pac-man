@@ -34,6 +34,8 @@ private:
   std::shared_ptr<Renderer> m_renderer;
   std::shared_ptr<Assets> m_assets;
 
+  GameState m_state;
+
   bool m_running;
   int w_sep;
 
