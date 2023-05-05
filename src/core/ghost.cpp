@@ -172,7 +172,7 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
 
     // if the registered direction is not the opposite of the current direction
     // and the ghost can go in that direction
-    if (m_reg_direction != Direction::NONE && (map) &&
+    if (m_reg_direction != Direction::NONE && can_change_direction(map) &&
         m_direction != opposite(m_reg_direction) &&
         can_go(map, m_reg_direction)) {
       m_direction = m_reg_direction;
