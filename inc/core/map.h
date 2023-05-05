@@ -78,6 +78,8 @@ public:
   Direction reconstruct_path(std::unordered_map<Node, Node, NodeHash> came_from,
                              Node current) const;
   Direction astar(struct Node start, struct Node end) const;
+
+  Direction stupid(struct Node start, struct Node end, Direction cur_dir);
 };
 
 #endif // __inc_core_map_H__

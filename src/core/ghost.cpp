@@ -55,7 +55,7 @@ bool Ghost::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
 }
 
 bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
-  static const double epsilon = 1.5;
+  static const double epsilon = 0.2;
   double tile_size = map->get_size();
 
   // the relative x position of the entity on the tile
@@ -69,19 +69,62 @@ bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
 }
 
 void Ghost::blinky_chase(std::shared_ptr<Map> map,
-                         std::tuple<int, int> pacman_pos) {
+                         std::tuple<int, int> pacman_pos,
+                         Direction pacman_dir) {
+
+  (void)pacman_dir;
 
   Node pacman_tile = {std::get<1>(pacman_pos), std::get<0>(pacman_pos)};
   auto [i, j] = get_ij(map->get_size());
   Node ghost_tile = {j, i};
 
-  m_reg_direction = map->astar(ghost_tile, pacman_tile);
+  // m_reg_direction = map->astar(ghost_tile, pacman_tile);
+  m_reg_direction = map->stupid(ghost_tile, pacman_tile, m_direction);
 }
 
 void Ghost::pinky_chase(std::shared_ptr<Map> map,
-                        std::tuple<int, int> pacman_pos) {
-  (void)pacman_pos;
-  (void)map;
+                        std::tuple<int, int> pacman_pos, Direction pacman_dir) {
+
+  Node pacman_tile = {std::get<1>(pacman_pos), std::get<0>(pacman_pos)};
+  auto [i, j] = get_ij(map->get_size());
+  Node ghost_tile = {j, i};
+
+  switch (pacman_dir) {
+  case Direction::UP:
+    if (map->can_go(pacman_tile.i - 3, pacman_tile.j, pacman_dir)) {
+      pacman_tile.i = pacman_tile.i - 3;
+      m_reg_direction = map->astar(ghost_tile, pacman_tile);
+
+    } else {
+      m_reg_direction = map->astar(ghost_tile, pacman_tile);
+    }
+    return;
+  case Direction::DOWN:
+    if (map->can_go(pacman_tile.i + 3, pacman_tile.j, pacman_dir)) {
+      pacman_tile.i = pacman_tile.i + 3;
+      m_reg_direction = map->astar(ghost_tile, pacman_tile);
+    } else {
+      m_reg_direction = map->astar(ghost_tile, pacman_tile);
+    }
+    return;
+  case Direction::LEFT:
+    if (map->can_go(pacman_tile.i, pacman_tile.j - 3, pacman_dir)) {
+      pacman_tile.i = pacman_tile.j - 3;
+      m_reg_direction = map->astar(ghost_tile, pacman_tile);
+    } else {
+      m_reg_direction = map->astar(ghost_tile, pacman_tile);
+    }
+    return;
+  case Direction::RIGHT:
+    if (map->can_go(pacman_tile.i, pacman_tile.j + 3, pacman_dir)) {
+      pacman_tile.i = pacman_tile.j + 3;
+      m_reg_direction = map->astar(ghost_tile, pacman_tile);
+    } else {
+      m_reg_direction = map->astar(ghost_tile, pacman_tile);
+    }
+    return;
+  default: m_reg_direction = map->astar(ghost_tile, pacman_tile);
+  }
 }
 
 void Ghost::inky_chase(std::shared_ptr<Map> map,
@@ -97,9 +140,10 @@ void Ghost::clyde_chase(std::shared_ptr<Map> map,
 }
 
 void Ghost::chase_pacman(std::shared_ptr<Map> map,
-                         std::tuple<int, int> pacman_pos) {
+                         std::tuple<int, int> pacman_pos,
+                         Direction pacman_dir) {
   switch (type) {
-  case GhostType::BLINKY: blinky_chase(map, pacman_pos); break;
+  case GhostType::BLINKY: blinky_chase(map, pacman_pos, pacman_dir); break;
   case GhostType::PINKY: break;
   case GhostType::INKY: break;
   case GhostType::CLYDE: break;
@@ -107,7 +151,8 @@ void Ghost::chase_pacman(std::shared_ptr<Map> map,
   }
 }
 
-void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
+void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos,
+                   Direction pacman_dir) {
 
   if (is_at_home) {
 
@@ -119,7 +164,8 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
   }
 
   else {
-    chase_pacman(map, Pacman_pos); // update the registered direction
+    chase_pacman(map, Pacman_pos,
+                 pacman_dir); // update the registered direction
 
     // if the ghost can no longer go straight
     if (can_change_direction(map) && !can_go(map, m_direction)) {
@@ -128,10 +174,8 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
 
     // check if we can go in the registered direction
     if (can_change_direction(map) && can_go(map, m_reg_direction)) {
-      if (m_reg_direction != m_direction) {
-        m_direction = m_reg_direction;
-        m_reg_direction = Direction::NONE;
-      }
+      m_direction = m_reg_direction;
+      m_reg_direction = Direction::NONE;
     }
   }
   move();

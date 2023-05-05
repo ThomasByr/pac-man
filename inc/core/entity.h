@@ -17,7 +17,7 @@ protected:
   double m_cx, m_cy; // center position of the entity on the map
   double w, h;       // width and height of the entity
 
-  size_t m_score; // score of the entity (only makes sense for pacman ?)
+  size_t m_score;    // score of the entity (only makes sense for pacman ?)
 
   Direction m_direction, m_reg_direction;
 
@@ -28,6 +28,9 @@ public:
   // virtual void update() = 0;
 
   virtual void set_direction(const Direction direction);
+
+  // return direction
+  Direction get_direction();
 
   /**
    * @brief Get the i and j of the entity on the map (index of the tile)
