@@ -62,10 +62,10 @@ private:
 
   std::vector<SDL_Rect> m_weak_ghost_ending; // frightened ghost blinking
 
-  std::vector<SDL_Rect> m_eyes_right; // dead ghost eye
-  std::vector<SDL_Rect> m_eyes_left;  // facing left...
-  std::vector<SDL_Rect> m_eyes_up;
-  std::vector<SDL_Rect> m_eyes_down;
+  SDL_Rect m_eyes_right; // dead ghost eye facing right
+  SDL_Rect m_eyes_left;  // dead ghost eye facing left
+  SDL_Rect m_eyes_up;    // dead ghost eye facing up
+  SDL_Rect m_eyes_down;  // dead ghost eye facing down
 
 public:
   SDL_Rect m_bg, m_bg_menu; // background
@@ -132,6 +132,9 @@ public:
    * @return SDL_Rect - the sprite
    */
   SDL_Rect get_sprite_ghost_orange(const Direction &dir, int fc) const;
+
+  SDL_Rect get_sprite_ghost_weak(int fc, bool ending = false) const;
+  SDL_Rect get_sprite_ghost_eyes(const Direction &dir) const;
 };
 
 #endif // __inc_helper_assets_H__

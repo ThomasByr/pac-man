@@ -72,17 +72,30 @@ bool wait_for_next_keypress() {
   fmt::unreachable("invalid return value from _kbhit()");
 }
 
-bool wait_for_ms(useconds_t usec) {
-  using namespace std::chrono;
-  static auto start = std::optional<steady_clock::time_point>();
-  if (!start) { start = steady_clock::now(); }
-  auto now = steady_clock::now();
-  auto diff = duration_cast<microseconds>(now - *start);
-  if (diff.count() >= usec) {
-    start.reset();
-    return true;
-  }
-  return false;
+Timer::Timer() : running(false) {}
+
+void Timer::start_timer(unsigned sec) {
+  if (running) { fmt::panic("timer already running"); }
+  start = std::chrono::high_resolution_clock::now();
+  end = start + std::chrono::seconds(sec);
+  running = true;
+}
+
+bool Timer::step_passed(unsigned sec) {
+  if (!running) { fmt::panic("timer not running"); }
+  auto now = std::chrono::high_resolution_clock::now();
+  return now >= start + std::chrono::seconds(sec);
+}
+
+bool Timer::is_expired() {
+  if (!running) { fmt::panic("timer not running"); }
+  return std::chrono::high_resolution_clock::now() >= end;
+}
+
+void Timer::reset_timer() {
+  if (!running) { fmt::panic("timer not running"); }
+  start = std::chrono::high_resolution_clock::now();
+  end = start + std::chrono::microseconds(0);
 }
 
 } // namespace sys_pause

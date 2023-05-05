@@ -32,7 +32,6 @@ public:
   void show(std::shared_ptr<Renderer> renderer) override;
 
   bool can_go(std::shared_ptr<Map> map, const Direction &dir) const;
-  bool can_change_direction(std::shared_ptr<Map> map) const;
   void update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
               Direction pacman_dir);
 

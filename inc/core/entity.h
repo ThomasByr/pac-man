@@ -16,6 +16,7 @@ class Entity {
 protected:
   double m_cx, m_cy; // center position of the entity on the map
   double w, h;       // width and height of the entity
+  double m_speed;    // speed of the entity
 
   size_t m_score; // score of the entity (only makes sense for pacman ?)
 
@@ -57,7 +58,7 @@ public:
    * @return true if the entity is somewhere in the middle of a tile
    * @return false otherwise
    */
-  virtual bool can_change_direction(std::shared_ptr<Map> map) const = 0;
+  bool can_change_direction(std::shared_ptr<Map> map) const;
 };
 
 #endif // __inc_core_entity_H__

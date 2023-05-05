@@ -214,6 +214,15 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   for (size_t i = 0; i < _data_orangeghost_down.size(); i++) {
     m_orangeghost_down.push_back(from_json(_data_orangeghost_down[i]));
   }
+
+  auto _data_eyes_up = data["m_eyes_up"];
+  m_eyes_up = from_json(_data_eyes_up);
+  auto _data_eyes_left = data["m_eyes_left"];
+  m_eyes_left = from_json(_data_eyes_left);
+  auto _data_eyes_right = data["m_eyes_right"];
+  m_eyes_right = from_json(_data_eyes_right);
+  auto _data_eyes_down = data["m_eyes_down"];
+  m_eyes_down = from_json(_data_eyes_down);
 }
 
 Assets::~Assets() { SDL_FreeSurface(m_surface); }
@@ -295,5 +304,23 @@ SDL_Rect Assets::get_sprite_ghost_orange(const Direction &dir, int fc) const {
     return m_orangeghost_right.at(fc % m_orangeghost_right.size());
   default: // fallback for Direction::NONE
     return m_orangeghost_up.at(0);
+  }
+}
+
+SDL_Rect Assets::get_sprite_ghost_weak(int fc, bool ending) const {
+  if (ending) {
+    return m_weak_ghost_ending.at(fc % m_weak_ghost_ending.size());
+  }
+  return m_weak_ghost.at(fc % m_weak_ghost.size());
+}
+
+SDL_Rect Assets::get_sprite_ghost_eyes(const Direction &dir) const {
+  switch (dir) {
+  case Direction::UP: return m_eyes_up;
+  case Direction::DOWN: return m_eyes_down;
+  case Direction::LEFT: return m_eyes_left;
+  case Direction::RIGHT: return m_eyes_right;
+  default: // fallback for Direction::NONE
+    return m_eyes_up;
   }
 }
