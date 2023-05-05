@@ -38,14 +38,14 @@ public:
   void chase_pacman(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
                     Direction pacman_dir);
 
-  void blinky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
-                    Direction pacman_dir);
+  void blinky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
   void pinky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
                    Direction pacman_dir);
-  void inky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
+  void inky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
+                  std::tuple<int, int> blinky_pos, Direction pacman_dir);
   void clyde_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
 
-  void move(void);
+  void move(std::shared_ptr<Map> map);
 };
 
 #endif // __inc_core_ghost_H__

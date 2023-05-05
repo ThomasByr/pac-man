@@ -97,6 +97,10 @@ void Map::show(std::shared_ptr<Renderer> renderer) {
 int Map::get_width() const { return m_map[0].size() * size; }
 int Map::get_height() const { return m_map.size() * size; }
 double Map::get_size() const { return size; }
+std::tuple<int, int> Map::get_map_size() const {
+  return {m_map[0].size(), m_map.size()};
+}
+
 
 std::tuple<double, double> Map::get_start_tile_c() const {
   return {m_start_tile_cx, m_start_tile_cy};
@@ -117,6 +121,9 @@ std::tuple<double, double> Map::get_inky_start_tile_c() const {
 std::tuple<double, double> Map::get_clyde_start_tile_c() const {
   return {clyde_start_tile_cx, clyde_start_tile_cy};
 }
+
+std::tuple<int, int> Map::get_blinky_pos() const { return blinky_pos; }
+void Map::set_blinky_pos(const int i, const int j) { blinky_pos = {i, j}; }
 
 bool Map::can_go(const int i, const int j, const Direction &dir) const {
   Tile my_tile = m_map[i][j];
@@ -139,6 +146,12 @@ bool Map::can_go(const int i, const int j, const Direction &dir) const {
   return my_tile.can_go(target);
 }
 
+double Map::distance(const struct Node &from, const struct Node &to) const {
+  // same as heuristic_cost_estimate
+  return std::sqrt(std::pow(from.i - to.i, 2) + std::pow(from.j - to.j, 2));
+}
+
+
 bool Map::ate_food(const int i, const int j) const {
   return m_map[i][j].get_type() == TileType::DOT;
 }
@@ -149,11 +162,12 @@ void Map::eat_food(const int i, const int j) {
   }
 }
 
-double Map::heuristic_cost_estimate(struct Node start, struct Node end) const {
+double Map::heuristic_cost_estimate(const struct Node &start,
+                                    const struct Node &end) const {
   return std::sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
 }
 
-std::vector<Node> Map::get_neighbors(struct Node current) const {
+std::vector<Node> Map::get_neighbors(const struct Node &current) const {
   std::vector<Node> neighbours;
   if (can_go(current.i, current.j, Direction::UP)) {
     neighbours.push_back({current.i - 1, current.j});
@@ -181,14 +195,10 @@ Direction Map::reconstruct_path(
   total_path.pop_back();
   Node next = total_path.back();
   total_path.pop_back();
-  if (next.i == current.i - 1) { return Direction::UP; }
-  if (next.i == current.i + 1) { return Direction::DOWN; }
-  if (next.j == current.j - 1) { return Direction::LEFT; }
-  if (next.j == current.j + 1) { return Direction::RIGHT; }
-  return Direction::NONE;
+  return get_direction(current, next);
 }
 
-Direction Map::astar(struct Node start, struct Node end) const {
+Direction Map::astar(const struct Node &start, const struct Node &end) const {
   std::unordered_set<Node, NodeHash> closed_set;
   std::unordered_set<Node, NodeHash> open_set;
 
@@ -232,76 +242,26 @@ Direction Map::astar(struct Node start, struct Node end) const {
   return Direction::NONE;
 }
 
-Direction Map::stupid(struct Node start, struct Node end, Direction cur_dir) {
-
-  int nb_chemins = 0;
-  if (can_go(start.i, start.j, Direction::UP)) { nb_chemins++; }
-  if (can_go(start.i, start.j, Direction::DOWN)) { nb_chemins++; }
-  if (can_go(start.i, start.j, Direction::LEFT)) { nb_chemins++; }
-  if (can_go(start.i, start.j, Direction::RIGHT)) { nb_chemins++; }
-
-  if (nb_chemins == 2) {
-    if (can_go(start.i, start.j, Direction::UP) &&
-        Direction::UP != opposite(cur_dir)) {
-      return Direction::UP;
-    }
-    if (can_go(start.i, start.j, Direction::DOWN) &&
-        Direction::DOWN != opposite(cur_dir)) {
-      return Direction::DOWN;
-    }
-    if (can_go(start.i, start.j, Direction::LEFT) &&
-        Direction::LEFT != opposite(cur_dir)) {
-      return Direction::LEFT;
-    }
-    if (can_go(start.i, start.j, Direction::RIGHT) &&
-        Direction::RIGHT != opposite(cur_dir)) {
-      return Direction::RIGHT;
-    }
-  } else {
-
-    float closest = 15000;
-    float calc;
-    Direction selected;
-
-    if (can_go(start.i, start.j, Direction::UP) &&
-        Direction::UP != opposite(cur_dir)) {
-      calc = sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
-      if (calc < closest) {
-        closest = calc;
-        selected = Direction::UP;
-      }
-    }
-    if (can_go(start.i, start.j, Direction::DOWN) &&
-        Direction::DOWN != opposite(cur_dir)) {
-      calc = sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
-
-      if (calc < closest) {
-        closest = calc;
-        selected = Direction::DOWN;
-      }
-    }
-    if (can_go(start.i, start.j, Direction::LEFT) &&
-        Direction::LEFT != opposite(cur_dir)) {
-      calc = sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
-
-      if (calc < closest) {
-        closest = calc;
-        selected = Direction::LEFT;
-      }
-    }
-    if (can_go(start.i, start.j, Direction::RIGHT) &&
-        Direction::RIGHT != opposite(cur_dir)) {
-      calc = sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
-
-      if (calc < closest) {
-        closest = calc;
-        selected = Direction::RIGHT;
-      }
-    }
-
-    return selected;
+Direction Map::stupid(const struct Node &start, const struct Node &end,
+                      const Direction &current) const {
+  std::unordered_map<Node, double, NodeHash> f_score;
+  for (auto &neighbor : get_neighbors(start)) {
+    f_score[neighbor] = heuristic_cost_estimate(neighbor, end);
+  }
+  // chose the direction that is the closest to the target
+  auto [target, _] = *std::min_element(
+    f_score.begin(), f_score.end(),
+    [&](const auto &a, const auto &b) { return a.second < b.second; });
+  // get the direction to the target
+  auto d = get_direction(start, target);
+  // if direction is opposite to the current direction, chose the second best
+  if (d == opposite(current)) {
+    f_score.erase(target);
+    auto [target, _] = *std::min_element(
+      f_score.begin(), f_score.end(),
+      [&](const auto &a, const auto &b) { return a.second < b.second; });
+    d = get_direction(start, target);
   }
 
-  fmt::debug("should not arrive there");
-  return cur_dir;
+  return d;
 }

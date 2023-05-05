@@ -35,7 +35,7 @@ bool Pacman::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
 }
 
 bool Pacman::can_change_direction(std::shared_ptr<Map> map) const {
-  static const double epsilon = 1.5;
+  static const double epsilon = .5;
   double tile_size = map->get_size();
 
   // the relative x position of the entity on the tile
@@ -93,10 +93,10 @@ void Pacman::update(std::shared_ptr<Map> map) {
   }
 
   switch (m_direction) {
-  case Direction::UP: m_cy -= 2; break;
-  case Direction::DOWN: m_cy += 2; break;
-  case Direction::LEFT: m_cx -= 2; break;
-  case Direction::RIGHT: m_cx += 2; break;
+  case Direction::UP: m_cy -= 1; break;
+  case Direction::DOWN: m_cy += 1; break;
+  case Direction::LEFT: m_cx -= 1; break;
+  case Direction::RIGHT: m_cx += 1; break;
   default: break;
   }
   if (ate_food(map)) { eat_food(map); }
