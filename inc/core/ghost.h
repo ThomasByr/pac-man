@@ -17,6 +17,7 @@ enum class GhostType { BLINKY, PINKY, INKY, CLYDE };
 class Ghost : public Entity {
 private:
   GhostType type;
+  GhstState state;
   bool is_at_home;
 
 public:
@@ -44,6 +45,9 @@ public:
   void inky_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
                   std::tuple<int, int> blinky_pos, Direction pacman_dir);
   void clyde_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
+  void scatter(std::shared_ptr<Map> map);
+  void frightened(std::shared_ptr<Map> map);
+  void eaten(std::shared_ptr<Map> map);
 
   void move(std::shared_ptr<Map> map);
 };

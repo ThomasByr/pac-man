@@ -6,7 +6,8 @@
 #include "utils.h"
 
 Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
-  : Entity{cx, cy, 0, 0}, type{type}, is_at_home{is_at_home} {
+  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::SCATTER},
+    is_at_home{is_at_home} {
   if (is_at_home) {
     m_direction = Direction::UP;
   } else {
@@ -154,6 +155,33 @@ void Ghost::chase_pacman(std::shared_ptr<Map> map,
   }
 }
 
+void Ghost::scatter(std::shared_ptr<Map> map) {
+  auto [i, j] = get_ij(map->get_size());
+  Node ghost_tile = {j, i};
+
+  Node target = {0, 0};
+  switch (type) {
+  case GhostType::BLINKY:
+    target = {-2, std::get<0>(map->get_map_size()) - 2};
+    break;
+  case GhostType::PINKY: target = {-2, 2}; break;
+  case GhostType::INKY:
+    target = {std::get<1>(map->get_map_size()) - 2,
+              std::get<0>(map->get_map_size()) - 2};
+    break;
+  case GhostType::CLYDE:
+    target = {std::get<1>(map->get_map_size()) - 2, 2};
+    break;
+  default: fmt::unreachable("Invalid ghost type");
+  }
+
+  m_reg_direction = map->stupid(ghost_tile, target, get_direction());
+}
+
+void Ghost::frightened(std::shared_ptr<Map> map) { (void)map; }
+
+void Ghost::eaten(std::shared_ptr<Map> map) { (void)map; }
+
 void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
                    Direction pacman_dir) {
 
@@ -168,8 +196,12 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
 
   else {
     // update the registered direction
-    chase_pacman(map, pacman_pos, pacman_dir);
-
+    switch (state) {
+    case GhstState::SCATTER: scatter(map); break;
+    case GhstState::CHASE: chase_pacman(map, pacman_pos, pacman_dir); break;
+    case GhstState::FRIGHTENED: frightened(map); break;
+    case GhstState::EATEN: eaten(map); break;
+    }
     // if the registered direction is not the opposite of the current direction
     // and the ghost can go in that direction
     if (m_reg_direction != Direction::NONE && can_change_direction(map) &&
