@@ -101,7 +101,6 @@ std::tuple<int, int> Map::get_map_size() const {
   return {m_map[0].size(), m_map.size()};
 }
 
-
 std::tuple<double, double> Map::get_start_tile_c() const {
   return {m_start_tile_cx, m_start_tile_cy};
 }
@@ -150,7 +149,6 @@ double Map::distance(const struct Node &from, const struct Node &to) const {
   // same as heuristic_cost_estimate
   return std::sqrt(std::pow(from.i - to.i, 2) + std::pow(from.j - to.j, 2));
 }
-
 
 bool Map::ate_food(const int i, const int j) const {
   return m_map[i][j].get_type() == TileType::DOT;

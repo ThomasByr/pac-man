@@ -40,10 +40,10 @@ struct NodeHash {
 
 /**
  * @brief get a direction from two adjacent nodes
- * 
+ *
  * @param from start node
  * @param to   destination node
- * @return Direction 
+ * @return Direction
  */
 inline Direction get_direction(const Node &from, const Node &to) {
   if (from.i == to.i + 1) { return Direction::UP; }
@@ -105,12 +105,14 @@ public:
   double distance(const struct Node &from, const struct Node &to) const;
 
   std::vector<Node> get_neighbors(const struct Node &current) const;
-  double heuristic_cost_estimate(const struct Node &start, const struct Node &end) const;
+  double heuristic_cost_estimate(const struct Node &start,
+                                 const struct Node &end) const;
   Direction reconstruct_path(std::unordered_map<Node, Node, NodeHash> came_from,
                              Node current) const;
   Direction astar(const struct Node &start, const struct Node &end) const;
 
-  Direction stupid(const struct Node &start, const struct Node &end, const Direction &current) const;
+  Direction stupid(const struct Node &start, const struct Node &end,
+                   const Direction &current) const;
 };
 
 #endif // __inc_core_map_H__
