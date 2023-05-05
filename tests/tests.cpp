@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "ctpl_test.hpp"
+#include "future_test.hpp"
 #include "ini_test.hpp"
 #include "json_test.hpp"
 
@@ -11,5 +12,6 @@ int main() {
   json_test::json_test();
   ini_test::ini_test();
   ctpl_test::ctpl_test();
+  future_test::future_test();
   return 0;
 }
