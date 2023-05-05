@@ -55,7 +55,7 @@ bool Ghost::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
 }
 
 bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
-  static const double epsilon = 1.5;
+  static const double epsilon = .5;
   double tile_size = map->get_size();
 
   // the relative x position of the entity on the tile
@@ -70,44 +70,92 @@ bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
 
 void Ghost::blinky_chase(std::shared_ptr<Map> map,
                          std::tuple<int, int> pacman_pos) {
+  Node pacman_tile = {std::get<1>(pacman_pos), std::get<0>(pacman_pos)};
+  auto [i, j] = get_ij(map->get_size());
+  Node ghost_tile = {j, i};
+
+  // m_reg_direction = map->astar(ghost_tile, pacman_tile);
+  m_reg_direction = map->stupid(ghost_tile, pacman_tile, get_direction());
+}
+
+void Ghost::pinky_chase(std::shared_ptr<Map> map,
+                        std::tuple<int, int> pacman_pos, Direction pacman_dir) {
 
   Node pacman_tile = {std::get<1>(pacman_pos), std::get<0>(pacman_pos)};
   auto [i, j] = get_ij(map->get_size());
   Node ghost_tile = {j, i};
 
-  m_reg_direction = map->astar(ghost_tile, pacman_tile);
-}
+  // look 3 tiles ahead of pacman
+  switch (pacman_dir) {
+  case Direction::UP: pacman_tile.i -= 3; break;
+  case Direction::DOWN: pacman_tile.i += 3; break;
+  case Direction::LEFT: pacman_tile.j -= 3; break;
+  case Direction::RIGHT: pacman_tile.j += 3; break;
+  case Direction::NONE: break; // todo: do we really do nothing here ?
+  }
 
-void Ghost::pinky_chase(std::shared_ptr<Map> map,
-                        std::tuple<int, int> pacman_pos) {
-  (void)pacman_pos;
-  (void)map;
+  m_reg_direction = map->stupid(ghost_tile, pacman_tile, get_direction());
 }
 
 void Ghost::inky_chase(std::shared_ptr<Map> map,
-                       std::tuple<int, int> pacman_pos) {
-  (void)pacman_pos;
-  (void)map;
+                       std::tuple<int, int> pacman_pos,
+                       std::tuple<int, int> blinky_pos, Direction pacman_dir) {
+  Node pacman_tile = {std::get<1>(pacman_pos), std::get<0>(pacman_pos)};
+  auto [i, j] = get_ij(map->get_size());
+  Node ghost_tile = {j, i};
+
+  // look 2 tiles ahead of pacman
+  switch (pacman_dir) {
+  case Direction::UP: pacman_tile.i -= 2; break;
+  case Direction::DOWN: pacman_tile.i += 2; break;
+  case Direction::LEFT: pacman_tile.j -= 2; break;
+  case Direction::RIGHT: pacman_tile.j += 2; break;
+  case Direction::NONE: break; // todo: do we really do nothing here ?
+  }
+
+  // get the vector from blinky to pacman
+  Node blinky_tile = {std::get<1>(blinky_pos), std::get<0>(blinky_pos)};
+  Node blinky_to_pacman = pacman_tile - blinky_tile;
+
+  // get the tile 2 tiles ahead of pacman
+  Node target_tile = pacman_tile + blinky_to_pacman;
+
+  m_reg_direction = map->stupid(ghost_tile, target_tile, get_direction());
 }
 
 void Ghost::clyde_chase(std::shared_ptr<Map> map,
                         std::tuple<int, int> pacman_pos) {
-  (void)pacman_pos;
-  (void)map;
-}
+  Node pacman_tile = {std::get<1>(pacman_pos), std::get<0>(pacman_pos)};
+  auto [i, j] = get_ij(map->get_size());
+  Node ghost_tile = {j, i};
 
-void Ghost::chase_pacman(std::shared_ptr<Map> map,
-                         std::tuple<int, int> pacman_pos) {
-  switch (type) {
-  case GhostType::BLINKY: blinky_chase(map, pacman_pos); break;
-  case GhostType::PINKY: break;
-  case GhostType::INKY: break;
-  case GhostType::CLYDE: break;
-  default: break;
+  // if the distance between pacman and clyde is greater than 8 tiles
+  if (map->distance(ghost_tile, pacman_tile) > 8) {
+    // clyde behaves like blinky
+    blinky_chase(map, pacman_pos);
+  } else {
+    // clyde goes to the bottom left corner
+    Node target_tile = {0, std::get<0>(map->get_map_size()) - 1};
+    m_reg_direction = map->stupid(ghost_tile, target_tile, get_direction());
   }
 }
 
-void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
+void Ghost::chase_pacman(std::shared_ptr<Map> map,
+                         std::tuple<int, int> pacman_pos,
+                         Direction pacman_dir) {
+  switch (type) {
+  case GhostType::BLINKY: blinky_chase(map, pacman_pos); break;
+  case GhostType::PINKY: pinky_chase(map, pacman_pos, pacman_dir); break;
+  case GhostType::INKY:
+    inky_chase(map, pacman_pos, map->get_blinky_pos(), pacman_dir);
+    break;
+  case GhostType::CLYDE: clyde_chase(map, pacman_pos); break;
+  default: fmt::unreachable("Invalid ghost type");
+  }
+}
+
+void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
+                   Direction pacman_dir) {
 
   if (is_at_home) {
 
@@ -119,25 +167,27 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> Pacman_pos) {
   }
 
   else {
-    chase_pacman(map, Pacman_pos); // update the registered direction
+    // update the registered direction
+    chase_pacman(map, pacman_pos, pacman_dir);
+
+    // if the registered direction is not the opposite of the current direction
+    // and the ghost can go in that direction
+    if (m_reg_direction != Direction::NONE && (map) &&
+        m_direction != opposite(m_reg_direction) &&
+        can_go(map, m_reg_direction)) {
+      m_direction = m_reg_direction;
+      m_reg_direction = Direction::NONE;
+    }
 
     // if the ghost can no longer go straight
     if (can_change_direction(map) && !can_go(map, m_direction)) {
       m_direction = Direction::NONE;
     }
-
-    // check if we can go in the registered direction
-    if (can_change_direction(map) && can_go(map, m_reg_direction)) {
-      if (m_reg_direction != m_direction) {
-        m_direction = m_reg_direction;
-        m_reg_direction = Direction::NONE;
-      }
-    }
   }
-  move();
+  move(map);
 }
 
-void Ghost::move() {
+void Ghost::move(std::shared_ptr<Map> map) {
 
   switch (m_direction) {
   case Direction::UP: m_cy -= 1; break;
@@ -147,4 +197,7 @@ void Ghost::move() {
 
   default: break;
   }
+
+  // save the position of blinky because we need it for inky
+  if (type == GhostType::BLINKY) { map->set_blinky_pos(m_cx, m_cy); }
 }

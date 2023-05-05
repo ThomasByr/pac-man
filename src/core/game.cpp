@@ -111,10 +111,10 @@ void Game::run() {
 
     std::tuple<int, int> pacman_pos = m_pacman->get_ij(m_map->get_size());
 
-    m_ghosts[0]->update(m_map, pacman_pos);
-    m_ghosts[1]->update(m_map, pacman_pos);
-    m_ghosts[2]->update(m_map, pacman_pos);
-    m_ghosts[3]->update(m_map, pacman_pos);
+    m_ghosts[0]->update(m_map, pacman_pos, m_pacman->get_direction());
+    m_ghosts[1]->update(m_map, pacman_pos, m_pacman->get_direction());
+    m_ghosts[2]->update(m_map, pacman_pos, m_pacman->get_direction());
+    m_ghosts[3]->update(m_map, pacman_pos, m_pacman->get_direction());
 
     // render
     m_renderer->clear();
