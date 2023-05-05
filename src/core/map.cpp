@@ -241,6 +241,8 @@ Direction Map::stupid(struct Node start, struct Node end, Direction cur_dir) {
   if (can_go(start.i, start.j, Direction::RIGHT)) { nb_chemins++; }
 
   if (nb_chemins == 2) {
+
+    fmt::debug("pas calcul");
     if (can_go(start.i, start.j, Direction::UP) &&
         Direction::UP != opposite(cur_dir)) {
       return Direction::UP;
@@ -263,9 +265,13 @@ Direction Map::stupid(struct Node start, struct Node end, Direction cur_dir) {
     float calc;
     Direction selected;
 
+    fmt::debug("calcul !");
+
     if (can_go(start.i, start.j, Direction::UP) &&
         Direction::UP != opposite(cur_dir)) {
-      calc = sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
+      calc =
+        sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - 1 - end.j, 2));
+      fmt::debug("up %f", calc);
       if (calc < closest) {
         closest = calc;
         selected = Direction::UP;
@@ -273,8 +279,9 @@ Direction Map::stupid(struct Node start, struct Node end, Direction cur_dir) {
     }
     if (can_go(start.i, start.j, Direction::DOWN) &&
         Direction::DOWN != opposite(cur_dir)) {
-      calc = sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
-
+      calc =
+        sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j + 1 - end.j, 2));
+      fmt::debug("down %f", calc);
       if (calc < closest) {
         closest = calc;
         selected = Direction::DOWN;
@@ -282,8 +289,9 @@ Direction Map::stupid(struct Node start, struct Node end, Direction cur_dir) {
     }
     if (can_go(start.i, start.j, Direction::LEFT) &&
         Direction::LEFT != opposite(cur_dir)) {
-      calc = sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
-
+      calc =
+        sqrt(std::pow(start.i - 1 - end.i, 2) + std::pow(start.j - end.j, 2));
+      fmt::debug("left %f", calc);
       if (calc < closest) {
         closest = calc;
         selected = Direction::LEFT;
@@ -291,8 +299,9 @@ Direction Map::stupid(struct Node start, struct Node end, Direction cur_dir) {
     }
     if (can_go(start.i, start.j, Direction::RIGHT) &&
         Direction::RIGHT != opposite(cur_dir)) {
-      calc = sqrt(std::pow(start.i - end.i, 2) + std::pow(start.j - end.j, 2));
-
+      calc =
+        sqrt(std::pow(start.i + 1 - end.i, 2) + std::pow(start.j - end.j, 2));
+      fmt::debug("right %f", calc);
       if (calc < closest) {
         closest = calc;
         selected = Direction::RIGHT;

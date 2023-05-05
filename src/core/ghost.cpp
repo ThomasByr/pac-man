@@ -55,7 +55,7 @@ bool Ghost::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
 }
 
 bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
-  static const double epsilon = 0.2;
+  static const double epsilon = 1.1;
   double tile_size = map->get_size();
 
   // the relative x position of the entity on the tile
