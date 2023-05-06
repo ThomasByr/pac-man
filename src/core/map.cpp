@@ -20,6 +20,8 @@ Map::Map(double size, const std::string &path)
   : m_map{}, size{size}, m_start_tile_cx{0}, m_start_tile_cy{0} {
   using namespace std;
 
+  door_node = {0, 0};
+
   ifstream file{path};
   string line = "";
 
@@ -39,6 +41,7 @@ Map::Map(double size, const std::string &path)
     vector<Tile> row{};
     for (char c : line) {
       row.push_back(Tile{static_cast<int>(c - '0'), i, j, size});
+      if (c == '4') { door_node = {i, j}; }
       if (c == '9') {
         m_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
         m_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
@@ -64,14 +67,21 @@ Map::Map(double size, const std::string &path)
   }
   if (m_start_tile_cx == 0 && m_start_tile_cy == 0) {
     fmt::panic("Map::Map: pacman no start tile found");
-  } else if (inky_start_tile_cx == 0 && inky_start_tile_cy == 0) {
+  }
+  if (inky_start_tile_cx == 0 && inky_start_tile_cy == 0) {
     fmt::panic("Map::Map: inky no start tile found");
-  } else if (pinky_start_tile_cx == 0 && pinky_start_tile_cy == 0) {
+  }
+  if (pinky_start_tile_cx == 0 && pinky_start_tile_cy == 0) {
     fmt::panic("Map::Map: pinky no start tile found");
-  } else if (blinky_start_tile_cx == 0 && blinky_start_tile_cy == 0) {
+  }
+  if (blinky_start_tile_cx == 0 && blinky_start_tile_cy == 0) {
     fmt::panic("Map::Map: blinky no start tile found");
-  } else if (clyde_start_tile_cx == 0 && clyde_start_tile_cy == 0) {
+  }
+  if (clyde_start_tile_cx == 0 && clyde_start_tile_cy == 0) {
     fmt::panic("Map::Map: clyde no start tile found");
+  }
+  if (door_node.i == 0 && door_node.j == 0) {
+    fmt::panic("Map::Map: no door found");
   }
 
   fmt::debug("Map::Map: pacman start tile found at (%f, %f)", m_start_tile_cx,
@@ -122,9 +132,25 @@ std::tuple<double, double> Map::get_clyde_start_tile_c() const {
 }
 
 std::tuple<int, int> Map::get_blinky_pos() const { return blinky_pos; }
+std::vector<std::tuple<int, int>> Map::get_ghosts_pos() const {
+  // we work with copies here
+  std::vector<std::tuple<int, int>> ghosts_pos;
+  ghosts_pos.push_back(blinky_pos);
+  ghosts_pos.push_back(pinky_pos);
+  ghosts_pos.push_back(inky_pos);
+  ghosts_pos.push_back(clyde_pos);
+  return ghosts_pos;
+}
 void Map::set_blinky_pos(const int i, const int j) { blinky_pos = {i, j}; }
+void Map::set_pinky_pos(const int i, const int j) { pinky_pos = {i, j}; }
+void Map::set_inky_pos(const int i, const int j) { inky_pos = {i, j}; }
+void Map::set_clyde_pos(const int i, const int j) { clyde_pos = {i, j}; }
 
-bool Map::can_go(const int i, const int j, const Direction &dir) const {
+std::tuple<int, int> Map::get_pacman_pos() const { return pacman_pos; }
+void Map::set_pacman_pos(const int i, const int j) { pacman_pos = {i, j}; }
+
+bool Map::can_go(const int i, const int j, const Direction &dir,
+                 bool ghost) const {
   Tile my_tile = m_map[i][j];
   std::optional<Tile> target = std::nullopt;
   switch (dir) {
@@ -142,7 +168,7 @@ bool Map::can_go(const int i, const int j, const Direction &dir) const {
     break;
   case Direction::NONE: break;
   }
-  return my_tile.can_go(target);
+  return ghost ? my_tile.can_go_ghost(target) : my_tile.can_go(target);
 }
 
 double Map::distance(const struct Node &from, const struct Node &to) const {
@@ -167,16 +193,16 @@ double Map::heuristic_cost_estimate(const struct Node &start,
 
 std::vector<Node> Map::get_neighbors(const struct Node &current) const {
   std::vector<Node> neighbours;
-  if (can_go(current.i, current.j, Direction::UP)) {
+  if (can_go(current.i, current.j, Direction::UP, true)) {
     neighbours.push_back({current.i - 1, current.j});
   }
-  if (can_go(current.i, current.j, Direction::DOWN)) {
+  if (can_go(current.i, current.j, Direction::DOWN, true)) {
     neighbours.push_back({current.i + 1, current.j});
   }
-  if (can_go(current.i, current.j, Direction::LEFT)) {
+  if (can_go(current.i, current.j, Direction::LEFT, true)) {
     neighbours.push_back({current.i, current.j - 1});
   }
-  if (can_go(current.i, current.j, Direction::RIGHT)) {
+  if (can_go(current.i, current.j, Direction::RIGHT, true)) {
     neighbours.push_back({current.i, current.j + 1});
   }
   return neighbours;
@@ -253,7 +279,8 @@ Direction Map::stupid(const struct Node &start, const struct Node &end,
   // get the direction to the target
   auto d = get_direction(start, target);
   // if direction is opposite to the current direction, chose the second best
-  if (current != Direction::NONE && d == opposite(current) && f_score.size() > 1) {
+  if (current != Direction::NONE && d == opposite(current) &&
+      f_score.size() > 1) {
     f_score.erase(target);
     auto [target, _] = *std::min_element(
       f_score.begin(), f_score.end(),
@@ -263,3 +290,9 @@ Direction Map::stupid(const struct Node &start, const struct Node &end,
 
   return d;
 }
+
+bool Map::is_home(const int i, const int j) const {
+  return i >= 9 && i <= 12 && j >= 12 && j <= 13;
+}
+
+struct Node Map::get_door_node() const { return door_node; }

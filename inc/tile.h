@@ -45,6 +45,7 @@ public:
   void show(std::shared_ptr<Renderer> renderer);
 
   bool can_go(const std::optional<Tile> &target) const;
+  bool can_go_ghost(const std::optional<Tile> &target) const;
 };
 
 #endif // __inc_tile_H__

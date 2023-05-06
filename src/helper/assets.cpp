@@ -53,6 +53,9 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   auto _daga_bg_menu = data["bg_menu"];
   m_bg_menu = from_json(_daga_bg_menu);
 
+  auto _data_m_lives = data["m_lives"];
+  m_lives = from_json(_data_m_lives);
+
   // set dots
   auto _data_dot = data["m_dot"];
   m_dot = from_json(_data_dot);

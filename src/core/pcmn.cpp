@@ -9,7 +9,7 @@ Pacman::Pacman(const double cx, const double cy,
                const struct PacmanConfig &config)
   : Entity{cx, cy, 0, 0}, m_points_per_dot{config.m_points_per_dot},
     m_points_per_power_dot{config.m_points_per_power_dot},
-    m_points_per_ghost{config.m_points_per_ghost} {}
+    m_points_per_ghost{config.m_points_per_ghost}, state{PcmnState::ALIVE} {}
 
 void Pacman::show(std::shared_ptr<Renderer> renderer) {
   static const double custom_scale = 0.5;
@@ -79,7 +79,11 @@ void Pacman::update(std::shared_ptr<Map> map) {
       can_go(map, opposite(m_direction))) {
     m_direction = opposite(m_direction);
   }
+  move(map);
+  if (ate_food(map)) { eat_food(map); }
+}
 
+void Pacman::move(std::shared_ptr<Map> map) {
   switch (m_direction) {
   case Direction::UP: m_cy -= m_speed; break;
   case Direction::DOWN: m_cy += m_speed; break;
@@ -87,5 +91,17 @@ void Pacman::update(std::shared_ptr<Map> map) {
   case Direction::RIGHT: m_cx += m_speed; break;
   default: break;
   }
-  if (ate_food(map)) { eat_food(map); }
+  map->set_pacman_pos(m_cx, m_cy);
+}
+
+bool Pacman::eat_entity(std::shared_ptr<Map> map) {
+  (void)map;
+  switch (state) {
+  case PcmnState::ALIVE:
+    m_lives--;
+    state = PcmnState::DEAD;
+    return m_lives > 0;
+  case PcmnState::POWERED: m_score += m_points_per_ghost; return true;
+  default: fmt::unreachable("Pacman::eat_entity : dead pacman cannot eat");
+  }
 }

@@ -65,8 +65,11 @@ bool Ghost::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
   std::tie(i, j) = get_ij(map->get_size());
   if (i == -1 || j == -1) { return false; }
 
-  return map->can_go(j, i, dir); // why j, i and not i, j ?
-                                 // well ...
+  if (map->is_home(i, j) || state == GhstState::EATEN) {
+    return map->can_go(j, i, dir, true);
+  } else {
+    return map->can_go(j, i, dir);
+  }
 }
 
 void Ghost::blinky_chase(std::shared_ptr<Map> map,
@@ -187,24 +190,39 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
   teleport(map);
 
   // start or init the timer the first time
-  if (!m_timer.is_running()) { m_timer.start_timer(7); }
+  if (!m_timer.is_running()) {
+    if (is_at_home) {
+      m_timer.start_timer(dis(gen));
+    } else {
+      m_timer.start_timer(7);
+    }
+  }
 
   // change state
   if (m_timer.is_expired()) {
-    switch (state) {
-    case GhstState::SCATTER:
-      state = GhstState::CHASE;
-      m_timer.reset_timer();
-      m_timer.start_timer(20);
-      break;
-    case GhstState::CHASE:
-      state = GhstState::SCATTER;
+    if (is_at_home) {
+      is_at_home = false;
       m_timer.reset_timer();
       m_timer.start_timer(7);
-      break;
-    default: break; // todo: will become fmt::unreachable
+      state = GhstState::SCATTER; // not needed ?
+    } else {
+      switch (state) {
+      case GhstState::SCATTER:
+        state = GhstState::CHASE;
+        m_timer.reset_timer();
+        m_timer.start_timer(20);
+        break;
+      case GhstState::CHASE:
+        state = GhstState::SCATTER;
+        m_timer.reset_timer();
+        m_timer.start_timer(7);
+        break;
+      default: break; // todo: will become fmt::unreachable
+      }
     }
   }
+
+  auto [i, j] = get_ij(map->get_size());
 
   if (is_at_home) {
 
@@ -223,6 +241,11 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
     case GhstState::FRIGHTENED: frightened(map); break;
     case GhstState::EATEN: eaten(map); break;
     }
+    // override the registered direction if the ghost is still at home
+    if (map->is_home(i, j) /* here it is still i, j */) {
+      m_reg_direction = map->astar({j, i}, map->get_door_node());
+    }
+
     // if the registered direction is not the opposite of the current direction
     // and the ghost can go in that direction
     if (m_reg_direction != Direction::NONE && can_change_direction(map) &&
@@ -251,6 +274,16 @@ void Ghost::move(std::shared_ptr<Map> map) {
   default: break;
   }
 
-  // save the position of blinky because we need it for inky
-  if (type == GhostType::BLINKY) { map->set_blinky_pos(m_cx, m_cy); }
+  switch (type) {
+  case GhostType::BLINKY: map->set_blinky_pos(m_cx, m_cy); break;
+  case GhostType::PINKY: map->set_pinky_pos(m_cx, m_cy); break;
+  case GhostType::INKY: map->set_inky_pos(m_cx, m_cy); break;
+  case GhostType::CLYDE: map->set_clyde_pos(m_cx, m_cy); break;
+  default: fmt::unreachable("Invalid ghost type");
+  }
+}
+
+bool Ghost::eat_entity(std::shared_ptr<Map> map) {
+  (void)map;
+  return false;
 }

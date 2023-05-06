@@ -111,6 +111,15 @@ void Game::run() {
         default: break;
         }
       }
+
+      // handle left click FOR DEBUG PURPOSES ONLY
+      if (m_state == GameState::MENU && event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          int x, y;
+          SDL_GetMouseState(&x, &y);
+          fmt::debug("x: %d, y: %d, i: %f, j: %f", x, y, x / m_map->get_size(), y / m_map->get_size());
+        }
+      }
     }
 
     // update
@@ -122,6 +131,15 @@ void Game::run() {
     m_renderer->text(fmt::format("FPS %d", fps), w_sep + 10, 10);
     m_renderer->text(fmt::format("SCORE %d", m_pacman->get_score()), w_sep + 10,
                      30);
+    unsigned lives = m_pacman->get_lives();
+    m_renderer->push();
+    m_renderer->rect_mode(RectMode::CORNER);
+    for (unsigned i = 0; i < lives; ++i) {
+      m_renderer->blit(m_assets->m_lives, w_sep + 10 + i * 30,
+                       m_map->get_height() -
+                         m_assets->m_lives.h * m_renderer->get_scale() - 10);
+    }
+    m_renderer->pop();
 
     std::tuple<int, int> pacman_pos = m_pacman->get_ij(m_map->get_size());
 
