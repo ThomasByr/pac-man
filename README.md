@@ -65,7 +65,11 @@ Then compile a release version of the program with :
 make release
 ```
 
-> **Tip**
+> <picture>
+>   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/tip.svg">
+>   <img alt="Tip" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/tip.svg">
+> </picture><br>
+>
 > To reduce compile time, you can use the `-j` flag to compile in parallel. For example, if you have 4 cores, you can use `make -j4 release` to compile in 4 threads.
 
 This project uses the `-std=gnu++17` flag to compile and the produced executable binary is to be found inside of the `bin` folder.
