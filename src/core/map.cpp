@@ -41,8 +41,11 @@ Map::Map(double size, const std::string &path)
     vector<Tile> row{};
     for (char c : line) {
       row.push_back(Tile{static_cast<int>(c - '0'), i, j, size});
-      if (c == '4') { door_node = {i, j}; }
-      if (c == '9') {
+      if (c == '4') {
+        door_node = {i, j};
+      } else if (c == '6') {
+        fruit_node = {i, j};
+      } else if (c == '9') {
         m_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
         m_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
       } // save the center position of the start tile
@@ -82,6 +85,9 @@ Map::Map(double size, const std::string &path)
   }
   if (door_node.i == 0 && door_node.j == 0) {
     fmt::panic("Map::Map: no door found");
+  }
+  if (fruit_node.i == 0 && fruit_node.j == 0) {
+    fmt::panic("Map::Map: no fruit found");
   }
 
   fmt::debug("Map::Map: pacman start tile found at (%f, %f)", m_start_tile_cx,
@@ -179,9 +185,17 @@ double Map::distance(const struct Node &from, const struct Node &to) const {
 bool Map::ate_food(const int i, const int j) const {
   return m_map[i][j].get_type() == TileType::DOT;
 }
-
 void Map::eat_food(const int i, const int j) {
   if (m_map[i][j].get_type() == TileType::DOT) {
+    m_map[i][j].set_type(TileType::EMPTY);
+  }
+}
+
+bool Map::ate_big_food(const int i, const int j) const {
+  return m_map[i][j].get_type() == TileType::POWER_DOT;
+}
+void Map::eat_big_food(const int i, const int j) {
+  if (m_map[i][j].get_type() == TileType::POWER_DOT) {
     m_map[i][j].set_type(TileType::EMPTY);
   }
 }

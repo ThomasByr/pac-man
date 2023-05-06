@@ -35,21 +35,25 @@ bool Pacman::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
 }
 
 bool Pacman::ate_food(std::shared_ptr<Map> map) {
-  int i = -1, j = -1;
-  std::tie(i, j) = get_ij(map->get_size());
-  if (i == -1 || j == -1) { return false; }
-
+  auto [i, j] = get_ij(map->get_size());
   return map->ate_food(j, i); // why j, i and not i, j ? well ...
 }
-
 void Pacman::eat_food(std::shared_ptr<Map> map) {
-  int i = -1, j = -1;
-  std::tie(i, j) = get_ij(map->get_size());
-  if (i == -1 || j == -1) { return; }
-
+  auto [i, j] = get_ij(map->get_size());
   map->eat_food(j, i); // those damn vectors
 
   m_score += m_points_per_dot;
+}
+
+bool Pacman::ate_big_food(std::shared_ptr<Map> map) {
+  auto [i, j] = get_ij(map->get_size());
+  return map->ate_big_food(j, i);
+}
+void Pacman::eat_big_food(std::shared_ptr<Map> map) {
+  auto [i, j] = get_ij(map->get_size());
+  map->eat_big_food(j, i);
+
+  m_score += m_points_per_power_dot;
 }
 
 void Pacman::update(std::shared_ptr<Map> map) {
@@ -81,6 +85,7 @@ void Pacman::update(std::shared_ptr<Map> map) {
   }
   move(map);
   if (ate_food(map)) { eat_food(map); }
+  if (ate_big_food(map)) { eat_big_food(map); }
 }
 
 void Pacman::move(std::shared_ptr<Map> map) {

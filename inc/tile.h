@@ -15,6 +15,7 @@
 3 : power dot
 4 : ghost house door
 5 : portal
+6 : bonus
 9 : start position
 */
 
@@ -25,7 +26,7 @@ enum class TileType {
   POWER_DOT,
   GHOST_HOUSE_DOOR,
   PORTAL,
-  BONUS,             // this one is not in the map.txt file
+  BONUS,
   START_POSITION = 9 // so that we can use static_cast<TileType>(9)
 };
 

@@ -38,6 +38,9 @@ public:
 
   bool ate_food(std::shared_ptr<Map> map);
   void eat_food(std::shared_ptr<Map> map);
+  bool ate_big_food(std::shared_ptr<Map> map);
+  void eat_big_food(std::shared_ptr<Map> map);
+
   void update(std::shared_ptr<Map> map);
   void move(std::shared_ptr<Map> map);
 

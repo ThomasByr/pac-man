@@ -71,7 +71,7 @@ private:
 
   std::tuple<int, int> blinky_pos, pinky_pos, inky_pos, clyde_pos;
   std::tuple<int, int> pacman_pos;
-  struct Node door_node;
+  struct Node door_node, fruit_node;
 
 public:
   Map(double size, const std::string &path = "assets/map.txt");
@@ -108,6 +108,10 @@ public:
 
   bool ate_food(const int i, const int j) const;
   void eat_food(const int i, const int j);
+  bool ate_big_food(const int i, const int j) const;
+  void eat_big_food(const int i, const int j);
+  bool ate_fruit(const int i, const int j) const;
+  void eat_fruit(const int i, const int j);
 
   bool can_go(const int i, const int j, const Direction &dir, bool ghost = false) const;
   /// @brief distance between two nodes
