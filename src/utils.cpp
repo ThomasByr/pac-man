@@ -97,7 +97,7 @@ bool Timer::is_expired() {
 void Timer::reset_timer() {
   if (!running) { fmt::panic("timer not running"); }
   start = std::chrono::high_resolution_clock::now();
-  end = start + std::chrono::microseconds(0);
+  end = std::chrono::high_resolution_clock::now();
   running = false;
 }
 

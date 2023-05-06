@@ -6,8 +6,8 @@
 #include "utils.h"
 
 Entity::Entity(const double cx, const double cy, const double w, const double h)
-  : m_cx{cx}, m_cy{cy}, w{w}, h{h}, m_speed{1}, m_lives{3}, m_max_lives{3}, m_score{0},
-    m_direction{Direction::NONE}, m_reg_direction{Direction::NONE} {
+  : m_cx{cx}, m_cy{cy}, w{w}, h{h}, m_speed{1}, m_lives{3}, m_max_lives{3},
+    m_score{0}, m_direction{Direction::NONE}, m_reg_direction{Direction::NONE} {
   m_timer = sys_pause::Timer();
 
   gen = std::mt19937(rd());
@@ -62,5 +62,6 @@ void Entity::teleport(std::shared_ptr<Map> map) {
 
 bool Entity::ate_entity(double other_cx, double other_cy) const {
   const double epsilon = 10;
-  return std::abs(m_cx - other_cx) < epsilon && std::abs(m_cy - other_cy) < epsilon;
+  return std::abs(m_cx - other_cx) < epsilon &&
+         std::abs(m_cy - other_cy) < epsilon;
 }

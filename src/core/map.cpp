@@ -17,7 +17,8 @@
 #include "utils.h"
 
 Map::Map(double size, const std::string &path)
-  : m_map{}, size{size}, m_start_tile_cx{0}, m_start_tile_cy{0} {
+  : m_map{}, size{size}, m_start_tile_cx{0}, m_start_tile_cy{0},
+    is_pcmn_powered{false} {
   using namespace std;
 
   door_node = {0, 0};
@@ -155,6 +156,9 @@ void Map::set_clyde_pos(const int i, const int j) { clyde_pos = {i, j}; }
 std::tuple<int, int> Map::get_pacman_pos() const { return pacman_pos; }
 void Map::set_pacman_pos(const int i, const int j) { pacman_pos = {i, j}; }
 
+bool Map::pcmn_powered() const { return is_pcmn_powered; }
+void Map::pcmn_powered(const bool powered) { is_pcmn_powered = powered; }
+
 bool Map::can_go(const int i, const int j, const Direction &dir,
                  bool ghost) const {
   Tile my_tile = m_map[i][j];
@@ -233,7 +237,7 @@ Direction Map::reconstruct_path(
   total_path.pop_back();
   Node next = total_path.back();
   total_path.pop_back();
-  return get_direction(current, next);
+  return get_direction_from_nodes(current, next);
 }
 
 Direction Map::astar(const struct Node &start, const struct Node &end) const {
@@ -291,7 +295,7 @@ Direction Map::stupid(const struct Node &start, const struct Node &end,
     f_score.begin(), f_score.end(),
     [&](const auto &a, const auto &b) { return a.second < b.second; });
   // get the direction to the target
-  auto d = get_direction(start, target);
+  auto d = get_direction_from_nodes(start, target);
   // if direction is opposite to the current direction, chose the second best
   if (current != Direction::NONE && d == opposite(current) &&
       f_score.size() > 1) {
@@ -299,7 +303,7 @@ Direction Map::stupid(const struct Node &start, const struct Node &end,
     auto [target, _] = *std::min_element(
       f_score.begin(), f_score.end(),
       [&](const auto &a, const auto &b) { return a.second < b.second; });
-    d = get_direction(start, target);
+    d = get_direction_from_nodes(start, target);
   }
 
   return d;

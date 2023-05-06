@@ -54,11 +54,28 @@ void Pacman::eat_big_food(std::shared_ptr<Map> map) {
   map->eat_big_food(j, i);
 
   m_score += m_points_per_power_dot;
+  state = PcmnState::POWERED;
 }
 
 void Pacman::update(std::shared_ptr<Map> map) {
 
   teleport(map);
+
+  if (state == PcmnState::POWERED && !m_timer.is_running()) {
+    m_timer.start_timer(10);
+  }
+
+  // here we test if the timer is running before because, as opposed to ghosts
+  // pacman behavior is not always being timed
+  if (m_timer.is_running() && m_timer.is_expired()) {
+    switch (state) {
+    case PcmnState::POWERED:
+      state = PcmnState::ALIVE;
+      m_timer.reset_timer();
+      break;
+    default: break;
+    }
+  }
 
   // first check if we can still go in the current direction
   if (can_change_direction(map) && !can_go(map, m_direction)) {
@@ -97,6 +114,7 @@ void Pacman::move(std::shared_ptr<Map> map) {
   default: break;
   }
   map->set_pacman_pos(m_cx, m_cy);
+  map->pcmn_powered(state == PcmnState::POWERED);
 }
 
 bool Pacman::eat_entity(std::shared_ptr<Map> map) {

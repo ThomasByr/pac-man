@@ -45,7 +45,7 @@ struct NodeHash {
  * @param to   destination node
  * @return Direction
  */
-inline Direction get_direction(const Node &from, const Node &to) {
+inline Direction get_direction_from_nodes(const Node &from, const Node &to) {
   if (from.i == to.i + 1) { return Direction::UP; }
   if (from.i == to.i - 1) { return Direction::DOWN; }
   if (from.j == to.j + 1) { return Direction::LEFT; }
@@ -72,6 +72,7 @@ private:
   std::tuple<int, int> blinky_pos, pinky_pos, inky_pos, clyde_pos;
   std::tuple<int, int> pacman_pos;
   struct Node door_node, fruit_node;
+  bool is_pcmn_powered;
 
 public:
   Map(double size, const std::string &path = "assets/map.txt");
@@ -105,6 +106,9 @@ public:
 
   std::tuple<int, int> get_pacman_pos() const;
   void set_pacman_pos(const int i, const int j);
+
+  bool pcmn_powered() const;
+  void pcmn_powered(const bool powered);
 
   bool ate_food(const int i, const int j) const;
   void eat_food(const int i, const int j);

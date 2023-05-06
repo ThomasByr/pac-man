@@ -226,6 +226,15 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   m_eyes_right = from_json(_data_eyes_right);
   auto _data_eyes_down = data["m_eyes_down"];
   m_eyes_down = from_json(_data_eyes_down);
+
+  auto _data_weak_ghost = data["m_weak_ghost"];
+  for (size_t i = 0; i < _data_weak_ghost.size(); i++) {
+    m_weak_ghost.push_back(from_json(_data_weak_ghost[i]));
+  }
+  auto _data_weak_ghost_ending = data["m_weak_ghost_ending"];
+  for (size_t i = 0; i < _data_weak_ghost_ending.size(); i++) {
+    m_weak_ghost_ending.push_back(from_json(_data_weak_ghost_ending[i]));
+  }
 }
 
 Assets::~Assets() { SDL_FreeSurface(m_surface); }

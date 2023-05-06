@@ -23,9 +23,8 @@ void Ghost::show(std::shared_ptr<Renderer> renderer) {
   switch (state) {
 
   case GhstState::FRIGHTENED:
-    // todo: ending animation (pass `true` to get_sprite_ghost_weak)
     asset = renderer->get_assets()->get_sprite_ghost_weak(
-      renderer->get_fps_anim_count());
+      renderer->get_fps_anim_count(), m_timer.step_passed(7));
     break;
 
   case GhstState::EATEN:
@@ -180,7 +179,20 @@ void Ghost::scatter(std::shared_ptr<Map> map) {
   m_reg_direction = map->stupid(ghost_tile, target, get_direction());
 }
 
-void Ghost::frightened(std::shared_ptr<Map> map) { (void)map; }
+void Ghost::frightened(std::shared_ptr<Map> map) {
+  auto [i, j] = get_ij(map->get_size());
+  Node ghost_tile = {j, i};
+
+  std::vector<Direction> possible_directions;
+  std::vector<Node> possible_nodes = map->get_neighbors(ghost_tile);
+  for (auto node : possible_nodes) {
+    possible_directions.push_back(get_direction_from_nodes(ghost_tile, node));
+  }
+
+  std::uniform_int_distribution<> dist(0, possible_directions.size() - 1);
+  int random_index = dist(gen);
+  m_reg_direction = possible_directions[random_index];
+}
 
 void Ghost::eaten(std::shared_ptr<Map> map) { (void)map; }
 
@@ -196,6 +208,12 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
     } else {
       m_timer.start_timer(7);
     }
+  }
+
+  if (!is_at_home && state != GhstState::FRIGHTENED && map->pcmn_powered()) {
+    state = GhstState::FRIGHTENED;
+    m_timer.reset_timer();
+    m_timer.start_timer(10);
   }
 
   // change state
@@ -217,7 +235,12 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
         m_timer.reset_timer();
         m_timer.start_timer(7);
         break;
-      default: break; // todo: will become fmt::unreachable
+      case GhstState::FRIGHTENED:
+        state = GhstState::SCATTER;
+        m_timer.reset_timer();
+        m_timer.start_timer(7);
+        break;
+      default: fmt::unreachable("Invalid ghost state when timer expired");
       }
     }
   }
