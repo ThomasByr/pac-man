@@ -6,12 +6,12 @@
 #include "utils.h"
 
 Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
-  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::SCATTER}, is_at_home{
-                                                                   is_at_home} {
+  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::SCATTER},
+    is_at_home{is_at_home} {
   if (is_at_home) {
     m_direction = Direction::UP;
   } else {
-    m_direction = Direction::LEFT;
+    m_direction = Direction::NONE;
   }
 }
 
@@ -183,6 +183,28 @@ void Ghost::eaten(std::shared_ptr<Map> map) { (void)map; }
 
 void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
                    Direction pacman_dir) {
+
+  teleport(map);
+
+  // start or init the timer the first time
+  if (!m_timer.is_running()) { m_timer.start_timer(7); }
+
+  // change state
+  if (m_timer.is_expired()) {
+    switch (state) {
+    case GhstState::SCATTER:
+      state = GhstState::CHASE;
+      m_timer.reset_timer();
+      m_timer.start_timer(20);
+      break;
+    case GhstState::CHASE:
+      state = GhstState::SCATTER;
+      m_timer.reset_timer();
+      m_timer.start_timer(7);
+      break;
+    default: break; // todo: will become fmt::unreachable
+    }
+  }
 
   if (is_at_home) {
 

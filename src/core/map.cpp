@@ -253,7 +253,7 @@ Direction Map::stupid(const struct Node &start, const struct Node &end,
   // get the direction to the target
   auto d = get_direction(start, target);
   // if direction is opposite to the current direction, chose the second best
-  if (d == opposite(current)) {
+  if (current != Direction::NONE && d == opposite(current) && f_score.size() > 1) {
     f_score.erase(target);
     auto [target, _] = *std::min_element(
       f_score.begin(), f_score.end(),

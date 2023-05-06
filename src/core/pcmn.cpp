@@ -54,6 +54,8 @@ void Pacman::eat_food(std::shared_ptr<Map> map) {
 
 void Pacman::update(std::shared_ptr<Map> map) {
 
+  teleport(map);
+
   // first check if we can still go in the current direction
   if (can_change_direction(map) && !can_go(map, m_direction)) {
     // in that case we simply stop

@@ -74,6 +74,8 @@ bool wait_for_next_keypress() {
 
 Timer::Timer() : running(false) {}
 
+bool Timer::is_running() { return running; }
+
 void Timer::start_timer(unsigned sec) {
   if (running) { fmt::panic("timer already running"); }
   start = std::chrono::high_resolution_clock::now();
@@ -96,6 +98,7 @@ void Timer::reset_timer() {
   if (!running) { fmt::panic("timer not running"); }
   start = std::chrono::high_resolution_clock::now();
   end = start + std::chrono::microseconds(0);
+  running = false;
 }
 
 } // namespace sys_pause

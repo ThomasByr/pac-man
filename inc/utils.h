@@ -134,6 +134,9 @@ public:
   Timer(void);
   ~Timer(void) = default;
 
+  ///@brief if the timer is running
+  bool is_running(void);
+
   ///@brief start the timer with a given duration in seconds
   void start_timer(unsigned sec);
   ///@brief check for intermidiate step

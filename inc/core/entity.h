@@ -11,6 +11,7 @@
 #include "helper/renderer.h"
 
 #include "directions.h"
+#include "utils.h"
 
 class Entity {
 protected:
@@ -21,6 +22,7 @@ protected:
   size_t m_score; // score of the entity (only makes sense for pacman ?)
 
   Direction m_direction, m_reg_direction;
+  sys_pause::Timer m_timer; // timer to control the speed behavior
 
 public:
   Entity(const double cx, const double cy, const double w, const double h);
@@ -59,6 +61,7 @@ public:
    * @return false otherwise
    */
   bool can_change_direction(std::shared_ptr<Map> map) const;
+  void teleport(std::shared_ptr<Map> map);
 };
 
 #endif // __inc_core_entity_H__
