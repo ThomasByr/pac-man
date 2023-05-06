@@ -34,20 +34,6 @@ bool Pacman::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
                                  // well ...
 }
 
-bool Pacman::can_change_direction(std::shared_ptr<Map> map) const {
-  static const double epsilon = .5;
-  double tile_size = map->get_size();
-
-  // the relative x position of the entity on the tile
-  double relative_x = std::fmod(m_cx, tile_size);
-  // the relative y position of the entity on the tile
-  double relative_y = std::fmod(m_cy, tile_size);
-
-  // if the entity is in the middle of the tile
-  return std::abs(relative_x - tile_size / 2) < epsilon &&
-         std::abs(relative_y - tile_size / 2) < epsilon;
-}
-
 bool Pacman::ate_food(std::shared_ptr<Map> map) {
   int i = -1, j = -1;
   std::tie(i, j) = get_ij(map->get_size());
@@ -67,6 +53,8 @@ void Pacman::eat_food(std::shared_ptr<Map> map) {
 }
 
 void Pacman::update(std::shared_ptr<Map> map) {
+
+  teleport(map);
 
   // first check if we can still go in the current direction
   if (can_change_direction(map) && !can_go(map, m_direction)) {
@@ -93,10 +81,10 @@ void Pacman::update(std::shared_ptr<Map> map) {
   }
 
   switch (m_direction) {
-  case Direction::UP: m_cy -= 1; break;
-  case Direction::DOWN: m_cy += 1; break;
-  case Direction::LEFT: m_cx -= 1; break;
-  case Direction::RIGHT: m_cx += 1; break;
+  case Direction::UP: m_cy -= m_speed; break;
+  case Direction::DOWN: m_cy += m_speed; break;
+  case Direction::LEFT: m_cx -= m_speed; break;
+  case Direction::RIGHT: m_cx += m_speed; break;
   default: break;
   }
   if (ate_food(map)) { eat_food(map); }

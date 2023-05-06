@@ -11,7 +11,7 @@ Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
   if (is_at_home) {
     m_direction = Direction::UP;
   } else {
-    m_direction = Direction::LEFT;
+    m_direction = Direction::NONE;
   }
 }
 
@@ -20,25 +20,39 @@ void Ghost::show(std::shared_ptr<Renderer> renderer) {
   SDL_Rect asset;
   static const double custom_scale = 0.6;
 
-  switch (type) {
-  case GhostType::BLINKY:
-    asset = renderer->get_assets()->get_sprite_ghost_red(
-      m_direction, renderer->get_fps_anim_count());
+  switch (state) {
+
+  case GhstState::FRIGHTENED:
+    // todo: ending animation (pass `true` to get_sprite_ghost_weak)
+    asset = renderer->get_assets()->get_sprite_ghost_weak(
+      renderer->get_fps_anim_count());
     break;
-  case GhostType::PINKY:
-    asset = renderer->get_assets()->get_sprite_ghost_pink(
-      m_direction, renderer->get_fps_anim_count());
+
+  case GhstState::EATEN:
+    asset = renderer->get_assets()->get_sprite_ghost_eyes(m_direction);
     break;
-  case GhostType::INKY:
-    asset = renderer->get_assets()->get_sprite_ghost_blue(
-      m_direction, renderer->get_fps_anim_count());
-    break;
-  case GhostType::CLYDE:
-    asset = renderer->get_assets()->get_sprite_ghost_orange(
-      m_direction, renderer->get_fps_anim_count());
+
+  default:
+    switch (type) {
+    case GhostType::BLINKY:
+      asset = renderer->get_assets()->get_sprite_ghost_red(
+        m_direction, renderer->get_fps_anim_count());
+      break;
+    case GhostType::PINKY:
+      asset = renderer->get_assets()->get_sprite_ghost_pink(
+        m_direction, renderer->get_fps_anim_count());
+      break;
+    case GhostType::INKY:
+      asset = renderer->get_assets()->get_sprite_ghost_blue(
+        m_direction, renderer->get_fps_anim_count());
+      break;
+    case GhostType::CLYDE:
+      asset = renderer->get_assets()->get_sprite_ghost_orange(
+        m_direction, renderer->get_fps_anim_count());
+      break;
+    }
     break;
   }
-
   renderer->push();
   renderer->rect_mode(RectMode::CENTER);
   renderer->translate(m_cx, m_cy);
@@ -55,27 +69,12 @@ bool Ghost::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
                                  // well ...
 }
 
-bool Ghost::can_change_direction(std::shared_ptr<Map> map) const {
-  static const double epsilon = .5;
-  double tile_size = map->get_size();
-
-  // the relative x position of the entity on the tile
-  double relative_x = std::fmod(m_cx, tile_size);
-  // the relative y position of the entity on the tile
-  double relative_y = std::fmod(m_cy, tile_size);
-
-  // if the entity is in the middle of the tile
-  return std::abs(relative_x - tile_size / 2) < epsilon &&
-         std::abs(relative_y - tile_size / 2) < epsilon;
-}
-
 void Ghost::blinky_chase(std::shared_ptr<Map> map,
                          std::tuple<int, int> pacman_pos) {
   Node pacman_tile = {std::get<1>(pacman_pos), std::get<0>(pacman_pos)};
   auto [i, j] = get_ij(map->get_size());
   Node ghost_tile = {j, i};
 
-  // m_reg_direction = map->astar(ghost_tile, pacman_tile);
   m_reg_direction = map->stupid(ghost_tile, pacman_tile, get_direction());
 }
 
@@ -185,6 +184,28 @@ void Ghost::eaten(std::shared_ptr<Map> map) { (void)map; }
 void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
                    Direction pacman_dir) {
 
+  teleport(map);
+
+  // start or init the timer the first time
+  if (!m_timer.is_running()) { m_timer.start_timer(7); }
+
+  // change state
+  if (m_timer.is_expired()) {
+    switch (state) {
+    case GhstState::SCATTER:
+      state = GhstState::CHASE;
+      m_timer.reset_timer();
+      m_timer.start_timer(20);
+      break;
+    case GhstState::CHASE:
+      state = GhstState::SCATTER;
+      m_timer.reset_timer();
+      m_timer.start_timer(7);
+      break;
+    default: break; // todo: will become fmt::unreachable
+    }
+  }
+
   if (is_at_home) {
 
     // first check if we can still go in the current direction
@@ -222,10 +243,10 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
 void Ghost::move(std::shared_ptr<Map> map) {
 
   switch (m_direction) {
-  case Direction::UP: m_cy -= 1; break;
-  case Direction::DOWN: m_cy += 1; break;
-  case Direction::LEFT: m_cx -= 1; break;
-  case Direction::RIGHT: m_cx += 1; break;
+  case Direction::UP: m_cy -= m_speed; break;
+  case Direction::DOWN: m_cy += m_speed; break;
+  case Direction::LEFT: m_cx -= m_speed; break;
+  case Direction::RIGHT: m_cx += m_speed; break;
 
   default: break;
   }

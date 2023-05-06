@@ -34,7 +34,6 @@ public:
   size_t get_score(void) const;
 
   bool can_go(std::shared_ptr<Map> map, const Direction &dir) const;
-  bool can_change_direction(std::shared_ptr<Map> map) const;
 
   bool ate_food(std::shared_ptr<Map> map);
   void eat_food(std::shared_ptr<Map> map);
