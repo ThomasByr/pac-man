@@ -15,9 +15,11 @@
 
 class Entity {
 protected:
-  double m_cx, m_cy; // center position of the entity on the map
-  double w, h;       // width and height of the entity
-  double m_speed;    // speed of the entity
+  double m_cx, m_cy;             // center position of the entity on the map
+  double w, h;                   // width and height of the entity
+  double m_speed;                // speed of the entity
+
+  unsigned m_lives, m_max_lives; // lives of the entity
 
   size_t m_score; // score of the entity (only makes sense for pacman ?)
 
