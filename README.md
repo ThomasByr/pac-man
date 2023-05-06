@@ -25,6 +25,7 @@
 ## ✏️ Setup
 
 > **Note**
+>
 > This project is part of a M1 study done at the University of Strasbourg, France.
 
 Please make sure you have `libsdl2` installed :
@@ -77,6 +78,7 @@ This project uses the `-std=gnu++17` flag to compile and the produced executable
 ## 💁 More infos and Usage
 
 > **Warning**
+>
 > We use SDL2 as the only external dependency. Others dependencies are compiled from source (please see [lib](lib) folder). Note that if not specified, all files are written by @ThomasByr.
 >
 > Notable ones are :
