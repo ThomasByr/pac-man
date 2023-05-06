@@ -11,15 +11,20 @@
 #include "helper/renderer.h"
 
 #include "directions.h"
+#include "utils.h"
 
 class Entity {
 protected:
-  double m_cx, m_cy; // center position of the entity on the map
-  double w, h;       // width and height of the entity
+  double m_cx, m_cy;             // center position of the entity on the map
+  double w, h;                   // width and height of the entity
+  double m_speed;                // speed of the entity
+
+  unsigned m_lives, m_max_lives; // lives of the entity
 
   size_t m_score; // score of the entity (only makes sense for pacman ?)
 
   Direction m_direction, m_reg_direction;
+  sys_pause::Timer m_timer; // timer to control the speed behavior
 
 public:
   Entity(const double cx, const double cy, const double w, const double h);
@@ -57,7 +62,8 @@ public:
    * @return true if the entity is somewhere in the middle of a tile
    * @return false otherwise
    */
-  virtual bool can_change_direction(std::shared_ptr<Map> map) const = 0;
+  bool can_change_direction(std::shared_ptr<Map> map) const;
+  void teleport(std::shared_ptr<Map> map);
 };
 
 #endif // __inc_core_entity_H__

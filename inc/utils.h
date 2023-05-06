@@ -2,6 +2,7 @@
 #ifndef __inc_utils_H__
 #define __inc_utils_H__
 
+#include <chrono>
 #include <string>
 
 #define __VERSION__ "1.6.9"
@@ -121,17 +122,31 @@ void wait_for_key(void);
  */
 bool wait_for_next_keypress(void);
 
-/**
- * @brief wait for the given amount of time
- * @note this function is non-blocking and meant to be used in a loop ;
- * when the time is elapsed, it resets the internal timer
- * so you can call it again with another duration
- *
- * @param usec   time to wait in microseconds
- * @return true  when the time is elapsed
- * @return false otherwise
- */
-bool wait_for_ms(useconds_t usec);
+class Timer {
+
+private:
+  std::chrono::time_point<std::chrono::high_resolution_clock> start;
+  std::chrono::time_point<std::chrono::high_resolution_clock> end;
+  bool running;
+
+public:
+  ///@brief new timer with
+  Timer(void);
+  ~Timer(void) = default;
+
+  ///@brief if the timer is running
+  bool is_running(void);
+
+  ///@brief start the timer with a given duration in seconds
+  void start_timer(unsigned sec);
+  ///@brief check for intermidiate step
+  ///(i.e. if the timer has passed a given duration)
+  bool step_passed(unsigned sec);
+  ///@brief check for timer expiration
+  bool is_expired(void);
+  ///@brief reset the timer
+  void reset_timer(void);
+};
 
 } // namespace sys_pause
 

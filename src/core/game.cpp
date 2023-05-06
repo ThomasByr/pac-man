@@ -132,7 +132,7 @@ void Game::run() {
       m_renderer->rect_mode(RectMode::CENTER);
       m_renderer->blit(m_assets->m_bg_menu, m_map->get_width() / 2, 200, 0.7);
       m_renderer->rect_mode(RectMode::CORNER);
-      if (m_renderer->get_fps_anim_count() & 1) {
+      if ((2 * m_renderer->get_fps_count() / m_renderer->get_max_fps()) & 1) {
         m_renderer->text("PRESS ENTER TO START", 50, 350);
       }
       break;
