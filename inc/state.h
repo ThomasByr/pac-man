@@ -6,12 +6,15 @@
 
 enum class GameState { MENU, GAME, PAUSE, GAME_OVER, EXIT };
 enum class PcmnState { ALIVE, DEAD, POWERED };
-enum class GhstState { CHASE, SCATTER, FRIGHTENED };
+enum class GhstState { CHASE, SCATTER, FRIGHTENED, EATEN };
 
 std::ostream &operator<<(std::ostream &os, const GameState &state);
 std::string to_string(const GameState &state);
 
 std::ostream &operator<<(std::ostream &os, const PcmnState &state);
 std::string to_string(const PcmnState &state);
+
+std::ostream &operator<<(std::ostream &os, const GhstState &state);
+std::string to_string(const GhstState &state);
 
 #endif

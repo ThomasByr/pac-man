@@ -37,3 +37,20 @@ std::string to_string(const PcmnState &state) {
   }
   return str;
 }
+
+std::ostream &operator<<(std::ostream &os, const GhstState &state) {
+  os << to_string(state);
+  return os;
+}
+
+std::string to_string(const GhstState &state) {
+  std::string str;
+  switch (state) {
+  case GhstState::CHASE: str = "CHASE"; break;
+  case GhstState::SCATTER: str = "SCATTER"; break;
+  case GhstState::FRIGHTENED: str = "FRIGHTENED"; break;
+  case GhstState::EATEN: str = "EATEN"; break;
+  default: fmt::unreachable("Invalid ghost state");
+  }
+  return str;
+}
