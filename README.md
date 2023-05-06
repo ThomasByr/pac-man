@@ -176,6 +176,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 - ghost entity on display
 - added chasing algorithms
+- added scatter mode and frightened (pure random) mode
+- added timed mode switching
 
 </details>
 
@@ -187,11 +189,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | won't fix  | bug that won't be fixed ... maybe                                                                                                             |
 | future bug | bug that does not appear in the current version but will appear as soon as the corresponding feature is implemented due to current core logic |
+| logic bug  | bug that is not due to source code but rather to the way the core logic have been thought out                                                 |
+| bug        | just a bug ... or a feature ... the base thing that won't last long I promise                                                                 |
 
 - ~~target fps bypassed~~ (resolved by re-updating timers after each frame)
 - pac-man speed is set to 1.0f (won't fix)
 - first animation sprite depends on current frame count (won't fix)
 - when ghosts go back to their home, they come out as frightened (future bug)
+- when ghosts go back to normal, they might re-enter frightened mode (logic bug)
 
 **todo** (first implementation version)
 
