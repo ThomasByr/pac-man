@@ -24,7 +24,7 @@ void Ghost::show(std::shared_ptr<Renderer> renderer) {
 
   case GhstState::FRIGHTENED:
     asset = renderer->get_assets()->get_sprite_ghost_weak(
-      renderer->get_fps_anim_count(), m_timer.step_passed(7));
+      renderer->get_fps_anim_count(), p_timer->step_passed(7));
     break;
 
   case GhstState::EATEN:
@@ -200,6 +200,7 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
                    Direction pacman_dir) {
 
   teleport(map);
+  p_timer = map->get_power_timer();
 
   // start or init the timer the first time
   if (!m_timer.is_running()) {
@@ -212,12 +213,11 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
 
   if (!is_at_home && state != GhstState::FRIGHTENED && map->pcmn_powered()) {
     state = GhstState::FRIGHTENED;
-    m_timer.reset_timer();
-    m_timer.start_timer(10);
+    m_timer.reset_timer(); // reset to use global timer
   }
 
   // change state
-  if (m_timer.is_expired()) {
+  if ((m_timer.is_running() && m_timer.is_expired()) || p_timer->is_expired()) {
     if (is_at_home) {
       is_at_home = false;
       m_timer.reset_timer();
@@ -237,12 +237,19 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
         break;
       case GhstState::FRIGHTENED:
         state = GhstState::SCATTER;
-        m_timer.reset_timer();
+        m_timer.reset_timer(); // reset for ghosts that just went out of the
+                               // house
         m_timer.start_timer(7);
         break;
       default: fmt::unreachable("Invalid ghost state when timer expired");
       }
     }
+  }
+  // go out of frightened state
+  if (state == GhstState::FRIGHTENED && !p_timer->is_running()) {
+    state = GhstState::SCATTER;
+    m_timer.reset_timer();
+    m_timer.start_timer(7);
   }
 
   auto [i, j] = get_ij(map->get_size());

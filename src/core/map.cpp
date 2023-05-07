@@ -23,6 +23,8 @@ Map::Map(double size, const std::string &path)
 
   door_node = {0, 0};
 
+  power_timer = std::make_shared<sys_pause::Timer>();
+
   ifstream file{path};
   string line = "";
 
@@ -314,3 +316,5 @@ bool Map::is_home(const int i, const int j) const {
 }
 
 struct Node Map::get_door_node() const { return door_node; }
+
+std::shared_ptr<sys_pause::Timer>Map::get_power_timer() { return power_timer; }

@@ -60,18 +60,19 @@ void Pacman::eat_big_food(std::shared_ptr<Map> map) {
 void Pacman::update(std::shared_ptr<Map> map) {
 
   teleport(map);
+  p_timer = map->get_power_timer();
 
-  if (state == PcmnState::POWERED && !m_timer.is_running()) {
-    m_timer.start_timer(10);
+  if (state == PcmnState::POWERED && !p_timer->is_running()) {
+    p_timer->start_timer(10);
   }
 
   // here we test if the timer is running before because, as opposed to ghosts
   // pacman behavior is not always being timed
-  if (m_timer.is_running() && m_timer.is_expired()) {
+  if (p_timer->is_running() && p_timer->is_expired()) {
     switch (state) {
     case PcmnState::POWERED:
       state = PcmnState::ALIVE;
-      m_timer.reset_timer();
+      p_timer->reset_timer();
       break;
     default: break;
     }

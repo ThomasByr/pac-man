@@ -31,6 +31,9 @@ protected:
   Direction m_direction, m_reg_direction;
   sys_pause::Timer m_timer; // timer to control the speed behavior
 
+  // global timer (will be updated in the main loop)
+  std::shared_ptr<sys_pause::Timer> p_timer;
+
 public:
   Entity(const double cx, const double cy, const double w, const double h);
   virtual void show(std::shared_ptr<Renderer> renderer) = 0;

@@ -84,21 +84,16 @@ void Timer::start_timer(unsigned sec) {
 }
 
 bool Timer::step_passed(unsigned sec) {
-  if (!running) { fmt::panic("timer not running"); }
+  if (!running) { return false; }
   auto now = std::chrono::high_resolution_clock::now();
   return now >= start + std::chrono::seconds(sec);
 }
 
 bool Timer::is_expired() {
-  if (!running) { fmt::panic("timer not running"); }
+  if (!running) { return false; }
   return std::chrono::high_resolution_clock::now() >= end;
 }
 
-void Timer::reset_timer() {
-  if (!running) { fmt::panic("timer not running"); }
-  start = std::chrono::high_resolution_clock::now();
-  end = std::chrono::high_resolution_clock::now();
-  running = false;
-}
+void Timer::reset_timer() { running = false; }
 
 } // namespace sys_pause

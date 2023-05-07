@@ -61,7 +61,7 @@ void Entity::teleport(std::shared_ptr<Map> map) {
 }
 
 bool Entity::ate_entity(double other_cx, double other_cy) const {
-  const double epsilon = 10;
+  const double epsilon = 10; // todo: this 10 is kind of hardcoded ...
   return std::abs(m_cx - other_cx) < epsilon &&
          std::abs(m_cy - other_cy) < epsilon;
 }
