@@ -102,6 +102,15 @@ public:
   SDL_Rect get_sprite_pacman(const Direction &dir, int fc) const;
 
   /**
+   * @brief Get the Sprite object for pacman dead
+   *
+   * @param fc  the frame count
+   * @param end becomes true when the animation is over
+   * @return SDL_Rect - the sprite
+   */
+  SDL_Rect get_sprite_pacman_dead(int fc, int &end) const;
+
+  /**
    * @brief Get the Sprite object for ghost red
    *
    * @param dir the direction of the sprite

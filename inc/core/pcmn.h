@@ -14,12 +14,15 @@
 struct PacmanConfig {
   int m_points_per_dot, m_points_per_power_dot;
   int m_points_per_ghost;
+  int max_number_of_dots;
 };
 
 class Pacman : public Entity {
 private:
   int m_points_per_dot, m_points_per_power_dot;
   int m_points_per_ghost;
+  int max_number_of_dots;
+  int m_dots_eaten;
   PcmnState state;
 
 public:
@@ -45,6 +48,15 @@ public:
   void move(std::shared_ptr<Map> map);
 
   bool eat_entity();
+  bool ate_all_dots(void) const;
+  bool play_dead(std::shared_ptr<Renderer> renderer) const;
+
+  /**
+   * @brief reset pacman to its initial state
+   * 
+   * @param go if true, pacman will recover its entire life
+   */
+  void reset(bool go = false);
 };
 
 #endif // __inc_core_pcmn_H__

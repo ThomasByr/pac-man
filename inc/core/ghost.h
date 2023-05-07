@@ -49,7 +49,12 @@ public:
   void eaten(std::shared_ptr<Map> map);
 
   void move(std::shared_ptr<Map> map);
-  bool eat_entity(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
+  bool eat_entity(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos) const;
+  
+  /**
+   * @brief reset ghost to its initial state
+   */
+  void reset(void);
 };
 
 #endif // __inc_core_ghost_H__

@@ -235,6 +235,11 @@ Assets::Assets(const std::string &path) : m_surface{nullptr} {
   for (size_t i = 0; i < _data_weak_ghost_ending.size(); i++) {
     m_weak_ghost_ending.push_back(from_json(_data_weak_ghost_ending[i]));
   }
+
+  auto _data_pacman_dead = data["m_pacman_dead"];
+  for (size_t i = 0; i < _data_pacman_dead.size(); i++) {
+    m_pacman_dead.push_back(from_json(_data_pacman_dead[i]));
+  }
 }
 
 Assets::~Assets() { SDL_FreeSurface(m_surface); }
@@ -335,4 +340,9 @@ SDL_Rect Assets::get_sprite_ghost_eyes(const Direction &dir) const {
   default: // fallback for Direction::NONE
     return m_eyes_up;
   }
+}
+
+SDL_Rect Assets::get_sprite_pacman_dead(int fc, int &end) const {
+  end = m_pacman_dead.size() - 1;
+  return m_pacman_dead.at(fc % m_pacman_dead.size());
 }
