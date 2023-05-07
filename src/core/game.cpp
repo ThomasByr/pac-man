@@ -177,7 +177,7 @@ void Game::run() {
       for (auto &ghost : m_ghosts) {
         ghost->update(m_map, pacman_pos, m_pacman->get_direction());
         if (ghost->eat_entity(m_map, pacman_pos)) {
-          fmt::panic("pacman monge");
+          m_state = GameState::PACMAN_DIE;
         }
       }
       /* FALLTHROUGH */
@@ -193,6 +193,11 @@ void Game::run() {
       for (auto &ghost : m_ghosts) { ghost->show(m_renderer); }
 
       break;
+
+    case GameState::PACMAN_DIE:
+      if (!m_pacman->eat_entity()) { m_state = GameState::GAME_OVER; }
+
+    case GameState::GAME_OVER: break;
 
     default: break;
     }

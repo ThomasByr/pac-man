@@ -120,10 +120,7 @@ void Pacman::move(std::shared_ptr<Map> map) {
 
 bool Pacman::eat_entity() {
   switch (state) {
-  case PcmnState::ALIVE:
-    m_lives--;
-    state = PcmnState::DEAD;
-    return m_lives > 0;
+  case PcmnState::ALIVE: m_lives--; return m_lives > 0;
   case PcmnState::POWERED: m_score += m_points_per_ghost; return true;
   default: fmt::unreachable("Pacman::eat_entity : dead pacman cannot eat");
   }
