@@ -80,16 +80,16 @@ void Pacman::eat_big_food(std::shared_ptr<Map> map) {
   m_score += m_points_per_power_dot;
   m_dots_eaten += 1;
   state = PcmnState::POWERED;
+
+  p_timer->reset_timer();
+  p_timer->start_timer(10);
+  map->set_ghosts_powered(true);
 }
 
 void Pacman::update(std::shared_ptr<Map> map) {
 
   teleport(map);
   p_timer = map->get_power_timer();
-
-  if (state == PcmnState::POWERED && !p_timer->is_running()) {
-    p_timer->start_timer(10);
-  }
 
   // here we test if the timer is running before because, as opposed to ghosts
   // pacman behavior is not always being timed
@@ -98,6 +98,7 @@ void Pacman::update(std::shared_ptr<Map> map) {
     case PcmnState::POWERED:
       state = PcmnState::ALIVE;
       p_timer->reset_timer();
+      map->set_ghosts_powered(false);
       break;
     default: break;
     }

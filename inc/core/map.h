@@ -77,6 +77,7 @@ private:
 
   bool is_pcmn_powered;
   std::shared_ptr<sys_pause::Timer> power_timer;
+  std::array<bool, 4> ghosts_powered;
 
 public:
   Map(double size, const std::string &path = "assets/map.txt");
@@ -142,6 +143,9 @@ public:
   std::shared_ptr<sys_pause::Timer> get_power_timer(void);
 
   void reset(const std::string &path = "assets/map.txt");
+
+  void set_ghosts_powered(const bool powered, std::optional<int> ghost = std::nullopt);
+  int get_ghosts_powered(int ghost) const;
 };
 
 #endif // __inc_core_map_H__

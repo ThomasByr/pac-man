@@ -275,7 +275,7 @@ std::shared_ptr<sys_pause::Timer> Map::get_power_timer() { return power_timer; }
 void Map::reset(const std::string &path) {
   using namespace std;
 
-    power_timer = std::make_shared<sys_pause::Timer>();
+  power_timer = std::make_shared<sys_pause::Timer>();
 
   ifstream file{path};
   string line = "";
@@ -323,4 +323,18 @@ void Map::reset(const std::string &path) {
     i++;
     j = 0;
   }
+}
+
+void Map::set_ghosts_powered(const bool powered, std::optional<int> ghost) {
+  if (!ghost.has_value()) {
+    // set all ghosts to powered
+    for (int i = 0; i < 4; i++) { ghosts_powered.at(i) = powered; }
+  } else {
+    // set only the specified ghost to powered
+    ghosts_powered.at(ghost.value()) = powered;
+  }
+}
+
+int Map::get_ghosts_powered(int ghost) const {
+  return ghosts_powered.at(ghost);
 }

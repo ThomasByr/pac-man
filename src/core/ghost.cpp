@@ -198,6 +198,7 @@ void Ghost::frightened(std::shared_ptr<Map> map,
   if (ghost_tile.i == std::get<1>(pacman_pos) &&
       ghost_tile.j == std::get<0>(pacman_pos)) {
     state = GhstState::EATEN;
+    map->set_ghosts_powered(false, static_cast<int>(type));
   }
 }
 
@@ -242,7 +243,7 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
     }
   }
 
-  if (!is_at_home && state != GhstState::EATEN && map->pcmn_powered()) {
+  if (!is_at_home && state != GhstState::FRIGHTENED && map->get_ghosts_powered(static_cast<int>(type))) {
     state = GhstState::FRIGHTENED;
     m_timer.reset_timer(); // reset to use global timer
   }
@@ -266,12 +267,12 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
         m_timer.reset_timer();
         m_timer.start_timer(7);
         break;
-      case GhstState::FRIGHTENED:
-        state = GhstState::SCATTER;
-        m_timer.reset_timer(); // reset for ghosts that just went out of the
-                               // house
-        m_timer.start_timer(7);
-        break;
+      // case GhstState::FRIGHTENED:
+      //   state = GhstState::SCATTER;
+      //   m_timer.reset_timer(); // reset for ghosts that just went out of the
+      //                          // house
+      //   m_timer.start_timer(7);
+      //   break;
       default: break;
       }
     }
