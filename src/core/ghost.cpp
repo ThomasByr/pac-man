@@ -203,9 +203,9 @@ void Ghost::eaten(std::shared_ptr<Map> map) {
   auto [i, j] = get_ij(map->get_size());
   Node ghost_tile = {j, i};
 
-  /*is at home ?
+  /* is at home ?
   -> yes then become normal
-  -> no then continu to go home
+  -> no then continue to go home
   */
 
   Node home_tile = map->get_door_node(); // home coordinate;
@@ -343,24 +343,6 @@ void Ghost::move(std::shared_ptr<Map> map) {
   }
 }
 
-bool Ghost::eat_entity(std::shared_ptr<Map> map,
-                       std::tuple<int, int> pacman_pos) const {
-
-  if (state == GhstState::CHASE || state == GhstState::SCATTER) {
-    auto [i, j] = get_ij(map->get_size());
-
-    Node ghost_tile = {i, j};
-
-    Node pacman_tile = {std::get<0>(pacman_pos), std::get<1>(pacman_pos)};
-
-    if (ghost_tile.i == pacman_tile.i && ghost_tile.j == pacman_tile.j) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 void Ghost::reset() {
   m_cx = m_start_cx;
   m_cy = m_start_cy;
@@ -368,7 +350,7 @@ void Ghost::reset() {
   m_direction = is_at_home ? Direction::UP : Direction::NONE;
   m_reg_direction = Direction::NONE;
   state = GhstState::CHASE;
-  m_timer.reset_timer(); // time will start itself in update
+  m_timer.reset_timer(); // timer will start itself in update
 }
 
 bool Ghost::is_eaten() const { return state == GhstState::EATEN; }

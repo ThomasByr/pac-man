@@ -122,29 +122,64 @@ public:
   bool ate_fruit(const int i, const int j) const;
   void eat_fruit(const int i, const int j);
 
+  /**
+   * @brief from a tile, return true if we can go in the given direction
+   * 
+   * @param i      row
+   * @param j      column
+   * @param dir    direction
+   * @param ghost  if true, we can go through the door
+   * @return true  if we can go in the given direction
+   * @return false otherwise
+   */
   bool can_go(const int i, const int j, const Direction &dir,
               bool ghost = false) const;
+
   /// @brief distance between two nodes
   double distance(const struct Node &from, const struct Node &to) const;
 
+  /// @brief get the neighbors of a node
   std::vector<Node> get_neighbors(const struct Node &current) const;
+  /// @brief get the distance between two nodes (same as distance)
   double heuristic_cost_estimate(const struct Node &start,
                                  const struct Node &end) const;
+  /// @brief get the path from the start node to the end node (return direction)
   Direction reconstruct_path(std::unordered_map<Node, Node, NodeHash> came_from,
                              Node current) const;
+  /// @brief get the next direction according to the A* algorithm
   Direction astar(const struct Node &start, const struct Node &end) const;
 
+  /// @brief get the next direction that will reduce the distance
   Direction stupid(const struct Node &start, const struct Node &end,
                    const Direction &current) const;
 
+  /// @brief given a node, return if we are at home
   bool is_home(const int i, const int j) const;
+  /// @brief get the door node
   struct Node get_door_node(void) const;
 
+  /// @brief get the global timer for powered pacman
   std::shared_ptr<sys_pause::Timer> get_power_timer(void);
 
+  /// @brief reset the map
   void reset(const std::string &path = "assets/map.txt");
 
+  /**
+   * @brief Set the ghosts powered option
+   * @note this indicates if the ghosts have been eaten once
+   *       during the current power
+   * 
+   * @param powered on/off
+   * @param ghost   specific/global
+   */
   void set_ghosts_powered(const bool powered, std::optional<int> ghost = std::nullopt);
+  /**
+   * @brief Get the ghosts powered option
+   * (i.e. if the ghosts have been eaten once during the current power)
+   * 
+   * @param ghost index/type of the ghost
+   * @return int  option
+   */
   int get_ghosts_powered(int ghost) const;
 };
 

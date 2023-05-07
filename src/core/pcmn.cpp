@@ -147,7 +147,7 @@ void Pacman::move(std::shared_ptr<Map> map) {
 void Pacman::eat_ghost() {
   switch (state) {
   case PcmnState::POWERED: m_score += m_points_per_ghost; break;
-  default: fmt::unreachable("Pacman::eat_entity : should call this function "
+  default: fmt::unreachable("Pacman::eat_ghost : should call this function "
                             "only when pacman is powered");
   }
 }

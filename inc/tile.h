@@ -39,13 +39,23 @@ private:
 public:
   Tile() = default;
   Tile(const int type, const int x, const int y, const double size);
+  ~Tile() = default;
 
+  /// @brief the type of the tile
   TileType get_type(void) const;
+  /// @brief set the type of the tile
   void set_type(const TileType &type);
 
+  /**
+   * @brief show the tile on the screen
+   *
+   * @param renderer the renderer to use
+   */
   void show(std::shared_ptr<Renderer> renderer);
 
+  /// @brief can we go to the target tile (as pacman)?
   bool can_go(const std::optional<Tile> &target) const;
+  /// @brief can we go to the target tile (as a ghost who can go through doors)?
   bool can_go_ghost(const std::optional<Tile> &target) const;
 };
 

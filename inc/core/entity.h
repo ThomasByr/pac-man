@@ -41,9 +41,10 @@ public:
 
   void set_direction(const Direction direction);
 
-  // return direction
+  /// @brief get the current direction of the entity (not the registered one)
   Direction get_direction(void) const;
 
+  /// @brief the number of lives of the entity
   unsigned get_lives(void) const;
 
   /**
@@ -53,6 +54,11 @@ public:
    * @return std::tuple<int, int>
    */
   std::tuple<int, int> get_ij(double size) const;
+  /**
+   * @brief Get the real position of the entity on the map (double precision)
+   * 
+   * @return std::tuple<double, double> 
+   */
   std::tuple<double, double> get_pos(void) const;
   /**
    * @brief Check if the entity can go to the direction
@@ -73,7 +79,9 @@ public:
    * @return false otherwise
    */
   bool can_change_direction(std::shared_ptr<Map> map) const;
+  /// @brief do the entity teleportation
   void teleport(std::shared_ptr<Map> map);
+  /// @brief move the entity
   virtual void move(std::shared_ptr<Map> map) = 0;
 
   /**
@@ -85,9 +93,16 @@ public:
    * @return false   otherwise
    */
   bool ate_entity(double other_cx, double other_cy) const;
+  /// @brief if the entity life is 0
   bool is_dead(void) const;
+  /// @brief die ... just die (remove one life)
   void die(void);
 
+  /**
+   * @brief add some time to the internal timer
+   * 
+   * @param sec seconds to add
+   */
   void add_timer_time(unsigned sec);
 };
 
