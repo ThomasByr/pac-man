@@ -6,12 +6,12 @@
 #include "utils.h"
 
 Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
-  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::CHASE},
+  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::SCATTER},
     is_at_home{is_at_home} {
   if (is_at_home) {
     m_direction = Direction::UP;
   } else {
-    m_direction = Direction::LEFT;
+    m_direction = Direction::NONE;
   }
 }
 
@@ -238,7 +238,7 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
       default: m_timer.start_timer(dis(gen));
       }
     } else {
-      m_timer.start_timer(20);
+      m_timer.start_timer(7);
     }
   }
 
@@ -272,7 +272,7 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
                                // house
         m_timer.start_timer(7);
         break;
-      default:;
+      default: break;
       }
     }
   }
@@ -366,7 +366,7 @@ void Ghost::reset() {
   m_cx = m_start_cx;
   m_cy = m_start_cy;
   is_at_home = type != GhostType::BLINKY;
-  m_direction = is_at_home ? Direction::UP : Direction::LEFT;
+  m_direction = is_at_home ? Direction::UP : Direction::NONE;
   m_reg_direction = Direction::NONE;
   state = GhstState::CHASE;
   m_timer.reset_timer(); // time will start itself in update
