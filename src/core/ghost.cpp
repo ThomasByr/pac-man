@@ -228,7 +228,15 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
   // start or init the timer the first time
   if (!m_timer.is_running()) {
     if (is_at_home) {
-      m_timer.start_timer(dis(gen));
+      switch (type) {
+      case GhostType::CLYDE: m_timer.start_timer(20); break;
+
+      case GhostType::PINKY: m_timer.start_timer(0); break;
+
+      case GhostType::INKY: m_timer.start_timer(10); break;
+
+      default: m_timer.start_timer(dis(gen));
+      }
     } else {
       m_timer.start_timer(20);
     }
