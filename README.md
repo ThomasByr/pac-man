@@ -93,7 +93,7 @@ We provide a [makefile](makefile) to ease the compilation process. It is compose
 - `make debug` : compiles the program in debug mode
 - `make clean` : cleans the build directory and the binary
 - `make run` : runs the program
-- `make docs` : generates the documentation and opens it in your default browser
+- `make docs` : generates the documentation (and opens it in your default browser)
 
 There would be more to it, but these are the basics. To build the documentation, you will need `doxygen` and `graphviz` installed :
 
@@ -195,6 +195,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - ~~target fps bypassed~~ (resolved by re-updating timers after each frame)
 - pac-man speed is set to 1.0f (won't fix)
 - first animation sprite depends on current frame count (won't fix)
+- entity speed is not scaled by the window size (bug)
 - when ghosts go back to their home, they come out as frightened (future bug)
 - when ghosts go back to normal, they might re-enter frightened mode (logic bug)
 
