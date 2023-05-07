@@ -160,6 +160,7 @@ void Pacman::reset(bool go) {
   m_direction = Direction::NONE;
   m_reg_direction = Direction::NONE;
   state = PcmnState::ALIVE;
+  m_dots_eaten = 0;
   if (go) { m_lives = m_max_lives; }
 }
 
