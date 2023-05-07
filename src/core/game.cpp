@@ -185,7 +185,7 @@ void Game::run() {
       }
       if (m_pacman->ate_all_dots()) {
         m_state = GameState::WAITING;
-        m_pacman->reset();
+        m_pacman->reset(false, true);
         for (auto &ghost : m_ghosts) { ghost->reset(); }
         m_map->reset();
       }
@@ -218,7 +218,7 @@ void Game::run() {
     case GameState::GAME_OVER:
       switch (m_pacman->play_dead(m_renderer)) {
       case true:
-        m_pacman->reset(true);
+        m_pacman->reset(true, true);
         for (auto &ghost : m_ghosts) { ghost->reset(); }
         m_map->reset();
         m_state = GameState::MENU;

@@ -154,14 +154,14 @@ bool Pacman::eat_entity() {
 
 bool Pacman::ate_all_dots() const { return m_dots_eaten >= max_number_of_dots; }
 
-void Pacman::reset(bool go) {
+void Pacman::reset(bool g_o, bool e_l) {
   m_cx = m_start_cx;
   m_cy = m_start_cy;
   m_direction = Direction::NONE;
   m_reg_direction = Direction::NONE;
   state = PcmnState::ALIVE;
-  m_dots_eaten = 0;
-  if (go) { m_lives = m_max_lives; }
+  if (e_l) { m_dots_eaten = 0; }
+  if (g_o) { m_lives = m_max_lives; }
 }
 
 bool Pacman::is_powered() const { return state == PcmnState::POWERED; }

@@ -54,9 +54,10 @@ public:
   /**
    * @brief reset pacman to its initial state
    * 
-   * @param go if true, pacman will recover its entire life
+   * @param g_o game over : if true, pacman will recover its entire life
+   * @param e_l end level : if true, pacman dots eaten will be reset
    */
-  void reset(bool go = false);
+  void reset(bool g_o = false, bool e_l = false);
   bool is_powered(void) const;
 };
 
