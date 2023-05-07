@@ -206,3 +206,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - [x] implement pacman direction and collisions logic (v0.2)
 - [x] implement ghosts tracking algorithms (v0.4)
 - [ ] create levels, scores, lives and a save system
+- [ ] add fruits 🍒
