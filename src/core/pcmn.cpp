@@ -161,7 +161,7 @@ void Pacman::reset(bool g_o, bool e_l) {
   m_reg_direction = Direction::NONE;
   state = PcmnState::ALIVE;
   if (e_l) { m_dots_eaten = 0; }
-  if (g_o) { m_lives = m_max_lives; }
+  if (g_o) { m_lives = m_max_lives; m_score = 0; }
 }
 
 bool Pacman::is_powered() const { return state == PcmnState::POWERED; }
