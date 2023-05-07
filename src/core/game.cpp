@@ -47,11 +47,12 @@ Game::Game(const std::string &config_path)
   m_points_per_dot = game["points_per_dot"].as<int>();
   m_points_per_power_dot = game["points_per_power_dot"].as<int>();
   m_points_per_ghost = game["points_per_ghost"].as<int>();
+  max_number_of_dots = game["max_number_of_dots"].as<int>();
 
   double cx = 0, cy = 0;
   std::tie(cx, cy) = m_map->get_start_tile_c();
   const struct PacmanConfig c = {m_points_per_dot, m_points_per_power_dot,
-                                 m_points_per_ghost};
+                                 m_points_per_ghost, max_number_of_dots};
   m_pacman = std::make_shared<Pacman>(cx, cy, c);
 
   double cx_pinky = 0, cy_pinky = 0;
@@ -157,7 +158,8 @@ void Game::run() {
     }
     m_renderer->pop();
 
-    std::tuple<int, int> pacman_pos = m_pacman->get_ij(m_map->get_size());
+    auto pacman_node = m_pacman->get_ij(m_map->get_size());
+    auto [pcmn_cx, pcmn_cy] = m_pacman->get_pos();
 
     switch (m_state) {
 
@@ -175,7 +177,17 @@ void Game::run() {
       m_pacman->update(m_map);
 
       for (auto &ghost : m_ghosts) {
-        ghost->update(m_map, pacman_pos, m_pacman->get_direction());
+        ghost->update(m_map, pacman_node, m_pacman->get_direction());
+        if (ghost->ate_entity(pcmn_cx, pcmn_cy)) {
+          m_pacman->die();
+          m_state = GameState::PACMAN_DIE;
+        }
+      }
+      if (m_pacman->ate_all_dots()) {
+        m_state = GameState::WAITING;
+        m_pacman->reset();
+        for (auto &ghost : m_ghosts) { ghost->reset(); }
+        m_map->reset();
       }
       /* FALLTHROUGH */
     case GameState::WAITING:
@@ -189,6 +201,30 @@ void Game::run() {
       m_pacman->show(m_renderer);
       for (auto &ghost : m_ghosts) { ghost->show(m_renderer); }
 
+      break;
+
+    case GameState::PACMAN_DIE:
+      if (m_pacman->is_dead()) { m_state = GameState::GAME_OVER; }
+      switch (m_pacman->play_dead(m_renderer)) {
+      case true:
+        m_pacman->reset();
+        for (auto &ghost : m_ghosts) { ghost->reset(); }
+        m_state = GameState::WAITING;
+        break;
+      default: break;
+      }
+      break;
+
+    case GameState::GAME_OVER:
+      switch (m_pacman->play_dead(m_renderer)) {
+      case true:
+        m_pacman->reset();
+        for (auto &ghost : m_ghosts) { ghost->reset(); }
+        m_map->reset();
+        m_state = GameState::MENU;
+        break;
+      default: break;
+      }
       break;
 
     default: break;

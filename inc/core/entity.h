@@ -16,6 +16,7 @@
 
 class Entity {
 protected:
+  double m_start_cx, m_start_cy; // start position of the entity on the map
   double m_cx, m_cy;             // center position of the entity on the map
   double w, h;                   // width and height of the entity
   double m_speed;                // speed of the entity
@@ -52,6 +53,7 @@ public:
    * @return std::tuple<int, int>
    */
   std::tuple<int, int> get_ij(double size) const;
+  std::tuple<double, double> get_pos(void) const;
   /**
    * @brief Check if the entity can go to the direction
    *
@@ -83,15 +85,8 @@ public:
    * @return false   otherwise
    */
   bool ate_entity(double other_cx, double other_cy) const;
-  /**
-   * @brief eat or be eaten by another entity
-   * (for pacman : ghosts | for ghosts : pacman)
-   * @note DO NOT USE THIS FUNCTION TO EAT A PELLET / A POWER PELLET / A FRUIT
-   *
-   * @param map   map of the game
-   * @return true if the entity is alive afterwards
-   */
-  virtual bool eat_entity(std::shared_ptr<Map> map) = 0;
+  bool is_dead(void) const;
+  void die(void);
 };
 
 #endif // __inc_core_entity_H__

@@ -41,6 +41,7 @@ private:
 
   int m_points_per_dot, m_points_per_power_dot;
   int m_points_per_ghost;
+  int max_number_of_dots;
 
 public:
   Game(const std::string &config_path = ".ini");
