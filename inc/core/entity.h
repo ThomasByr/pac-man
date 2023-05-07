@@ -87,6 +87,8 @@ public:
   bool ate_entity(double other_cx, double other_cy) const;
   bool is_dead(void) const;
   void die(void);
+
+  void add_timer_time(unsigned sec);
 };
 
 #endif // __inc_core_entity_H__

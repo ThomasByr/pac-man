@@ -146,6 +146,8 @@ public:
   bool is_expired(void);
   ///@brief reset the timer
   void reset_timer(void);
+  ///@brief add a given duration to the timer
+  void add_time(unsigned sec);
 };
 
 } // namespace sys_pause

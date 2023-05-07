@@ -72,3 +72,5 @@ bool Entity::ate_entity(double other_cx, double other_cy) const {
 
 bool Entity::is_dead() const { return m_lives <= 0; }
 void Entity::die() { m_lives--; }
+
+void Entity::add_timer_time(unsigned sec) { m_timer.add_time(sec); }

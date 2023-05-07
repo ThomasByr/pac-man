@@ -48,6 +48,7 @@ public:
   ~Game();
 
   void run(void);
+  void pause(void);
 };
 
 #endif // __inc_core_game_H__
