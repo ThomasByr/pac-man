@@ -276,6 +276,7 @@ void Map::reset(const std::string &path) {
   using namespace std;
 
   power_timer = std::make_shared<sys_pause::Timer>();
+  ghosts_powered = std::array<bool, 4>{false, false, false, false};
 
   ifstream file{path};
   string line = "";
@@ -336,6 +337,6 @@ void Map::set_ghosts_powered(const bool powered, std::optional<int> ghost) {
   }
 }
 
-int Map::get_ghosts_powered(int ghost) const {
+bool Map::get_ghosts_powered(int ghost) const {
   return ghosts_powered.at(ghost);
 }

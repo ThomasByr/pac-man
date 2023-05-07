@@ -178,9 +178,9 @@ public:
    * (i.e. if the ghosts have been eaten once during the current power)
    * 
    * @param ghost index/type of the ghost
-   * @return int  option
+   * @return bool option
    */
-  int get_ghosts_powered(int ghost) const;
+  bool get_ghosts_powered(int ghost) const;
 };
 
 #endif // __inc_core_map_H__

@@ -228,9 +228,7 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
     if (is_at_home) {
       switch (type) {
       case GhostType::CLYDE: m_timer.start_timer(20); break;
-
       case GhostType::PINKY: m_timer.start_timer(0); break;
-
       case GhostType::INKY: m_timer.start_timer(10); break;
 
       default: m_timer.start_timer(dis(gen));
@@ -243,11 +241,12 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
   if (!is_at_home && state != GhstState::FRIGHTENED &&
       map->get_ghosts_powered(static_cast<int>(type))) {
     state = GhstState::FRIGHTENED;
+    fmt::debug("lol");
     m_timer.reset_timer(); // reset to use global timer
   }
 
   // change state
-  if ((m_timer.is_running() && m_timer.is_expired()) || p_timer->is_expired()) {
+  if (m_timer.is_expired() /* || !m_timer.is_running() */) {
     if (is_at_home) {
       is_at_home = false;
       m_timer.reset_timer();
@@ -276,6 +275,7 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
     }
   }
   // go out of frightened state
+  // we cannot check if the timer is expired because it might be reset
   if (state == GhstState::FRIGHTENED && !p_timer->is_running()) {
     state = GhstState::SCATTER;
     m_timer.reset_timer();
@@ -349,7 +349,7 @@ void Ghost::reset() {
   is_at_home = type != GhostType::BLINKY;
   m_direction = is_at_home ? Direction::UP : Direction::NONE;
   m_reg_direction = Direction::NONE;
-  state = GhstState::CHASE;
+  state = GhstState::SCATTER;
   m_timer.reset_timer(); // timer will start itself in update
 }
 
