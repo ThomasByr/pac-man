@@ -162,3 +162,5 @@ void Pacman::reset(bool go) {
   state = PcmnState::ALIVE;
   if (go) { m_lives = m_max_lives; }
 }
+
+bool Pacman::is_powered() const { return state == PcmnState::POWERED; }

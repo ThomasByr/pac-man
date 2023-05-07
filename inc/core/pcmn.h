@@ -57,6 +57,7 @@ public:
    * @param go if true, pacman will recover its entire life
    */
   void reset(bool go = false);
+  bool is_powered(void) const;
 };
 
 #endif // __inc_core_pcmn_H__

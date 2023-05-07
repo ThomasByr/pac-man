@@ -178,7 +178,7 @@ void Game::run() {
 
       for (auto &ghost : m_ghosts) {
         ghost->update(m_map, pacman_node, m_pacman->get_direction());
-        if (ghost->ate_entity(pcmn_cx, pcmn_cy)) {
+        if (!m_pacman->is_powered() && ghost->ate_entity(pcmn_cx, pcmn_cy)) {
           m_pacman->die();
           m_state = GameState::PACMAN_DIE;
         }
