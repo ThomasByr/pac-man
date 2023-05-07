@@ -145,7 +145,7 @@ bool Pacman::eat_entity() {
   }
 }
 
-void Pacman::reset(bool go = false) {
+void Pacman::reset(bool go) {
   m_cx = m_start_cx;
   m_cy = m_start_cy;
   m_direction = Direction::NONE;
