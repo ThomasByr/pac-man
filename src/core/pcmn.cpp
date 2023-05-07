@@ -118,8 +118,7 @@ void Pacman::move(std::shared_ptr<Map> map) {
   map->pcmn_powered(state == PcmnState::POWERED);
 }
 
-bool Pacman::eat_entity(std::shared_ptr<Map> map) {
-  (void)map;
+bool Pacman::eat_entity() {
   switch (state) {
   case PcmnState::ALIVE:
     m_lives--;

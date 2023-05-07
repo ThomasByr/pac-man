@@ -176,6 +176,9 @@ void Game::run() {
 
       for (auto &ghost : m_ghosts) {
         ghost->update(m_map, pacman_pos, m_pacman->get_direction());
+        if (ghost->eat_entity(m_map, pacman_pos)) {
+          fmt::panic("pacman monge");
+        }
       }
       /* FALLTHROUGH */
     case GameState::WAITING:

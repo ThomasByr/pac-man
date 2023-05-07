@@ -91,7 +91,6 @@ public:
    * @param map   map of the game
    * @return true if the entity is alive afterwards
    */
-  virtual bool eat_entity(std::shared_ptr<Map> map) = 0;
 };
 
 #endif // __inc_core_entity_H__

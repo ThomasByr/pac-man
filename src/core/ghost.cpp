@@ -210,7 +210,7 @@ void Ghost::eaten(std::shared_ptr<Map> map) {
   -> no then continu to go home
   */
 
-  Node home_tile = {13, 10}; // home coordinate;
+  Node home_tile = map->get_door_node(); // home coordinate;
 
   if (ghost_tile.i == home_tile.i && ghost_tile.j == home_tile.j) {
     state = GhstState::CHASE;
@@ -336,7 +336,20 @@ void Ghost::move(std::shared_ptr<Map> map) {
   }
 }
 
-bool Ghost::eat_entity(std::shared_ptr<Map> map) {
-  (void)map;
+bool Ghost::eat_entity(std::shared_ptr<Map> map,
+                       std::tuple<int, int> pacman_pos) {
+
+  if (state == GhstState::CHASE || state == GhstState::SCATTER) {
+    auto [i, j] = get_ij(map->get_size());
+
+    Node ghost_tile = {i, j};
+
+    Node pacman_tile = {std::get<0>(pacman_pos), std::get<1>(pacman_pos)};
+
+    if (ghost_tile.i == pacman_tile.i && ghost_tile.j == pacman_tile.j) {
+      return true;
+    }
+  }
+
   return false;
 }

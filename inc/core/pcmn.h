@@ -44,7 +44,7 @@ public:
   void update(std::shared_ptr<Map> map);
   void move(std::shared_ptr<Map> map);
 
-  bool eat_entity(std::shared_ptr<Map> map);
+  bool eat_entity();
 };
 
 #endif // __inc_core_pcmn_H__
