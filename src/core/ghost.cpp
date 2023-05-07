@@ -11,7 +11,7 @@ Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
   if (is_at_home) {
     m_direction = Direction::UP;
   } else {
-    m_direction = Direction::NONE;
+    m_direction = Direction::LEFT;
   }
 }
 
@@ -354,12 +354,11 @@ bool Ghost::eat_entity(std::shared_ptr<Map> map,
   return false;
 }
 
-void Ghost::reset(bool go) {
-  (void)go; // used for pacman to reset lives
+void Ghost::reset() {
   m_cx = m_start_cx;
   m_cy = m_start_cy;
   is_at_home = type != GhostType::BLINKY;
-  m_direction = is_at_home ? Direction::UP : Direction::NONE;
+  m_direction = is_at_home ? Direction::UP : Direction::LEFT;
   m_reg_direction = Direction::NONE;
   state = GhstState::CHASE;
   m_timer.reset_timer(); // time will start itself in update
