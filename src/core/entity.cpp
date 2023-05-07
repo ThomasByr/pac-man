@@ -6,12 +6,16 @@
 #include "utils.h"
 
 Entity::Entity(const double cx, const double cy, const double w, const double h)
-  : m_cx{cx}, m_cy{cy}, w{w}, h{h}, m_speed{1}, m_lives{3}, m_max_lives{3}, m_score{0},
-    m_direction{Direction::NONE}, m_reg_direction{Direction::NONE} {
+  : m_cx{cx}, m_cy{cy}, w{w}, h{h}, m_speed{1}, m_lives{3}, m_max_lives{3},
+    m_score{0}, m_direction{Direction::NONE}, m_reg_direction{Direction::NONE} {
   m_timer = sys_pause::Timer();
+
+  gen = std::mt19937(rd());
+  dis = std::uniform_int_distribution<>(10, 30);
 }
 
-Direction Entity::get_direction() { return m_direction; }
+Direction Entity::get_direction() const { return m_direction; }
+unsigned Entity::get_lives() const { return m_lives; }
 
 void Entity::set_direction(const Direction direction) {
   if (direction == Direction::NONE) {
@@ -54,4 +58,10 @@ void Entity::teleport(std::shared_ptr<Map> map) {
       m_cx = tile_size;
     }
   }
+}
+
+bool Entity::ate_entity(double other_cx, double other_cy) const {
+  const double epsilon = 10; // todo: this 10 is kind of hardcoded ...
+  return std::abs(m_cx - other_cx) < epsilon &&
+         std::abs(m_cy - other_cy) < epsilon;
 }

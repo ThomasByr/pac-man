@@ -20,6 +20,7 @@ class Pacman : public Entity {
 private:
   int m_points_per_dot, m_points_per_power_dot;
   int m_points_per_ghost;
+  PcmnState state;
 
 public:
   Pacman(const double cx, const double cy, const struct PacmanConfig &config);
@@ -37,7 +38,13 @@ public:
 
   bool ate_food(std::shared_ptr<Map> map);
   void eat_food(std::shared_ptr<Map> map);
+  bool ate_big_food(std::shared_ptr<Map> map);
+  void eat_big_food(std::shared_ptr<Map> map);
+
   void update(std::shared_ptr<Map> map);
+  void move(std::shared_ptr<Map> map);
+
+  bool eat_entity(std::shared_ptr<Map> map);
 };
 
 #endif // __inc_core_pcmn_H__

@@ -66,8 +66,6 @@ If you're looking for something - here's a breakdown of our codebase
 │
 ├── assets/                        # generic assets and textures
 │
-├── docs/
-│
 ├── inc/                           # include directory
 │   ├── helper/                    # helper functions for SDL2
 │   ├── core/                      # core game logic
@@ -82,6 +80,7 @@ If you're looking for something - here's a breakdown of our codebase
 ├── src/                           # source directory
 │   ├── helper/
 │   ├── core/
+│   ├── ...
 │   └── main.cpp                   # main entry point
 │
 ├── tests/                         # test suite 👻

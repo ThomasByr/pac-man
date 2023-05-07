@@ -31,3 +31,5 @@
 
 - ghost entity on display
 - added chasing algorithms
+- added scatter mode and frightened (pure random) mode
+- added timed mode switching

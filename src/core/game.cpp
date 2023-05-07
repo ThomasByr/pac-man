@@ -92,7 +92,28 @@ void Game::run() {
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) { m_running = false; }
 
-      // handle key events
+      // handle key events in menu mode
+      if (m_state == GameState::MENU && event.type == SDL_KEYDOWN) {
+        switch (event.key.keysym.sym) {
+
+        case SDLK_RETURN: m_state = GameState::WAITING; break;
+        default: break;
+        }
+      }
+
+      // handle key events in waiting mode
+      if (m_state == GameState::WAITING && event.type == SDL_KEYDOWN) {
+        switch (event.key.keysym.sym) {
+
+        case SDLK_UP:
+        case SDLK_DOWN:
+        case SDLK_LEFT:
+        case SDLK_RIGHT: m_state = GameState::GAME; break;
+        default: break;
+        }
+      }
+
+      // handle key events in game mode
       if (m_state == GameState::GAME && event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
 
@@ -103,12 +124,14 @@ void Game::run() {
         default: break;
         }
       }
-      // handle key events
-      if (m_state == GameState::MENU && event.type == SDL_KEYDOWN) {
-        switch (event.key.keysym.sym) {
 
-        case SDLK_RETURN: m_state = GameState::GAME; break;
-        default: break;
+      // handle left click FOR DEBUG PURPOSES ONLY
+      if (m_state == GameState::MENU && event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button == SDL_BUTTON_LEFT) {
+          int x, y;
+          SDL_GetMouseState(&x, &y);
+          fmt::debug("x: %d, y: %d, i: %f, j: %f", x, y, x / m_map->get_size(),
+                     y / m_map->get_size());
         }
       }
     }
@@ -122,6 +145,17 @@ void Game::run() {
     m_renderer->text(fmt::format("FPS %d", fps), w_sep + 10, 10);
     m_renderer->text(fmt::format("SCORE %d", m_pacman->get_score()), w_sep + 10,
                      30);
+
+    // render lives
+    unsigned lives = m_pacman->get_lives();
+    m_renderer->push();
+    m_renderer->rect_mode(RectMode::CORNER);
+    for (unsigned i = 0; i < lives; ++i) {
+      m_renderer->blit(m_assets->m_lives, w_sep + 10 + i * 30,
+                       m_map->get_height() -
+                         m_assets->m_lives.h * m_renderer->get_scale() - 10);
+    }
+    m_renderer->pop();
 
     std::tuple<int, int> pacman_pos = m_pacman->get_ij(m_map->get_size());
 
@@ -142,6 +176,11 @@ void Game::run() {
 
       for (auto &ghost : m_ghosts) {
         ghost->update(m_map, pacman_pos, m_pacman->get_direction());
+      }
+      /* FALLTHROUGH */
+    case GameState::WAITING:
+      if (m_state == GameState::WAITING) { /* ready */
+        m_renderer->text("READY!", 175, 335);
       }
 
       m_map->show(m_renderer);
