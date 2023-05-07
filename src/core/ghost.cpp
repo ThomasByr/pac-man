@@ -6,7 +6,7 @@
 #include "utils.h"
 
 Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
-  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::SCATTER},
+  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::CHASE},
     is_at_home{is_at_home} {
   if (is_at_home) {
     m_direction = Direction::UP;
@@ -230,7 +230,7 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
     if (is_at_home) {
       m_timer.start_timer(dis(gen));
     } else {
-      m_timer.start_timer(7);
+      m_timer.start_timer(20);
     }
   }
 
@@ -337,7 +337,7 @@ void Ghost::move(std::shared_ptr<Map> map) {
 }
 
 bool Ghost::eat_entity(std::shared_ptr<Map> map,
-                       std::tuple<int, int> pacman_pos) {
+                       std::tuple<int, int> pacman_pos) const {
 
   if (state == GhstState::CHASE || state == GhstState::SCATTER) {
     auto [i, j] = get_ij(map->get_size());
@@ -352,4 +352,15 @@ bool Ghost::eat_entity(std::shared_ptr<Map> map,
   }
 
   return false;
+}
+
+void Ghost::reset(bool go) {
+  (void)go; // used for pacman to reset lives
+  m_cx = m_start_cx;
+  m_cy = m_start_cy;
+  is_at_home = type != GhostType::BLINKY;
+  m_direction = is_at_home ? Direction::UP : Direction::NONE;
+  m_reg_direction = Direction::NONE;
+  state = GhstState::CHASE;
+  m_timer.reset_timer(); // time will start itself in update
 }
