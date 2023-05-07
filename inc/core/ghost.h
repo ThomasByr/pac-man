@@ -45,7 +45,7 @@ public:
                   std::tuple<int, int> blinky_pos, Direction pacman_dir);
   void clyde_chase(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
   void scatter(std::shared_ptr<Map> map);
-  void frightened(std::shared_ptr<Map> map);
+  void frightened(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
   void eaten(std::shared_ptr<Map> map);
 
   void move(std::shared_ptr<Map> map);
