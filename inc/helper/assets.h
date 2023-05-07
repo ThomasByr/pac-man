@@ -69,6 +69,7 @@ private:
 
 public:
   SDL_Rect m_bg, m_bg_menu; // background
+  SDL_Rect m_lives;         // life indicator
 
   /**
    * @brief Construct a new Assets object

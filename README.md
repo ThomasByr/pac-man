@@ -25,6 +25,7 @@
 ## ✏️ Setup
 
 > **Note**
+>
 > This project is part of a M1 study done at the University of Strasbourg, France.
 
 Please make sure you have `libsdl2` installed :
@@ -37,25 +38,25 @@ sudo apt-get update && sudo apt-get install libsdl2-dev
   <summary> For Windows 11 WSLg users (click here to expand) </summary>
   Please make sure you have graphical x11 support installed (should be installed by default) :
 
-  ```bash
-  sudo apt-get install libgl1 libxkbcommon-x11-0
-  ```
+```bash
+sudo apt-get install libgl1 libxkbcommon-x11-0
+```
 
-  Also, make sure `wsl --version` outputs at least the following :
+Also, make sure `wsl --version` outputs at least the following :
 
-  ```bash
-  WSL    Version : 1.2.5.0
-  kernel Version : 5.15.90.1
-  WSLg   Version : 1.0.51
-  ```
+```bash
+WSL    Version : 1.2.5.0
+kernel Version : 5.15.90.1
+WSLg   Version : 1.0.51
+```
 
-  If not, please update your WSLg version by following the instructions [here](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel#update-the-wsl-2-linux-kernel). tl;dr : type this in your powershell :
+If not, please update your WSLg version by following the instructions [here](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel#update-the-wsl-2-linux-kernel). tl;dr : type this in your powershell :
 
-  ```ps1
-  # will only work if you have the latest Windows 11 update
-  wsl --shutdown
-  wsl --update
-  ```
+```ps1
+# will only work if you have the latest Windows 11 update
+wsl --shutdown
+wsl --update
+```
 
 </details>
 
@@ -65,11 +66,19 @@ Then compile a release version of the program with :
 make release
 ```
 
+> <picture>
+>   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/tip.svg">
+>   <img alt="Tip" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/tip.svg">
+> </picture><br>
+>
+> To reduce compile time, you can use the `-j` flag to compile in parallel. For example, if you have 4 cores, you can use `make -j4 release` to compile in 4 threads.
+
 This project uses the `-std=gnu++17` flag to compile and the produced executable binary is to be found inside of the `bin` folder.
 
 ## 💁 More infos and Usage
 
 > **Warning**
+>
 > We use SDL2 as the only external dependency. Others dependencies are compiled from source (please see [lib](lib) folder). Note that if not specified, all files are written by @ThomasByr.
 >
 > Notable ones are :
@@ -84,7 +93,7 @@ We provide a [makefile](makefile) to ease the compilation process. It is compose
 - `make debug` : compiles the program in debug mode
 - `make clean` : cleans the build directory and the binary
 - `make run` : runs the program
-- `make docs` : generates the documentation and opens it in your default browser
+- `make docs` : generates the documentation (and opens it in your default browser)
 
 There would be more to it, but these are the basics. To build the documentation, you will need `doxygen` and `graphviz` installed :
 
@@ -167,6 +176,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 - ghost entity on display
 - added chasing algorithms
+- added scatter mode and frightened (pure random) mode
+- added timed mode switching
 
 </details>
 
@@ -174,9 +185,19 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 **known bugs** (final correction patch) [see Issues](https://github.com/ThomasByr/pac-man/issues)
 
+| bug type   | description                                                                                                                                   |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| won't fix  | bug that won't be fixed ... maybe                                                                                                             |
+| future bug | bug that does not appear in the current version but will appear as soon as the corresponding feature is implemented due to current core logic |
+| logic bug  | bug that is not due to source code but rather to the way the core logic have been thought out                                                 |
+| bug        | just a bug ... or a feature ... the base thing that won't last long I promise                                                                 |
+
 - ~~target fps bypassed~~ (resolved by re-updating timers after each frame)
 - pac-man speed is set to 1.0f (won't fix)
 - first animation sprite depends on current frame count (won't fix)
+- entity speed is not scaled by the window size (bug)
+- when ghosts go back to their home, they come out as frightened (future bug)
+- when ghosts go back to normal, they might re-enter frightened mode (logic bug)
 
 **todo** (first implementation version)
 

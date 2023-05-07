@@ -13,6 +13,7 @@ std::string to_string(const GameState &state) {
   std::string str;
   switch (state) {
   case GameState::MENU: str = "MENU"; break;
+  case GameState::WAITING: str = "WAITING"; break;
   case GameState::GAME: str = "GAME"; break;
   case GameState::PAUSE: str = "PAUSE"; break;
   case GameState::GAME_OVER: str = "GAME_OVER"; break;
