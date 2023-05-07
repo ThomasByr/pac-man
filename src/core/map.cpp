@@ -284,6 +284,7 @@ void Map::reset(const std::string &path) {
   while (getline(file, line)) {
     if (line.find("<!--") != string::npos) { break; }
   }
+  m_map.clear();
 
   // read the map (each line is a row until the end of the file)
   int i = 0, j = 0;

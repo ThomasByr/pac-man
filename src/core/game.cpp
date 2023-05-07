@@ -181,6 +181,10 @@ void Game::run() {
         if (!m_pacman->is_powered() && ghost->ate_entity(pcmn_cx, pcmn_cy)) {
           m_pacman->die();
           m_state = GameState::PACMAN_DIE;
+          break;
+        } else if (m_pacman->is_powered() &&
+                   ghost->ate_entity(pcmn_cx, pcmn_cy)) {
+          m_pacman->eat_ghost();
         }
       }
       if (m_pacman->ate_all_dots()) {

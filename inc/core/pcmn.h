@@ -34,10 +34,10 @@ public:
 
   virtual ~Pacman() = default;
 
-  void show(std::shared_ptr<Renderer> renderer);
+  void show(std::shared_ptr<Renderer> renderer) override;
   size_t get_score(void) const;
 
-  bool can_go(std::shared_ptr<Map> map, const Direction &dir) const;
+  bool can_go(std::shared_ptr<Map> map, const Direction &dir) const override;
 
   bool ate_food(std::shared_ptr<Map> map);
   void eat_food(std::shared_ptr<Map> map);
@@ -45,9 +45,9 @@ public:
   void eat_big_food(std::shared_ptr<Map> map);
 
   void update(std::shared_ptr<Map> map);
-  void move(std::shared_ptr<Map> map);
+  void move(std::shared_ptr<Map> map) override;
 
-  bool eat_entity();
+  void eat_ghost(void);
   bool ate_all_dots(void) const;
   bool play_dead(std::shared_ptr<Renderer> renderer) const;
 

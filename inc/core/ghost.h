@@ -31,7 +31,7 @@ public:
 
   void show(std::shared_ptr<Renderer> renderer) override;
 
-  bool can_go(std::shared_ptr<Map> map, const Direction &dir) const;
+  bool can_go(std::shared_ptr<Map> map, const Direction &dir) const override;
   void update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
               Direction pacman_dir);
 
@@ -48,7 +48,7 @@ public:
   void frightened(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos);
   void eaten(std::shared_ptr<Map> map);
 
-  void move(std::shared_ptr<Map> map);
+  void move(std::shared_ptr<Map> map) override;
   bool eat_entity(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos) const;
   
   /**

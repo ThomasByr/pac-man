@@ -144,11 +144,11 @@ void Pacman::move(std::shared_ptr<Map> map) {
   map->pcmn_powered(state == PcmnState::POWERED);
 }
 
-bool Pacman::eat_entity() {
+void Pacman::eat_ghost() {
   switch (state) {
-  case PcmnState::ALIVE: m_lives--; return m_lives > 0;
-  case PcmnState::POWERED: m_score += m_points_per_ghost; return true;
-  default: fmt::unreachable("Pacman::eat_entity : dead pacman cannot eat");
+  case PcmnState::POWERED: m_score += m_points_per_ghost; break;
+  default: fmt::unreachable("Pacman::eat_entity : should call this function "
+                            "only when pacman is powered");
   }
 }
 
