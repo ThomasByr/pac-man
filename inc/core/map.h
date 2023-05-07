@@ -140,6 +140,8 @@ public:
   struct Node get_door_node(void) const;
 
   std::shared_ptr<sys_pause::Timer> get_power_timer(void);
+
+  void reset(const std::string &path = "assets/map.txt");
 };
 
 #endif // __inc_core_map_H__

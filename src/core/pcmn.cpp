@@ -23,6 +23,25 @@ void Pacman::show(std::shared_ptr<Renderer> renderer) {
   renderer->pop();
 }
 
+bool Pacman::play_dead(std::shared_ptr<Renderer> renderer) const {
+  static int fc = 0;
+  static const double custom_scale = 0.5;
+  int end = 0;
+  const SDL_Rect asset =
+    renderer->get_assets()->get_sprite_pacman_dead(fc / renderer->get_update_interval(), end);
+  fc += 1;
+
+  renderer->push();
+  renderer->rect_mode(RectMode::CENTER);
+  renderer->translate(m_cx, m_cy);
+  renderer->blit(asset, 0, 0, custom_scale);
+  renderer->pop();
+
+  bool ended = fc / renderer->get_update_interval() > end;
+  if (ended) { fc = 0; }
+  return ended;
+}
+
 size_t Pacman::get_score() const { return m_score; }
 
 bool Pacman::can_go(std::shared_ptr<Map> map, const Direction &dir) const {
@@ -118,14 +137,19 @@ void Pacman::move(std::shared_ptr<Map> map) {
   map->pcmn_powered(state == PcmnState::POWERED);
 }
 
-bool Pacman::eat_entity(std::shared_ptr<Map> map) {
-  (void)map;
+bool Pacman::eat_entity() {
   switch (state) {
-  case PcmnState::ALIVE:
-    m_lives--;
-    state = PcmnState::DEAD;
-    return m_lives > 0;
+  case PcmnState::ALIVE: m_lives--; return m_lives > 0;
   case PcmnState::POWERED: m_score += m_points_per_ghost; return true;
   default: fmt::unreachable("Pacman::eat_entity : dead pacman cannot eat");
   }
+}
+
+void Pacman::reset(bool go) {
+  m_cx = m_start_cx;
+  m_cy = m_start_cy;
+  m_direction = Direction::NONE;
+  m_reg_direction = Direction::NONE;
+  state = PcmnState::ALIVE;
+  if (go) {m_lives = m_max_lives; }
 }

@@ -6,8 +6,9 @@
 #include "utils.h"
 
 Entity::Entity(const double cx, const double cy, const double w, const double h)
-  : m_cx{cx}, m_cy{cy}, w{w}, h{h}, m_speed{1}, m_lives{3}, m_max_lives{3},
-    m_score{0}, m_direction{Direction::NONE}, m_reg_direction{Direction::NONE} {
+  : m_start_cx{cx}, m_start_cy{cy}, m_cx{cx}, m_cy{cy}, w{w}, h{h}, m_speed{1},
+    m_lives{3}, m_max_lives{3}, m_score{0}, m_direction{Direction::NONE},
+    m_reg_direction{Direction::NONE} {
   m_timer = sys_pause::Timer();
 
   gen = std::mt19937(rd());
@@ -27,6 +28,9 @@ void Entity::set_direction(const Direction direction) {
 std::tuple<int, int> Entity::get_ij(double size) const {
   return std::make_tuple(static_cast<int>(m_cx / size),
                          static_cast<int>(m_cy / size));
+}
+std::tuple<double, double> Entity::get_pos() const {
+  return std::make_tuple(m_cx, m_cy);
 }
 
 bool Entity::can_change_direction(std::shared_ptr<Map> map) const {
@@ -65,3 +69,6 @@ bool Entity::ate_entity(double other_cx, double other_cy) const {
   return std::abs(m_cx - other_cx) < epsilon &&
          std::abs(m_cy - other_cy) < epsilon;
 }
+
+bool Entity::is_dead() const { return m_lives <= 0; }
+void Entity::die() { m_lives--; }

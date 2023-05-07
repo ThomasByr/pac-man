@@ -19,58 +19,11 @@
 Map::Map(double size, const std::string &path)
   : m_map{}, size{size}, m_start_tile_cx{0}, m_start_tile_cy{0},
     is_pcmn_powered{false} {
-  using namespace std;
 
   door_node = {0, 0};
 
-  power_timer = std::make_shared<sys_pause::Timer>();
+  reset(path);
 
-  ifstream file{path};
-  string line = "";
-
-  // pass until we find the <!-- .* --> tag
-  while (getline(file, line)) {
-    if (line.find("<!--") != string::npos) { break; }
-  }
-
-  // read the map (each line is a row until the end of the file)
-  int i = 0, j = 0;
-  while (getline(file, line)) {
-    if (line.find("<!--") != string::npos) { continue; }
-    try {
-      if (isspace(line.at(0))) { continue; }
-    } catch (const out_of_range &e) { continue; }
-
-    vector<Tile> row{};
-    for (char c : line) {
-      row.push_back(Tile{static_cast<int>(c - '0'), i, j, size});
-      if (c == '4') {
-        door_node = {i, j};
-      } else if (c == '6') {
-        fruit_node = {i, j};
-      } else if (c == '9') {
-        m_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
-        m_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
-      } // save the center position of the start tile
-      else if (c == 'i') {
-        inky_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
-        inky_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
-      } else if (c == 'p') {
-        pinky_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
-        pinky_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
-      } else if (c == 'c') {
-        clyde_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
-        clyde_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
-      } else if (c == 'b') {
-        blinky_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
-        blinky_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
-      }
-      j++;
-    }
-    m_map.push_back(row);
-    i++;
-    j = 0;
-  }
   if (m_start_tile_cx == 0 && m_start_tile_cy == 0) {
     fmt::panic("Map::Map: pacman no start tile found");
   }
@@ -317,4 +270,57 @@ bool Map::is_home(const int i, const int j) const {
 
 struct Node Map::get_door_node() const { return door_node; }
 
-std::shared_ptr<sys_pause::Timer>Map::get_power_timer() { return power_timer; }
+std::shared_ptr<sys_pause::Timer> Map::get_power_timer() { return power_timer; }
+
+void Map::reset(const std::string &path) {
+  using namespace std;
+
+    power_timer = std::make_shared<sys_pause::Timer>();
+
+  ifstream file{path};
+  string line = "";
+
+  // pass until we find the <!-- .* --> tag
+  while (getline(file, line)) {
+    if (line.find("<!--") != string::npos) { break; }
+  }
+
+  // read the map (each line is a row until the end of the file)
+  int i = 0, j = 0;
+  while (getline(file, line)) {
+    if (line.find("<!--") != string::npos) { continue; }
+    try {
+      if (isspace(line.at(0))) { continue; }
+    } catch (const out_of_range &e) { continue; }
+
+    vector<Tile> row{};
+    for (char c : line) {
+      row.push_back(Tile{static_cast<int>(c - '0'), i, j, size});
+      if (c == '4') {
+        door_node = {i, j};
+      } else if (c == '6') {
+        fruit_node = {i, j};
+      } else if (c == '9') {
+        m_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        m_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      } // save the center position of the start tile
+      else if (c == 'i') {
+        inky_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        inky_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      } else if (c == 'p') {
+        pinky_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        pinky_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      } else if (c == 'c') {
+        clyde_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        clyde_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      } else if (c == 'b') {
+        blinky_start_tile_cx = static_cast<double>(j) * size + size / 2.0;
+        blinky_start_tile_cy = static_cast<double>(i) * size + size / 2.0;
+      }
+      j++;
+    }
+    m_map.push_back(row);
+    i++;
+    j = 0;
+  }
+}

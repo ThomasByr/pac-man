@@ -44,7 +44,10 @@ public:
   void update(std::shared_ptr<Map> map);
   void move(std::shared_ptr<Map> map);
 
-  bool eat_entity(std::shared_ptr<Map> map);
+  bool eat_entity();
+  bool play_dead(std::shared_ptr<Renderer> renderer) const;
+
+  void reset(bool go = false);
 };
 
 #endif // __inc_core_pcmn_H__

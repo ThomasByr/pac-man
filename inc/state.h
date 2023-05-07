@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-enum class GameState { MENU, WAITING, GAME, PAUSE, GAME_OVER, EXIT };
-enum class PcmnState { ALIVE, DEAD, POWERED };
+enum class GameState { MENU, WAITING, GAME, PACMAN_DIE, GAME_OVER, EXIT };
+enum class PcmnState { ALIVE, POWERED };
 enum class GhstState { CHASE, SCATTER, FRIGHTENED, EATEN };
 
 std::ostream &operator<<(std::ostream &os, const GameState &state);
