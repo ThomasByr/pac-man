@@ -205,5 +205,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - [x] show ghosts (v0.1)
 - [x] implement pacman direction and collisions logic (v0.2)
 - [x] implement ghosts tracking algorithms (v0.4)
+- [ ] make ghosts reverse direction when changing mode (exept when frightened)
 - [ ] create levels, scores, lives and a save system
 - [ ] add fruits 🍒
