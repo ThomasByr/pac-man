@@ -241,7 +241,6 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
   if (!is_at_home && state != GhstState::FRIGHTENED &&
       map->get_ghosts_powered(static_cast<int>(type))) {
     state = GhstState::FRIGHTENED;
-    fmt::debug("lol");
     m_timer.reset_timer(); // reset to use global timer
   }
 
