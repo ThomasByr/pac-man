@@ -186,16 +186,19 @@ void Game::run() {
 
       for (auto &ghost : m_ghosts) {
         ghost->update(m_map, pacman_node, m_pacman->get_direction());
-        if (!m_pacman->is_powered() && ghost->ate_entity(pcmn_cx, pcmn_cy)) {
-          m_pacman->die();
-          m_state = GameState::PACMAN_DIE;
-          break;
-        } else if (m_pacman->is_powered() &&
-                   ghost->ate_entity(pcmn_cx, pcmn_cy) && !ghost->is_eaten()) {
-          m_pacman->eat_ghost();
-          ghost->eat(m_map);
+        if (ghost->ate_entity(pcmn_cx, pcmn_cy) && !ghost->is_eaten()) {
+          switch (ghost->is_frightened()) {
+          case false:
+            m_pacman->die();
+            m_state = GameState::PACMAN_DIE;
+            break;
 
-          pause();
+          case true:
+            m_pacman->eat_ghost();
+            ghost->eat(m_map);
+            pause();
+            break;
+          }
         }
       }
       if (m_pacman->ate_all_dots()) {

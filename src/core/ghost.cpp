@@ -353,3 +353,5 @@ void Ghost::reset() {
 }
 
 bool Ghost::is_eaten() const { return state == GhstState::EATEN; }
+
+bool Ghost::is_frightened() const { return state == GhstState::FRIGHTENED; }

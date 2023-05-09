@@ -86,6 +86,8 @@ public:
   void reset(void);
   /// @brief return true if ghost is eaten
   bool is_eaten(void) const;
+  /// @brief return true if ghost is frightened
+  bool is_frightened(void) const;
   /// @brief make a ghost eaten
   void eat(std::shared_ptr<Map> map);
 };

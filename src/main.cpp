@@ -32,13 +32,7 @@
 //! ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 //! POSSIBILITY OF SUCH DAMAGE.
 
-#include <SDL.h>
-
-#include <iostream>
-#include <string>
-
 #include "core/game.h"
-
 #include "utils.h"
 
 int main(/* we take no cmd line arguments */) {
