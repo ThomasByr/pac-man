@@ -6,12 +6,12 @@
 #include "utils.h"
 
 Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
-  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::CHASE},
+  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::SCATTER},
     is_at_home{is_at_home} {
   if (is_at_home) {
     m_direction = Direction::UP;
   } else {
-    m_direction = Direction::LEFT;
+    m_direction = Direction::NONE;
   }
 }
 
@@ -179,8 +179,7 @@ void Ghost::scatter(std::shared_ptr<Map> map) {
   m_reg_direction = map->stupid(ghost_tile, target, get_direction());
 }
 
-void Ghost::frightened(std::shared_ptr<Map> map,
-                       std::tuple<int, int> pacman_pos) {
+void Ghost::frightened(std::shared_ptr<Map> map) {
   auto [i, j] = get_ij(map->get_size());
   Node ghost_tile = {j, i};
 
@@ -193,21 +192,20 @@ void Ghost::frightened(std::shared_ptr<Map> map,
   std::uniform_int_distribution<> dist(0, possible_directions.size() - 1);
   int random_index = dist(gen);
   m_reg_direction = possible_directions[random_index];
+}
 
-  // check if pacman and ghost is on the same tile
-  if (ghost_tile.i == std::get<1>(pacman_pos) &&
-      ghost_tile.j == std::get<0>(pacman_pos)) {
-    state = GhstState::EATEN;
-  }
+void Ghost::eat(std::shared_ptr<Map> map) {
+  state = GhstState::EATEN;
+  map->set_ghosts_powered(false, static_cast<int>(type));
 }
 
 void Ghost::eaten(std::shared_ptr<Map> map) {
   auto [i, j] = get_ij(map->get_size());
   Node ghost_tile = {j, i};
 
-  /*is at home ?
+  /* is at home ?
   -> yes then become normal
-  -> no then continu to go home
+  -> no then continue to go home
   */
 
   Node home_tile = map->get_door_node(); // home coordinate;
@@ -230,25 +228,25 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
     if (is_at_home) {
       switch (type) {
       case GhostType::CLYDE: m_timer.start_timer(20); break;
-
       case GhostType::PINKY: m_timer.start_timer(0); break;
-
       case GhostType::INKY: m_timer.start_timer(10); break;
 
       default: m_timer.start_timer(dis(gen));
       }
     } else {
-      m_timer.start_timer(20);
+      m_timer.start_timer(7);
     }
   }
 
-  if (!is_at_home && state != GhstState::EATEN && map->pcmn_powered()) {
+  if (!is_at_home && state != GhstState::FRIGHTENED &&
+      map->get_ghosts_powered(static_cast<int>(type))) {
     state = GhstState::FRIGHTENED;
+    fmt::debug("lol");
     m_timer.reset_timer(); // reset to use global timer
   }
 
   // change state
-  if ((m_timer.is_running() && m_timer.is_expired()) || p_timer->is_expired()) {
+  if (m_timer.is_expired() /* || !m_timer.is_running() */) {
     if (is_at_home) {
       is_at_home = false;
       m_timer.reset_timer();
@@ -266,17 +264,18 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
         m_timer.reset_timer();
         m_timer.start_timer(7);
         break;
-      case GhstState::FRIGHTENED:
-        state = GhstState::SCATTER;
-        m_timer.reset_timer(); // reset for ghosts that just went out of the
-                               // house
-        m_timer.start_timer(7);
-        break;
-      default:;
+      // case GhstState::FRIGHTENED:
+      //   state = GhstState::SCATTER;
+      //   m_timer.reset_timer(); // reset for ghosts that just went out of the
+      //                          // house
+      //   m_timer.start_timer(7);
+      //   break;
+      default: break;
       }
     }
   }
   // go out of frightened state
+  // we cannot check if the timer is expired because it might be reset
   if (state == GhstState::FRIGHTENED && !p_timer->is_running()) {
     state = GhstState::SCATTER;
     m_timer.reset_timer();
@@ -299,7 +298,7 @@ void Ghost::update(std::shared_ptr<Map> map, std::tuple<int, int> pacman_pos,
     switch (state) {
     case GhstState::SCATTER: scatter(map); break;
     case GhstState::CHASE: chase_pacman(map, pacman_pos, pacman_dir); break;
-    case GhstState::FRIGHTENED: frightened(map, pacman_pos); break;
+    case GhstState::FRIGHTENED: frightened(map); break;
     case GhstState::EATEN: eaten(map); break;
     }
     // override the registered direction if the ghost is still at home
@@ -344,30 +343,14 @@ void Ghost::move(std::shared_ptr<Map> map) {
   }
 }
 
-bool Ghost::eat_entity(std::shared_ptr<Map> map,
-                       std::tuple<int, int> pacman_pos) const {
-
-  if (state == GhstState::CHASE || state == GhstState::SCATTER) {
-    auto [i, j] = get_ij(map->get_size());
-
-    Node ghost_tile = {i, j};
-
-    Node pacman_tile = {std::get<0>(pacman_pos), std::get<1>(pacman_pos)};
-
-    if (ghost_tile.i == pacman_tile.i && ghost_tile.j == pacman_tile.j) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 void Ghost::reset() {
   m_cx = m_start_cx;
   m_cy = m_start_cy;
   is_at_home = type != GhostType::BLINKY;
-  m_direction = is_at_home ? Direction::UP : Direction::LEFT;
+  m_direction = is_at_home ? Direction::UP : Direction::NONE;
   m_reg_direction = Direction::NONE;
-  state = GhstState::CHASE;
-  m_timer.reset_timer(); // time will start itself in update
+  state = GhstState::SCATTER;
+  m_timer.reset_timer(); // timer will start itself in update
 }
+
+bool Ghost::is_eaten() const { return state == GhstState::EATEN; }

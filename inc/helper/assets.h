@@ -56,8 +56,6 @@ private:
   std::vector<SDL_Rect> m_orangeghost_up;
   std::vector<SDL_Rect> m_orangeghost_down;
 
-  // todo add vector for direction
-
   std::vector<SDL_Rect> m_weak_ghost; // frightened ghost
 
   std::vector<SDL_Rect> m_weak_ghost_ending; // frightened ghost blinking
@@ -143,7 +141,20 @@ public:
    */
   SDL_Rect get_sprite_ghost_orange(const Direction &dir, int fc) const;
 
+  /**
+   * @brief Get the sprite object for ghost weak
+   * 
+   * @param fc the frame count
+   * @param ending if the ghost should blink
+   * @return SDL_Rect - the sprite
+   */
   SDL_Rect get_sprite_ghost_weak(int fc, bool ending = false) const;
+  /**
+   * @brief Get the sprite object for ghost eyes
+   * 
+   * @param dir direction of the ghost
+   * @return SDL_Rect - the sprite
+   */
   SDL_Rect get_sprite_ghost_eyes(const Direction &dir) const;
 };
 

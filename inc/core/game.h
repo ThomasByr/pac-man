@@ -47,7 +47,10 @@ public:
   Game(const std::string &config_path = ".ini");
   ~Game();
 
+  /// @brief Run the game
   void run(void);
+  /// @brief pause for 1 second and delay timers
+  void pause(void);
 };
 
 #endif // __inc_core_game_H__

@@ -1,4 +1,6 @@
 
+#include <thread>
+
 #include "ini.hpp"
 
 #include "helper/assets.h"
@@ -8,8 +10,8 @@
 
 Renderer::Renderer(const std::string &title, const std::string &config_path)
   : m_window{nullptr}, m_surface{nullptr}, m_sprites{nullptr}, m_scale{1},
-    size{0}, m_config_stack{},
-    m_rect_mode{RectMode::CORNER}, m_trans_x{0}, m_trans_y{0} {
+    size{0}, m_config_stack{}, m_rect_mode{RectMode::CORNER}, m_trans_x{0},
+    m_trans_y{0} {
   ini::IniFile data;
   try {
     data.load(config_path);
@@ -78,7 +80,11 @@ void Renderer::flip() {
 
   double target_delay = ms_in_s / m_fps;
   auto wait_time = target_delay - static_cast<double>(elapsed_time);
-  if (wait_time > 0) SDL_Delay(static_cast<Uint32>(wait_time));
+  // if (wait_time > 0) SDL_Delay(static_cast<Uint32>(wait_time));
+  if (wait_time > 0) {
+    std::this_thread::sleep_for(
+      std::chrono::milliseconds(static_cast<Uint32>(wait_time)));
+  }
 
   // update window as soon as we delay
   switch (SDL_UpdateWindowSurface(m_window)) {

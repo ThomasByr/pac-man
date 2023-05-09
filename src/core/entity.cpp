@@ -34,7 +34,7 @@ std::tuple<double, double> Entity::get_pos() const {
 }
 
 bool Entity::can_change_direction(std::shared_ptr<Map> map) const {
-  const double epsilon = m_speed / 2.05;
+  const double epsilon = m_speed / 1.75;
   const double tile_size = map->get_size();
 
   // the relative x position of the entity on the tile
@@ -72,3 +72,5 @@ bool Entity::ate_entity(double other_cx, double other_cy) const {
 
 bool Entity::is_dead() const { return m_lives <= 0; }
 void Entity::die() { m_lives--; }
+
+void Entity::add_timer_time(unsigned sec) { m_timer.add_time(sec); }

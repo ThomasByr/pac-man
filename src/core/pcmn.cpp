@@ -80,16 +80,16 @@ void Pacman::eat_big_food(std::shared_ptr<Map> map) {
   m_score += m_points_per_power_dot;
   m_dots_eaten += 1;
   state = PcmnState::POWERED;
+
+  p_timer->reset_timer();
+  p_timer->start_timer(10);
+  map->set_ghosts_powered(true);
 }
 
 void Pacman::update(std::shared_ptr<Map> map) {
 
   teleport(map);
   p_timer = map->get_power_timer();
-
-  if (state == PcmnState::POWERED && !p_timer->is_running()) {
-    p_timer->start_timer(10);
-  }
 
   // here we test if the timer is running before because, as opposed to ghosts
   // pacman behavior is not always being timed
@@ -98,6 +98,7 @@ void Pacman::update(std::shared_ptr<Map> map) {
     case PcmnState::POWERED:
       state = PcmnState::ALIVE;
       p_timer->reset_timer();
+      map->set_ghosts_powered(false);
       break;
     default: break;
     }
@@ -143,21 +144,24 @@ void Pacman::move(std::shared_ptr<Map> map) {
   map->pcmn_powered(state == PcmnState::POWERED);
 }
 
-bool Pacman::eat_entity() {
+void Pacman::eat_ghost() {
   switch (state) {
-  case PcmnState::ALIVE: m_lives--; return m_lives > 0;
-  case PcmnState::POWERED: m_score += m_points_per_ghost; return true;
-  default: fmt::unreachable("Pacman::eat_entity : dead pacman cannot eat");
+  case PcmnState::POWERED: m_score += m_points_per_ghost; break;
+  default: fmt::unreachable("Pacman::eat_ghost : should call this function "
+                            "only when pacman is powered");
   }
 }
 
 bool Pacman::ate_all_dots() const { return m_dots_eaten >= max_number_of_dots; }
 
-void Pacman::reset(bool go) {
+void Pacman::reset(bool g_o, bool e_l) {
   m_cx = m_start_cx;
   m_cy = m_start_cy;
   m_direction = Direction::NONE;
   m_reg_direction = Direction::NONE;
   state = PcmnState::ALIVE;
-  if (go) { m_lives = m_max_lives; }
+  if (e_l) { m_dots_eaten = 0; }
+  if (g_o) { m_lives = m_max_lives; m_score = 0; }
 }
+
+bool Pacman::is_powered() const { return state == PcmnState::POWERED; }

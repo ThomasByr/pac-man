@@ -2,6 +2,7 @@
 #include <SDL.h>
 
 #include <memory>
+#include <thread>
 #include <tuple>
 #include <vector>
 
@@ -77,6 +78,13 @@ Game::Game(const std::string &config_path)
 }
 
 Game::~Game() = default;
+
+void Game::pause() {
+  m_pacman->add_timer_time(1);
+  for (auto &ghost : m_ghosts) { ghost->add_timer_time(1); }
+  m_map->get_power_timer()->add_time(1);
+  std::this_thread::sleep_for(std::chrono::seconds(1));
+}
 
 void Game::run() {
   FPSCounter fps_counter;
@@ -178,16 +186,25 @@ void Game::run() {
 
       for (auto &ghost : m_ghosts) {
         ghost->update(m_map, pacman_node, m_pacman->get_direction());
-        if (ghost->ate_entity(pcmn_cx, pcmn_cy)) {
+        if (!m_pacman->is_powered() && ghost->ate_entity(pcmn_cx, pcmn_cy)) {
           m_pacman->die();
           m_state = GameState::PACMAN_DIE;
+          break;
+        } else if (m_pacman->is_powered() &&
+                   ghost->ate_entity(pcmn_cx, pcmn_cy) && !ghost->is_eaten()) {
+          m_pacman->eat_ghost();
+          ghost->eat(m_map);
+
+          pause();
         }
       }
       if (m_pacman->ate_all_dots()) {
         m_state = GameState::WAITING;
-        m_pacman->reset();
+        m_pacman->reset(false, true);
         for (auto &ghost : m_ghosts) { ghost->reset(); }
         m_map->reset();
+
+        pause();
       }
       /* FALLTHROUGH */
     case GameState::WAITING:
@@ -210,6 +227,8 @@ void Game::run() {
         m_pacman->reset();
         for (auto &ghost : m_ghosts) { ghost->reset(); }
         m_state = GameState::WAITING;
+
+        pause();
         break;
       default: break;
       }
@@ -218,7 +237,7 @@ void Game::run() {
     case GameState::GAME_OVER:
       switch (m_pacman->play_dead(m_renderer)) {
       case true:
-        m_pacman->reset();
+        m_pacman->reset(true, true);
         for (auto &ghost : m_ghosts) { ghost->reset(); }
         m_map->reset();
         m_state = GameState::MENU;

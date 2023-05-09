@@ -96,4 +96,9 @@ bool Timer::is_expired() {
 
 void Timer::reset_timer() { running = false; }
 
+void Timer::add_time(unsigned sec) {
+  if (!running) { return; }
+  end += std::chrono::seconds(sec);
+}
+
 } // namespace sys_pause
