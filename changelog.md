@@ -33,3 +33,8 @@
 - added chasing algorithms
 - added scatter mode and frightened (pure random) mode
 - added timed mode switching
+
+**v0.5.x** game logic
+
+- game logic handles pacman / ghosts interractions
+- fixed pacman can eat eaten ghosts bug
