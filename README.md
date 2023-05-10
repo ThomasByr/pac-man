@@ -179,6 +179,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - added scatter mode and frightened (pure random) mode
 - added timed mode switching
 
+**v0.5.x** game logic
+
+- game logic handles pacman / ghosts interractions
+- fixed pacman can eat eaten ghosts bug
+
 </details>
 
 ## 🐛 Bugs & TODO
@@ -208,3 +213,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - [ ] make ghosts reverse direction when changing mode (exept when frightened)
 - [ ] create levels, scores, lives and a save system
 - [ ] add fruits 🍒
+- [ ] detach game logic from display logic
