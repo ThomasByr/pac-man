@@ -187,6 +187,8 @@ void Game::run() {
       for (auto &ghost : m_ghosts) {
         ghost->update(m_map, pacman_node, m_pacman->get_direction());
         if (ghost->ate_entity(pcmn_cx, pcmn_cy) && !ghost->is_eaten()) {
+          // do not test for pacman powered here
+          // otherwise we would be able to eat ghosts that have been eaten
           switch (ghost->is_frightened()) {
           case false:
             m_pacman->die();
