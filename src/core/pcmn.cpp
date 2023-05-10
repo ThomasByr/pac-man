@@ -141,7 +141,6 @@ void Pacman::move(std::shared_ptr<Map> map) {
   default: break;
   }
   map->set_pacman_pos(m_cx, m_cy);
-  map->pcmn_powered(state == PcmnState::POWERED);
 }
 
 void Pacman::eat_ghost() {

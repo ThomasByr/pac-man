@@ -17,8 +17,7 @@
 #include "utils.h"
 
 Map::Map(double size, const std::string &path)
-  : m_map{}, size{size}, m_start_tile_cx{0}, m_start_tile_cy{0},
-    is_pcmn_powered{false} {
+  : m_map{}, size{size}, m_start_tile_cx{0}, m_start_tile_cy{0} {
 
   door_node = {0, 0};
 
@@ -110,9 +109,6 @@ void Map::set_clyde_pos(const int i, const int j) { clyde_pos = {i, j}; }
 
 std::tuple<int, int> Map::get_pacman_pos() const { return pacman_pos; }
 void Map::set_pacman_pos(const int i, const int j) { pacman_pos = {i, j}; }
-
-bool Map::pcmn_powered() const { return is_pcmn_powered; }
-void Map::pcmn_powered(const bool powered) { is_pcmn_powered = powered; }
 
 bool Map::can_go(const int i, const int j, const Direction &dir,
                  bool ghost) const {

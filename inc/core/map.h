@@ -75,7 +75,6 @@ private:
   std::tuple<int, int> pacman_pos;
   struct Node door_node, fruit_node;
 
-  bool is_pcmn_powered;
   std::shared_ptr<sys_pause::Timer> power_timer;
   std::array<bool, 4> ghosts_powered;
 
@@ -111,9 +110,6 @@ public:
 
   std::tuple<int, int> get_pacman_pos(void) const;
   void set_pacman_pos(const int i, const int j);
-
-  bool pcmn_powered(void) const;
-  void pcmn_powered(const bool powered);
 
   bool ate_food(const int i, const int j) const;
   void eat_food(const int i, const int j);
