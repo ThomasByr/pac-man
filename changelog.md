@@ -38,3 +38,11 @@
 
 - game logic handles pacman / ghosts interractions
 - fixed pacman can eat eaten ghosts bug
+
+## Stable release v1
+
+**v1.0.0** after the storm
+
+- game pause on event
+- some pacman logic bugs fixed
+- stormed `-j20` by default in all workflows
