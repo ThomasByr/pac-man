@@ -28,4 +28,4 @@ jobs:
           echo "libsdl2-dev installed!"
 
       - name: make check
-        run: cd tests && make check_quiet
+        run: cd tests && make -j20 check_quiet
