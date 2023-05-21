@@ -61,6 +61,10 @@ public:
   bool ate_big_food(std::shared_ptr<Map> map);
   /// @brief eat a big dot (and power up pacman)
   void eat_big_food(std::shared_ptr<Map> map);
+  /// @brief return true if pacman ate a fruit
+  bool ate_fruit(std::shared_ptr<Map> map);
+  /// @brief eat a fruit
+  void eat_fruit(std::shared_ptr<Map> map);
 
   /// @brief main update function (does not deal with ghost interaction)
   void update(std::shared_ptr<Map> map);

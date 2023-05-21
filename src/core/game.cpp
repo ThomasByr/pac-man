@@ -80,6 +80,7 @@ Game::Game(const std::string &config_path)
 Game::~Game() = default;
 
 void Game::pause() {
+  // todo: tell other threads to also sleep
   m_pacman->add_timer_time(1);
   for (auto &ghost : m_ghosts) { ghost->add_timer_time(1); }
   m_map->get_power_timer()->add_time(1);
