@@ -91,7 +91,7 @@ void Game::run() {
   FPSCounter fps_counter;
   Uint64 fps = 0;
 
-  // pour les allers retours
+  // for ghosts to move up and down while at home
   m_ghosts[1]->set_direction(Direction::UP);
   m_ghosts[2]->set_direction(Direction::DOWN);
   m_ghosts[3]->set_direction(Direction::DOWN);
@@ -105,16 +105,18 @@ void Game::run() {
       // handle key events in menu mode
       if (m_state == GameState::MENU && event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
-
+        // wait for enter key to be pressed
         case SDLK_RETURN: m_state = GameState::WAITING; break;
         default: break;
         }
       }
 
       // handle key events in waiting mode
+      // we do it before game mode because we want to keep the pressed key
+      // so that pacman starts moving in the same direction
       if (m_state == GameState::WAITING && event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
-
+        // wait for any key to be pressed (start moving pacman)
         case SDLK_UP:
         case SDLK_DOWN:
         case SDLK_LEFT:
@@ -124,6 +126,7 @@ void Game::run() {
       }
 
       // handle key events in game mode
+      // basically just move pacman
       if (m_state == GameState::GAME && event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
 
@@ -136,12 +139,12 @@ void Game::run() {
       }
 
       // handle left click FOR DEBUG PURPOSES ONLY
-      if (m_state == GameState::MENU && event.type == SDL_MOUSEBUTTONDOWN) {
+      if (m_state != GameState::GAME && event.type == SDL_MOUSEBUTTONDOWN) {
         if (event.button.button == SDL_BUTTON_LEFT) {
-          int x, y;
+          int x = -1, y = -1;
           SDL_GetMouseState(&x, &y);
-          fmt::debug("x: %d, y: %d, i: %f, j: %f", x, y, x / m_map->get_size(),
-                     y / m_map->get_size());
+          fmt::debug("registered click at x: %d(%.0f), y: %d(%.0f)", x,
+                     x / m_map->get_size(), y, y / m_map->get_size());
         }
       }
     }
