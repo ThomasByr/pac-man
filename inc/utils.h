@@ -82,7 +82,7 @@ void warning(const std::string &fmt, Args &&...args);
 template <typename... Args> void error(const std::string &fmt, Args &&...args);
 
 /**
- * @brief print error message on std::cerr and abort
+ * @brief print error message on std::cerr w/ error code and abort
  *
  * @tparam Args template arguments
  * @param fmt   format string

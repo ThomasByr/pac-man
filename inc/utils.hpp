@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include <cerrno>
+#include <cstring>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -79,6 +81,7 @@ template <typename... Args>
   using namespace std;
   using namespace internal;
   cerr << FG_RED << "   panic " << RST << format(fmt, args...) << endl;
+  cerr << FG_RED << "      -> " << RST << format(strerror(errno)) << endl;
   abort();
 }
 
