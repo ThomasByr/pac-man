@@ -46,3 +46,4 @@
 - game pause on event
 - some pacman logic bugs fixed
 - stormed `-j20` by default in all workflows
+- added two more key controls (and a description of them in the README)
