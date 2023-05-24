@@ -36,7 +36,7 @@ public:
 
   /**
    * @brief show pacman on the screen
-   * 
+   *
    * @param renderer renderer to use
    */
   void show(std::shared_ptr<Renderer> renderer) override;
@@ -45,7 +45,7 @@ public:
 
   /**
    * @brief return true if pacman can go in the given direction
-   * 
+   *
    * @param map map to use
    * @param dir direction to test
    * @return true  pacman can go in the given direction
@@ -80,14 +80,14 @@ public:
 
   /**
    * @brief reset pacman to its initial state
-   * 
+   *
    * @param g_o game over : if true, pacman will recover its entire life
    * @param e_l end level : if true, pacman dots eaten will be reset
    */
   void reset(bool g_o = false, bool e_l = false);
   /**
    * @brief return true if pacman is powered
-   * 
+   *
    * @return true  pacman is powered
    * @return false otherwise
    */

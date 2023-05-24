@@ -6,8 +6,8 @@
 #include "utils.h"
 
 Ghost::Ghost(const double cx, const double cy, GhostType type, bool is_at_home)
-  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::SCATTER},
-    is_at_home{is_at_home} {
+  : Entity{cx, cy, 0, 0}, type{type}, state{GhstState::SCATTER}, is_at_home{
+                                                                   is_at_home} {
   if (is_at_home) {
     m_direction = Direction::UP;
   } else {

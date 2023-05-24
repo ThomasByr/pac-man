@@ -264,7 +264,9 @@ bool Map::is_home(const int i, const int j) const {
   return i >= 9 && i <= 12 && j >= 12 && j <= 13;
 }
 
-struct Node Map::get_door_node() const { return door_node; }
+struct Node Map::get_door_node() const {
+  return door_node;
+}
 
 std::shared_ptr<sys_pause::Timer> Map::get_power_timer() { return power_timer; }
 

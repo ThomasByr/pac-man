@@ -56,8 +56,8 @@ public:
   std::tuple<int, int> get_ij(double size) const;
   /**
    * @brief Get the real position of the entity on the map (double precision)
-   * 
-   * @return std::tuple<double, double> 
+   *
+   * @return std::tuple<double, double>
    */
   std::tuple<double, double> get_pos(void) const;
   /**
@@ -100,7 +100,7 @@ public:
 
   /**
    * @brief add some time to the internal timer
-   * 
+   *
    * @param sec seconds to add
    */
   void add_timer_time(unsigned sec);

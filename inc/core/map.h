@@ -120,7 +120,7 @@ public:
 
   /**
    * @brief from a tile, return true if we can go in the given direction
-   * 
+   *
    * @param i      row
    * @param j      column
    * @param dir    direction
@@ -164,15 +164,16 @@ public:
    * @brief Set the ghosts powered option
    * @note this indicates if the ghosts have been eaten once
    *       during the current power
-   * 
+   *
    * @param powered on/off
    * @param ghost   specific/global
    */
-  void set_ghosts_powered(const bool powered, std::optional<int> ghost = std::nullopt);
+  void set_ghosts_powered(const bool powered,
+                          std::optional<int> ghost = std::nullopt);
   /**
    * @brief Get the ghosts powered option
    * (i.e. if the ghosts have been eaten once during the current power)
-   * 
+   *
    * @param ghost index/type of the ghost
    * @return bool option
    */

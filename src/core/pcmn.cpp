@@ -10,8 +10,8 @@ Pacman::Pacman(const double cx, const double cy,
   : Entity{cx, cy, 0, 0}, m_points_per_dot{config.m_points_per_dot},
     m_points_per_power_dot{config.m_points_per_power_dot},
     m_points_per_ghost{config.m_points_per_ghost},
-    max_number_of_dots{config.max_number_of_dots}, m_dots_eaten{0},
-    state{PcmnState::ALIVE} {
+    max_number_of_dots{config.max_number_of_dots},
+    m_dots_eaten{0}, state{PcmnState::ALIVE} {
   m_speed = 1.05;
 }
 
@@ -146,8 +146,9 @@ void Pacman::move(std::shared_ptr<Map> map) {
 void Pacman::eat_ghost() {
   switch (state) {
   case PcmnState::POWERED: m_score += m_points_per_ghost; break;
-  default: fmt::unreachable("Pacman::eat_ghost : should call this function "
-                            "only when pacman is powered");
+  default:
+    fmt::unreachable("Pacman::eat_ghost : should call this function "
+                     "only when pacman is powered");
   }
 }
 
@@ -160,7 +161,10 @@ void Pacman::reset(bool g_o, bool e_l) {
   m_reg_direction = Direction::NONE;
   state = PcmnState::ALIVE;
   if (e_l) { m_dots_eaten = 0; }
-  if (g_o) { m_lives = m_max_lives; m_score = 0; }
+  if (g_o) {
+    m_lives = m_max_lives;
+    m_score = 0;
+  }
 }
 
 bool Pacman::is_powered() const { return state == PcmnState::POWERED; }

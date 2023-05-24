@@ -143,7 +143,7 @@ public:
 
   /**
    * @brief Get the sprite object for ghost weak
-   * 
+   *
    * @param fc the frame count
    * @param ending if the ghost should blink
    * @return SDL_Rect - the sprite
@@ -151,7 +151,7 @@ public:
   SDL_Rect get_sprite_ghost_weak(int fc, bool ending = false) const;
   /**
    * @brief Get the sprite object for ghost eyes
-   * 
+   *
    * @param dir direction of the ghost
    * @return SDL_Rect - the sprite
    */

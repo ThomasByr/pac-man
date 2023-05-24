@@ -49,8 +49,8 @@ public:
 
   /**
    * @brief Get the assets object
-   * 
-   * @return std::shared_ptr<Assets> 
+   *
+   * @return std::shared_ptr<Assets>
    */
   std::shared_ptr<Assets> get_assets(void) const;
   /// @brief get the base scale of the renderer (not the custom scale)
@@ -68,7 +68,7 @@ public:
   void clear(void);
   /**
    * @brief blit a sprite on the screen
-   * 
+   *
    * @param src   source rectangle
    * @param x     destination x
    * @param y     destination y
@@ -78,7 +78,7 @@ public:
 
   /**
    * @brief write some text to the screen
-   * 
+   *
    * @param text text to write
    * @param x    x position
    * @param y    y position
@@ -87,13 +87,13 @@ public:
 
   /**
    * @brief set the rect mode
-   * 
+   *
    * @param mode CORNER or CENTER
    */
   void rect_mode(RectMode mode);
   /**
    * @brief translate the origin of the screen
-   * 
+   *
    * @param x x offset
    * @param y y offset
    */
