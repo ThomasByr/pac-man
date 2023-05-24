@@ -60,7 +60,7 @@ docs:
 .PHONY : format
 format:
 # we exclude the lib directory because it may contain very large files
-	@find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.${FILEXT}" \) -not -path "./lib/*" -exec clang-format --style=file -i {} \;
+	@find . -type f \( -name "*.h" -o -name "*.hpp" -o -name "*.${FILEXT}" \) -not -path "./${LIB_PATH}/*" | xargs clang-format -i -style=file
 	@echo "\033[92mFormatting complete!\033[0m"
 
 debug: CFLAGS += -Og -DDEBUG -g -ggdb -DYYDEBUG
