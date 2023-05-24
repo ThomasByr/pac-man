@@ -99,14 +99,24 @@ void Game::run() {
   while (m_running) {
     // handle quit event
     SDL_Event event;
+    bool quit = false;
     while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) { m_running = false; }
+      if (event.type == SDL_QUIT || quit) { m_running = false; }
 
       // handle key events in menu mode
       if (m_state == GameState::MENU && event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
         // wait for enter key to be pressed
         case SDLK_RETURN: m_state = GameState::WAITING; break;
+        default: break;
+        }
+      }
+
+      // handle key events in all modes
+      if (event.type == SDL_KEYDOWN) {
+        switch (event.key.keysym.sym) {
+        // wait for q key to be pressed (alternative quit)
+        case SDLK_q: quit = true; break;
         default: break;
         }
       }
