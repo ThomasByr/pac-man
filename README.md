@@ -53,7 +53,7 @@ WSLg   Version : 1.0.51
 If not, please update your WSLg version by following the instructions [here](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel#update-the-wsl-2-linux-kernel). tl;dr : type this in your powershell :
 
 ```ps1
-# will only work if you have the latest Windows 11 update
+# will only work if you have a decently recent Windows 11 update
 wsl --shutdown
 wsl --update
 ```
@@ -71,7 +71,7 @@ make release
 >   <img alt="Tip" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/tip.svg">
 > </picture><br>
 >
-> To reduce compile time, you can use the `-j` flag to compile in parallel. For example, if you have 4 cores, you can use `make -j4 release` to compile in 4 threads.
+> To reduce compile time, you can use the `-j` flag to compile in parallel. For example, if you have 4 cores, you can use `make -j4 release` to compile with 4 threads.
 
 This project uses the `-std=gnu++17` flag to compile and the produced executable binary is to be found inside of the `bin` folder.
 
@@ -86,6 +86,15 @@ This project uses the `-std=gnu++17` flag to compile and the produced executable
 > - ctpl.hpp, a C++11 header-only library for thread pools
 > - ini.hpp, a single-file header-only library for INI files
 > - json.hpp, a single-file header-only library for JSON (by Niels Lohmann)
+
+| key          | action     |
+| ------------ | ---------- |
+| <kbd>↑</kbd> | move up    |
+| <kbd>↓</kbd> | move down  |
+| <kbd>←</kbd> | move left  |
+| <kbd>→</kbd> | move right |
+| <kbd>q</kbd> | quit       |
+| <kbd>p</kbd> | pause/menu |
 
 We provide a [makefile](makefile) to ease the compilation process. It is composed of the following targets :
 
@@ -145,6 +154,8 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## 🔄 Changelog
+
+Please see [changelog.md](changelog.md) for the full history.
 
 <details>
   <summary>  Stable release v1 (click here to expand) </summary>
