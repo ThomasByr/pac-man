@@ -15,6 +15,9 @@ enum class RectMode { CENTER, CORNER };
 struct Config {
   RectMode rect_mode;
   double trans_x, trans_y;
+
+  Config(enum RectMode rect_mode, double trans_x, double trans_y)
+    : rect_mode{rect_mode}, trans_x{trans_x}, trans_y{trans_y} {}
 };
 
 class Renderer {

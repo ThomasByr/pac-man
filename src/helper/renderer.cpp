@@ -155,10 +155,7 @@ void Renderer::translate(double x, double y) {
 }
 
 void Renderer::push() {
-  struct Config c {
-    m_rect_mode, m_trans_x, m_trans_y
-  };
-  m_config_stack.push_back(c);
+  m_config_stack.emplace_back(m_rect_mode, m_trans_x, m_trans_y);
 }
 
 void Renderer::pop() {
