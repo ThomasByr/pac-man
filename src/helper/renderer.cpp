@@ -159,7 +159,7 @@ void Renderer::push() {
 }
 
 void Renderer::pop() {
-  struct Config c = m_config_stack.back();
+  const struct Config c = m_config_stack.back();
   m_config_stack.pop_back();
   m_rect_mode = c.rect_mode;
   m_trans_x = c.trans_x;
