@@ -130,7 +130,7 @@ void Renderer::blit(SDL_Rect src, int x, int y, double scale) {
 void Renderer::text(const std::string &text, int x, int y) {
   // as we do not use sdl_ttf, we have to render the text ourselves
   // we can use sprites for that
-  // we have to render each character separately (each is 7)
+  // we have to render each character separately
 
   static const double custom_scale = 0.7;
   SDL_Rect src = m_assets->get_sprite_alpha_numerical(' ');

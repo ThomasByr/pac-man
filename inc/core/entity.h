@@ -102,8 +102,10 @@ public:
    * @brief add some time to the internal timer
    *
    * @param sec seconds to add
+   * @param ms milliseconds to add
+   * @param us microseconds to add
    */
-  void add_timer_time(unsigned sec);
+  void add_timer_time(unsigned sec=0, unsigned ms=0, unsigned us=0);
 };
 
 #endif // __inc_core_entity_H__

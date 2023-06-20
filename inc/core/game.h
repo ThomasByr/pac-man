@@ -49,8 +49,10 @@ public:
 
   /// @brief Run the game
   void run(void);
-  /// @brief pause for 1 second and delay timers
-  void pause(void);
+  /// @brief delay timeres
+  void delay(unsigned sec = 0, unsigned ms = 0, unsigned us = 0);
+  /// @brief pause for given duration and delay timers
+  void pause(unsigned sec = 0, unsigned ms = 0, unsigned us = 0);
 };
 
 #endif // __inc_core_game_H__

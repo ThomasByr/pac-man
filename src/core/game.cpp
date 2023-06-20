@@ -79,12 +79,17 @@ Game::Game(const std::string &config_path)
 
 Game::~Game() = default;
 
-void Game::pause() {
+void Game::delay(unsigned sec, unsigned ms, unsigned us) {
+  m_pacman->add_timer_time(sec, ms, us);
+  for (auto &ghost : m_ghosts) { ghost->add_timer_time(sec, ms, us); }
+  m_map->get_power_timer()->add_time(sec, ms, us);
+}
+
+void Game::pause(unsigned sec, unsigned ms, unsigned us) {
   // todo: tell other threads to also sleep
-  m_pacman->add_timer_time(1);
-  for (auto &ghost : m_ghosts) { ghost->add_timer_time(1); }
-  m_map->get_power_timer()->add_time(1);
-  std::this_thread::sleep_for(std::chrono::seconds(1));
+  std::this_thread::sleep_for(std::chrono::seconds(sec) +
+                              std::chrono::milliseconds(ms) +
+                              std::chrono::microseconds(us));
 }
 
 void Game::run() {
@@ -98,8 +103,9 @@ void Game::run() {
 
   while (m_running) {
     // handle quit event
-    SDL_Event event;
-    bool quit = false;
+    SDL_Event event;         // NOLINT
+    bool quit = false;       // quit game
+
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT || quit) { m_running = false; }
 
@@ -137,9 +143,9 @@ void Game::run() {
 
       // handle key events in game mode
       // basically just move pacman
-      if (m_state == GameState::GAME && event.type == SDL_KEYDOWN) {
+      if (m_state == GameState::GAME &&
+          event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
-
         case SDLK_UP: m_pacman->set_direction(Direction::UP); break;
         case SDLK_DOWN: m_pacman->set_direction(Direction::DOWN); break;
         case SDLK_LEFT: m_pacman->set_direction(Direction::LEFT); break;
@@ -157,7 +163,7 @@ void Game::run() {
                      x / m_map->get_size(), y, y / m_map->get_size());
         }
       }
-    }
+    } // end of event handling
 
     // update
     fps = fps_counter.tick();
@@ -212,7 +218,7 @@ void Game::run() {
           case true:
             m_pacman->eat_ghost();
             ghost->eat(m_map);
-            pause();
+            pause(1);
             break;
           }
         }
@@ -223,12 +229,17 @@ void Game::run() {
         for (auto &ghost : m_ghosts) { ghost->reset(); }
         m_map->reset();
 
-        pause();
+        pause(1);
       }
       /* FALLTHROUGH */
     case GameState::WAITING:
       if (m_state == GameState::WAITING) { /* ready */
         m_renderer->text("READY!", 175, 335);
+      }
+      /* FALLTHROUGH */
+    case GameState::PAUSE:
+      if (m_state == GameState::PAUSE) { /* pause */
+        m_renderer->text("PRESS P TO RESUME", 75, 335);
       }
 
       m_map->show(m_renderer);
@@ -247,7 +258,7 @@ void Game::run() {
         for (auto &ghost : m_ghosts) { ghost->reset(); }
         m_state = GameState::WAITING;
 
-        pause();
+        pause(1);
         break;
       default: break;
       }

@@ -147,7 +147,7 @@ public:
   ///@brief reset the timer
   void reset_timer(void);
   ///@brief add a given duration to the timer
-  void add_time(unsigned sec);
+  void add_time(unsigned sec=0, unsigned ms=0, unsigned us=0);
 };
 
 } // namespace sys_pause
