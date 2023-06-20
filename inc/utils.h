@@ -138,16 +138,16 @@ public:
   bool is_running(void);
 
   ///@brief start the timer with a given duration in seconds
-  void start_timer(unsigned sec);
+  void start_timer(unsigned sec = 0, unsigned ms = 0, unsigned us = 0);
   ///@brief check for intermidiate step
   ///(i.e. if the timer has passed a given duration)
-  bool step_passed(unsigned sec);
+  bool step_passed(unsigned sec = 0, unsigned ms = 0, unsigned us = 0);
   ///@brief check for timer expiration
   bool is_expired(void);
   ///@brief reset the timer
   void reset_timer(void);
   ///@brief add a given duration to the timer
-  void add_time(unsigned sec=0, unsigned ms=0, unsigned us=0);
+  void add_time(unsigned sec = 0, unsigned ms = 0, unsigned us = 0);
 };
 
 } // namespace sys_pause

@@ -76,17 +76,20 @@ Timer::Timer() : running(false) {}
 
 bool Timer::is_running() { return running; }
 
-void Timer::start_timer(unsigned sec) {
+void Timer::start_timer(unsigned sec, unsigned ms, unsigned us) {
   if (running) { fmt::panic("timer already running"); }
   start = std::chrono::high_resolution_clock::now();
   end = start + std::chrono::seconds(sec);
+  end += std::chrono::milliseconds(ms);
+  end += std::chrono::microseconds(us);
   running = true;
 }
 
-bool Timer::step_passed(unsigned sec) {
+bool Timer::step_passed(unsigned sec, unsigned ms, unsigned us) {
   if (!running) { return false; }
   auto now = std::chrono::high_resolution_clock::now();
-  return now >= start + std::chrono::seconds(sec);
+  return now >= start + std::chrono::seconds(sec) +
+                  std::chrono::milliseconds(ms) + std::chrono::microseconds(us);
 }
 
 bool Timer::is_expired() {
