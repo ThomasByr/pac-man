@@ -5,7 +5,7 @@
 #include <chrono>
 #include <string>
 
-#define __VERSION__ "1.6.9"
+#define __VERSION__ "1.1.9"
 #define __AUTHORS__ "ThomasByr & Arnaud"
 
 #define RST "\x1b[m\x1b[0m"
