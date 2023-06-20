@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-enum class GameState { MENU, WAITING, GAME, PACMAN_DIE, GAME_OVER, EXIT };
+enum class GameState { MENU, WAITING, PAUSE, GAME, PACMAN_DIE, GAME_OVER, EXIT };
 enum class PcmnState { ALIVE, POWERED };
 enum class GhstState { CHASE, SCATTER, FRIGHTENED, EATEN };
 
