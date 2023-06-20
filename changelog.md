@@ -41,9 +41,14 @@
 
 ## Stable release v1
 
-**v1.0.0** after the storm
+**v1.0** after the storm
 
 - game pause on event
 - some pacman logic bugs fixed
 - stormed `-j20` by default in all workflows
 - added two more key controls (and a description of them in the README)
+
+**v1.1** pause menu
+
+- added `GameState::PAUSE`
+- switched all `Timer` precision from secondes to microseconds
